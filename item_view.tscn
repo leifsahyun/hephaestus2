@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3 uid="uid://cnni31iqfdr7n"]
+
+[ext_resource type="Script" uid="uid://df30mkj28vtur" path="res://item_view.gd" id="1_f8ud8"]
+[ext_resource type="Texture2D" uid="uid://bvf2bgpwwnwmp" path="res://icon.svg" id="3_5en6a"]
+
+[node name="ItemView" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_f8ud8")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_right = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="IconTexture" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("3_5en6a")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "ItemName"
+fit_content = true
+autowrap_mode = 0
+
+[node name="HubrisLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 0, 0, 1)
+text = "Hubris"
+fit_content = true
+autowrap_mode = 0
+
+[node name="QualityLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "Quality"
+fit_content = true
+autowrap_mode = 0
+
+[node name="ChromaLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "Chroma"
+fit_content = true
+autowrap_mode = 0
+
+[node name="AugmentsList" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ValueLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+fit_content = true
+autowrap_mode = 0

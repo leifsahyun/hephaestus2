@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://by2g13bq832il"]
+
+[ext_resource type="Script" uid="uid://bus18750jv3b6" path="res://monster_pool.gd" id="1_jiosp"]
+[ext_resource type="Script" uid="uid://cr4tb8m0873js" path="res://augment.gd" id="2_wouky"]
+[ext_resource type="Script" uid="uid://ctgqaf4ah0w3n" path="res://item.gd" id="3_jvned"]
+
+[sub_resource type="Resource" id="Resource_soms2"]
+script = ExtResource("2_wouky")
+name = "Stamina Weakness"
+description = "Stamina item quality doubled against this enemy"
+metadata/_custom_type_script = "uid://cr4tb8m0873js"
+
+[sub_resource type="Resource" id="Resource_34rws"]
+script = ExtResource("3_jvned")
+base_quality = 50
+name = "Hydra"
+type = "Hydra"
+augments = [SubResource("Resource_soms2")]
+metadata/_custom_type_script = "uid://ctgqaf4ah0w3n"
+
+[node name="MonsterPool" type="Node"]
+script = ExtResource("1_jiosp")
+monsters = {
+1: [SubResource("Resource_34rws")]
+}

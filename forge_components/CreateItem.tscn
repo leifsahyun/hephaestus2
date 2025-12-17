@@ -1,0 +1,77 @@
+[gd_scene load_steps=6 format=3 uid="uid://bp00x6m3r3e1y"]
+
+[ext_resource type="PackedScene" uid="uid://concov566d8ou" path="res://forge_components/ItemTypeSelector.tscn" id="1_4nxsj"]
+[ext_resource type="Script" uid="uid://cr4564ujejiyq" path="res://forge_components/create_item.gd" id="1_8mbci"]
+[ext_resource type="Texture2D" uid="uid://bvf2bgpwwnwmp" path="res://icon.svg" id="1_ihnc1"]
+[ext_resource type="PackedScene" uid="uid://cwenjxg7obogh" path="res://forge_components/ItemChromaSelector.tscn" id="2_2rdtq"]
+[ext_resource type="PackedScene" uid="uid://87vp0r4qxw46" path="res://forge_components/NumberSelector.tscn" id="4_fe4sw"]
+
+[node name="CreateItem" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8mbci")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Kiln of Creation"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("1_ihnc1")
+expand_mode = 3
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer"]
+clip_contents = false
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Bow of Apollo"
+placeholder_text = "Item Name"
+scroll_fit_content_height = true
+scroll_fit_content_width = true
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Item Type"
+horizontal_alignment = 1
+
+[node name="ItemTypeSelector" parent="VBoxContainer" instance=ExtResource("1_4nxsj")]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Chroma"
+horizontal_alignment = 1
+
+[node name="ItemChromaSelector" parent="VBoxContainer" instance=ExtResource("2_2rdtq")]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Quality"
+horizontal_alignment = 1
+
+[node name="NumberSelector" parent="VBoxContainer" instance=ExtResource("4_fe4sw")]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Forge Item"
+
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/Button" to="." method="create_item"]

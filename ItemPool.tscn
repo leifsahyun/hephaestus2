@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://cumtv6tjpbm1r"]
+
+[ext_resource type="Script" uid="uid://b51a18nmkh72a" path="res://item_pool.gd" id="1_60gpb"]
+[ext_resource type="Resource" uid="uid://iygfir5ek68g" path="res://base_items/item1.tres" id="2_g0urk"]
+[ext_resource type="Script" uid="uid://ctgqaf4ah0w3n" path="res://item.gd" id="3_g5n31"]
+
+[sub_resource type="Resource" id="Resource_ewgdo"]
+script = ExtResource("3_g5n31")
+base_quality = 10
+value = 100
+name = "sword"
+type = "sword"
+chroma = "red"
+metadata/_custom_type_script = "uid://ctgqaf4ah0w3n"
+
+[sub_resource type="Resource" id="Resource_5w3p7"]
+script = ExtResource("3_g5n31")
+base_quality = 30
+value = 100
+name = "axe"
+type = "axe"
+chroma = "red"
+metadata/_custom_type_script = "uid://ctgqaf4ah0w3n"
+
+[sub_resource type="Resource" id="Resource_g0urk"]
+script = ExtResource("3_g5n31")
+base_quality = 20
+value = 200
+name = "shield"
+type = "shield"
+chroma = "green"
+metadata/_custom_type_script = "uid://ctgqaf4ah0w3n"
+
+[sub_resource type="Resource" id="Resource_g5n31"]
+script = ExtResource("3_g5n31")
+base_quality = 20
+value = 200
+name = "net"
+type = "net"
+chroma = "blue"
+metadata/_custom_type_script = "uid://ctgqaf4ah0w3n"
+
+[node name="ItemPool" type="Node"]
+script = ExtResource("1_60gpb")
+items = [ExtResource("2_g0urk"), SubResource("Resource_ewgdo"), SubResource("Resource_5w3p7"), SubResource("Resource_g0urk"), SubResource("Resource_g5n31")]

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1thomf81ml6r"]
+
+[ext_resource type="Script" uid="uid://1bojm83h2pqp" path="res://augment_view_compact.gd" id="1_1un46"]
+[ext_resource type="Texture2D" uid="uid://bvf2bgpwwnwmp" path="res://icon.svg" id="2_4tsps"]
+
+[node name="AugmentViewCompact" type="PanelContainer"]
+custom_minimum_size = Vector2(32, 32)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_1un46")
+
+[node name="IconTexture" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("2_4tsps")
+expand_mode = 3

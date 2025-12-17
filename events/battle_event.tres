@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BattleTimelineEvent" load_steps=3 format=3 uid="uid://cgvej2nh0cxk3"]
+
+[ext_resource type="PackedScene" uid="uid://dh3g51sk4jc2v" path="res://battle.tscn" id="1_jg8c6"]
+[ext_resource type="Script" uid="uid://1plh70qfcrxe" path="res://events/battle_event.gd" id="1_rv4bv"]
+
+[resource]
+script = ExtResource("1_rv4bv")
+name = "Battle"
+scene = ExtResource("1_jg8c6")
+metadata/_custom_type_script = "uid://1plh70qfcrxe"

@@ -1,0 +1,91 @@
+[gd_scene load_steps=3 format=3 uid="uid://blhgekfley6pd"]
+
+[ext_resource type="PackedScene" uid="uid://c1thomf81ml6r" path="res://augment_view_compact.tscn" id="1_8jouq"]
+[ext_resource type="PackedScene" uid="uid://p5up14yixpic" path="res://augment_view_purchase.tscn" id="2_vudr8"]
+
+[node name="AugmentShelf" type="PanelContainer"]
+offset_right = 286.0
+offset_bottom = 163.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Augment Shelves"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Held"
+horizontal_alignment = 1
+
+[node name="HeldAugments" type="GridContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="AugmentViewCompact" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HeldAugments" instance=ExtResource("1_8jouq")]
+layout_mode = 2
+
+[node name="AugmentViewCompact2" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HeldAugments" instance=ExtResource("1_8jouq")]
+layout_mode = 2
+
+[node name="AugmentViewCompact3" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HeldAugments" instance=ExtResource("1_8jouq")]
+layout_mode = 2
+
+[node name="AugmentViewCompact4" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HeldAugments" instance=ExtResource("1_8jouq")]
+layout_mode = 2
+
+[node name="AugmentViewCompact5" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HeldAugments" instance=ExtResource("1_8jouq")]
+layout_mode = 2
+
+[node name="AugmentViewCompact6" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HeldAugments" instance=ExtResource("1_8jouq")]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 3
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="AugmentViewPurchase" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/GridContainer" instance=ExtResource("2_vudr8")]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="AugmentViewPurchase2" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/GridContainer" instance=ExtResource("2_vudr8")]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="AugmentViewPurchase3" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/GridContainer" instance=ExtResource("2_vudr8")]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="AugmentViewPurchase4" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/GridContainer" instance=ExtResource("2_vudr8")]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2

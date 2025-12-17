@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=3 uid="uid://bjep4qeesyhur"]
+
+[ext_resource type="Script" uid="uid://c05o1s0ym5p68" path="res://constants.gd" id="1_2mmdi"]
+[ext_resource type="Theme" uid="uid://c5bi3fh1l4y14" path="res://attribute_themes/attribute_strength.tres" id="2_kumof"]
+[ext_resource type="Theme" uid="uid://h82teai5tyur" path="res://attribute_themes/attribute_stamina.tres" id="3_13uaj"]
+[ext_resource type="Texture2D" uid="uid://bvf2bgpwwnwmp" path="res://icon.svg" id="3_kn0fw"]
+[ext_resource type="Theme" uid="uid://xl7cr8wf5cyi" path="res://attribute_themes/attribute_foresight.tres" id="4_vub0o"]
+
+[node name="Constants" type="Node"]
+script = ExtResource("1_2mmdi")
+attribute_themes = {
+"foresight": ExtResource("4_vub0o"),
+"stamina": ExtResource("3_13uaj"),
+"strength": ExtResource("2_kumof")
+}
+attribute_icons = {
+"foresight": ExtResource("3_kn0fw"),
+"stamina": ExtResource("3_kn0fw"),
+"strength": ExtResource("3_kn0fw")
+}
+item_types = Array[String](["sword", "spear", "bow", "shield", "helm", "footwear"])

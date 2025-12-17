@@ -1,0 +1,67 @@
+[gd_scene load_steps=11 format=3 uid="uid://cwenjxg7obogh"]
+
+[ext_resource type="Script" uid="uid://b5sb34hbstw5r" path="res://forge_components/item_chroma_selector.gd" id="1_4q3l8"]
+[ext_resource type="PackedScene" uid="uid://cwpytcervecm5" path="res://forge_components/ColorButton.tscn" id="1_5f86a"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5f86a"]
+bg_color = Color(0, 1, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="Theme" id="Theme_4q3l8"]
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_5f86a")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4q3l8"]
+bg_color = Color(0.11764706, 0.6666667, 0.11764706, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="Theme" id="Theme_cwmn4"]
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_4q3l8")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cwmn4"]
+bg_color = Color(0, 0, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="Theme" id="Theme_milvo"]
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_cwmn4")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_milvo"]
+bg_color = Color(0.11764706, 0.11764706, 0.6666667, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="Theme" id="Theme_7oha4"]
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_milvo")
+
+[node name="ItemChromaSelector" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+alignment = 1
+script = ExtResource("1_4q3l8")
+
+[node name="RedButton" parent="." instance=ExtResource("1_5f86a")]
+layout_mode = 2
+
+[node name="GreenButton" parent="." instance=ExtResource("1_5f86a")]
+layout_mode = 2
+checked_style = SubResource("Theme_4q3l8")
+unchecked_style = SubResource("Theme_cwmn4")
+
+[node name="BlueButton" parent="." instance=ExtResource("1_5f86a")]
+layout_mode = 2
+checked_style = SubResource("Theme_milvo")
+unchecked_style = SubResource("Theme_7oha4")
