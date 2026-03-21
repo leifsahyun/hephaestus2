@@ -20,6 +20,12 @@ const Config = {
     equip: 10
   },
 
+  qualitySelector: {
+    min: 10,
+    max: 50,
+    increment: 5
+  },
+
   defaultHeroes: [
     { name: "Ajax", type: "hero", baseQuality: 20, baseHubris: 10, chroma: "", augments: [], variant: -1, value: 0 },
     { name: "Hector", type: "hero", baseQuality: 25, baseHubris: 15, chroma: "", augments: [], variant: -1, value: 0 },

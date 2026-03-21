@@ -294,7 +294,7 @@ const UI = {
     for (const t of Config.itemTypes) {
       const opt = document.createElement("option");
       opt.value = t;
-      opt.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      opt.textContent = capitalize(t);
       typeSelect.appendChild(opt);
     }
     typeGroup.appendChild(typeSelect);
@@ -310,7 +310,7 @@ const UI = {
     for (const color of ["red", "green", "blue"]) {
       const btn = document.createElement("button");
       btn.className = "chroma-btn chroma-" + color;
-      btn.textContent = color.charAt(0).toUpperCase() + color.slice(1);
+      btn.textContent = capitalize(color);
       btn.addEventListener("click", () => {
         if (selectedChroma === color) {
           selectedChroma = "";
@@ -334,7 +334,7 @@ const UI = {
     qualGroup.innerHTML = '<label>Quality:</label>';
     const qualDiv = document.createElement("div");
     qualDiv.className = "number-selector";
-    let qualityVal = 10;
+    let qualityVal = Config.qualitySelector.min;
     const qualLabel = document.createElement("span");
     qualLabel.className = "number-value";
     qualLabel.textContent = String(qualityVal);
@@ -343,14 +343,14 @@ const UI = {
     qualDown.className = "btn btn-sm";
     qualDown.textContent = "−";
     qualDown.addEventListener("click", () => {
-      qualityVal = Math.max(10, qualityVal - 5);
+      qualityVal = Math.max(Config.qualitySelector.min, qualityVal - Config.qualitySelector.increment);
       qualLabel.textContent = String(qualityVal);
     });
     const qualUp = document.createElement("button");
     qualUp.className = "btn btn-sm";
     qualUp.textContent = "+";
     qualUp.addEventListener("click", () => {
-      qualityVal = Math.min(50, qualityVal + 5);
+      qualityVal = Math.min(Config.qualitySelector.max, qualityVal + Config.qualitySelector.increment);
       qualLabel.textContent = String(qualityVal);
     });
 
@@ -510,7 +510,7 @@ const UI = {
 
     const nameEl = document.createElement("div");
     nameEl.className = "card-name";
-    nameEl.textContent = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+    nameEl.textContent = capitalize(item.name);
     card.appendChild(nameEl);
 
     const qualEl = document.createElement("div");
@@ -535,7 +535,7 @@ const UI = {
     if (item.chroma) {
       const chromaEl = document.createElement("div");
       chromaEl.className = "card-chroma chroma-text-" + item.chroma;
-      chromaEl.textContent = "Chroma: " + item.chroma.charAt(0).toUpperCase() + item.chroma.slice(1);
+      chromaEl.textContent = "Chroma: " + capitalize(item.chroma);
       card.appendChild(chromaEl);
     }
 

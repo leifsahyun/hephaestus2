@@ -12,6 +12,11 @@ function shuffleArray(arr) {
   return a;
 }
 
+function capitalize(str) {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 const ItemPool = {
   items: [],
   current: [],
@@ -54,6 +59,7 @@ const HeroPool = {
 
   draw() {
     const values = Object.values(this.current);
+    if (values.length === 0) return null;
     return values[Math.floor(Math.random() * values.length)];
   },
 

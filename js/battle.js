@@ -66,6 +66,7 @@ class Battle {
       (a, b) => chromaCounts[b] - chromaCounts[a]
     );
     if (
+      sortedKeys.length > 1 &&
       chromaCounts[sortedKeys[0]] > 0 &&
       chromaCounts[sortedKeys[0]] > chromaCounts[sortedKeys[1]]
     ) {
