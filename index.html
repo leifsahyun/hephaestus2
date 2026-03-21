@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hephaestus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>⚒ Hephaestus</h1>
+  </header>
+  <main id="app"></main>
+
+  <!-- Load order matters: config → models → pools → timeline → battle → ui → main -->
+  <script src="js/config.js"></script>
+  <script src="js/models.js"></script>
+  <script src="js/pools.js"></script>
+  <script src="js/timeline.js"></script>
+  <script src="js/battle.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
