@@ -240,6 +240,49 @@ header h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: flex-start;
+}
+
+.fate-stack {
+  position: relative;
+  /* card width (70px) + MAX_STACK_LAYERS(4) × LAYER_OFFSET(4px) = 82px */
+  width: 82px;
+  /* card height (70px × 3/2 = 105px) + MAX_STACK_LAYERS(4) × LAYER_OFFSET(4px) = 117px */
+  height: 117px;
+  flex-shrink: 0;
+}
+
+.fate-stack-card {
+  position: absolute;
+  width: 70px;
+  aspect-ratio: 2 / 3;
+  background: #0f3460;
+  border: 2px solid #e9c46a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+  color: #e9c46a;
+  font-size: 1rem;
+}
+
+.fate-stack-badge {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 22px;
+  height: 22px;
+  background: #e94560;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 
 .fate-card {
