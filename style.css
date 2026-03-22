@@ -271,6 +271,7 @@ header h1 {
   font-weight: bold;
   color: #e9c46a;
   font-size: 1rem;
+  filter: brightness(0.7);
 }
 
 .fate-stack-badge {
@@ -411,7 +412,7 @@ header h1 {
 }
 
 .modal-fate-card.modal-selected {
-  opacity: 0.6;
+  filter: brightness(0.7);
 }
 
 .modal-option-auto-selected {
