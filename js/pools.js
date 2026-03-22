@@ -1,5 +1,5 @@
 /**
- * Pool systems: ItemPool, HeroPool, MonsterPool, FatePool, AugmentPool
+ * Pool systems: ItemPool, HeroPool, MonsterPool, FatePool, AugmentPool, EffectPool
  * These are global singletons managing game resources.
  */
 
@@ -143,6 +143,88 @@ const FatePool = {
 
   shuffle() {
     this.current = shuffleArray(this.cards);
+  }
+};
+
+const EffectPool = {
+  effects: {
+    hubris: {
+      label(amount) {
+        return (amount >= 0 ? "+" : "") + amount + "H";
+      },
+      color(amount) {
+        return amount < 0 ? "#4ecca3" : "#e63946";
+      },
+      apply(battle, amount) {
+        battle.addHubris(amount);
+      }
+    },
+    heroQuality: {
+      label(amount) {
+        return (amount >= 0 ? "+" : "") + amount + "◈";
+      },
+      color(amount) {
+        return amount > 0 ? "#4ecca3" : "#e63946";
+      },
+      apply(battle, amount) {
+        const base = battle.hero.tempQuality != null ? battle.hero.tempQuality : battle.hero.baseQuality;
+        battle.hero.tempQuality = base + amount;
+      }
+    },
+    monsterQuality: {
+      label(amount) {
+        return (amount >= 0 ? "+" : "") + amount + "◈M";
+      },
+      color(amount) {
+        return amount > 0 ? "#e63946" : "#4ecca3";
+      },
+      apply(battle, amount) {
+        const base = battle.monster.tempQuality != null ? battle.monster.tempQuality : battle.monster.baseQuality;
+        battle.monster.tempQuality = base + amount;
+      }
+    },
+    monsterQualityMultiply: {
+      label(amount) {
+        return "\xD7" + amount + "◈M";
+      },
+      color(amount) {
+        return amount > 1 ? "#e63946" : "#4ecca3";
+      },
+      apply(battle, amount) {
+        const base = battle.monster.tempQuality != null ? battle.monster.tempQuality : battle.monster.baseQuality;
+        battle.monster.tempQuality = base * amount;
+      }
+    },
+    drawFateCards: {
+      label(amount) {
+        return "+" + amount + "▋";
+      },
+      color(amount) {
+        return "#e63946";
+      },
+      apply(battle, amount) {
+        for (let i = 0; i < amount; i++) {
+          const card = FatePool.draw();
+          if (card) battle.fateCards.push(card);
+        }
+      }
+    },
+    equipBoulder: {
+      label() {
+        return "\u229E5◈";
+      },
+      color(amount) {
+        return "#4ecca3";
+      },
+      apply(battle) {
+        const boulder = new Item({ name: "Boulder", type: "boulder", baseQuality: 5, augments: [] });
+        battle.equippedItems.push(boulder);
+      }
+    }
+  },
+
+  get(key) {
+    return this.effects[key] || null;
   }
 };
 
