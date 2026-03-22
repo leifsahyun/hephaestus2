@@ -20,6 +20,11 @@ const Config = {
     equip: 10
   },
 
+  battleRewards: {
+    moneyMin: 5,
+    moneyMax: 25
+  },
+
   qualitySelector: {
     min: 10,
     max: 50,
