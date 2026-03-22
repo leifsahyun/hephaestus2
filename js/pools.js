@@ -140,7 +140,7 @@ const FatePool = {
   draw() {
     if (this.fixedCards.has(this.current.length) && !this.indexed.includes(this.current.length)) {
       this.indexed.push(this.current.length);
-      return fixedCards.get(this.current.length);
+      return this.fixedCards.get(this.current.length);
     }
     return this.current.pop() || null;
   },
