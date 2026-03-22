@@ -263,6 +263,53 @@ const UI = {
       return;
     }
     display.innerHTML = "";
+
+    const MAX_VISIBLE = 3;
+    const MAX_STACK_LAYERS = 4;
+    const LAYER_OFFSET = 4; // px offset per depth level
+    const MIN_OPACITY = 0.2;
+    const MAX_OPACITY = 0.9;
+    const OPACITY_STEP = 0.2;
+    const stackedCards = [];  // card objects in stack, oldest first
+    const visiblePairs = [];  // { card, el } for on-screen cards, oldest first
+
+    const updateStack = () => {
+      let stackEl = display.querySelector(".fate-stack");
+      if (stackedCards.length === 0) {
+        if (stackEl) stackEl.remove();
+        return;
+      }
+      if (!stackEl) {
+        stackEl = document.createElement("div");
+        stackEl.className = "fate-stack";
+        display.insertBefore(stackEl, display.firstChild);
+      }
+      stackEl.innerHTML = "";
+
+      // Badge showing total stacked count
+      const badge = document.createElement("div");
+      badge.className = "fate-stack-badge";
+      badge.textContent = stackedCards.length;
+      stackEl.appendChild(badge);
+
+      // Show up to MAX_STACK_LAYERS visual layers (most recently stacked cards)
+      const layers = stackedCards.slice(-MAX_STACK_LAYERS);
+      const n = layers.length;
+      layers.forEach((card, idx) => {
+        // idx 0 = oldest shown layer, idx n-1 = most recently stacked (front)
+        const depthFromFront = n - 1 - idx;
+        const offset = depthFromFront * LAYER_OFFSET;
+        const cardEl = document.createElement("div");
+        cardEl.className = "fate-stack-card";
+        cardEl.textContent = card.toString();
+        cardEl.style.top = `${offset}px`;
+        cardEl.style.left = `${offset}px`;
+        cardEl.style.zIndex = n - depthFromFront;
+        cardEl.style.opacity = Math.max(MIN_OPACITY, MAX_OPACITY - depthFromFront * OPACITY_STEP);
+        stackEl.appendChild(cardEl);
+      });
+    };
+
     let i = 0;
     const drawNext = () => {
       if (i >= fateCards.length) {
@@ -271,21 +318,33 @@ const UI = {
       }
       const card = fateCards[i];
       i++;
+
+      // If already at max visible, move oldest to the stack
+      if (visiblePairs.length >= MAX_VISIBLE) {
+        const oldest = visiblePairs.shift();
+        oldest.el.remove();
+        stackedCards.push(oldest.card);
+        updateStack();
+      }
+
       if (card instanceof HubrisThresholdFateCard) {
         const cardEl = this.renderHubrisThresholdFateCard(card, battle, () => {
           setTimeout(drawNext, 300);
         });
         display.appendChild(cardEl);
+        visiblePairs.push({ card, el: cardEl });
       } else if (card instanceof ModalFateCard) {
         const cardEl = this.renderModalFateCard(card, battle, () => {
           setTimeout(drawNext, 300);
         });
         display.appendChild(cardEl);
+        visiblePairs.push({ card, el: cardEl });
       } else {
         const cardEl = document.createElement("div");
         cardEl.className = "fate-card";
         cardEl.textContent = card.toString();
         display.appendChild(cardEl);
+        visiblePairs.push({ card, el: cardEl });
         setTimeout(drawNext, 600);
       }
     };
