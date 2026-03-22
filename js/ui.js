@@ -181,8 +181,9 @@ const UI = {
       equipBtn.disabled = true;
       rerollBtn.disabled = true;
       fightBtn.disabled = true;
-      const result = battle.resolveBattle();
+      battle.drawFateCards();
       this.showFateCards(battle.fateCards, battle, () => {
+        const result = battle.resolveBattle();
         this.showBattleResult(result, battle);
       });
     });
