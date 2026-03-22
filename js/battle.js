@@ -61,7 +61,7 @@ class Battle {
   getExpectedDraw() {
     return Math.max(
       0,
-      Math.floor(0.08 * Math.pow(0.1 * this.hero.hubris, 3) + 1.03)
+      Math.floor(0.08 * Math.pow(0.1 * (this.hero.hubris + 10), 3) + 1.03)
     );
   }
 
