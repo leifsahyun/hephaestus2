@@ -68,9 +68,6 @@ class Battle {
   resolveBattle() {
     this.resolved = true;
 
-    // Draw fate cards
-    this.drawFateCards();
-
     // Calculate strengths
     let heroStrength = this.hero.quality;
     for (const item of this.equippedItems) {
