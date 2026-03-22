@@ -16,8 +16,8 @@ const Config = {
   minTimelineLength: 10,
 
   hubrisCosts: {
-    reroll: 3,
-    equip: 10
+    reroll: 2,
+    equip: 5
   },
 
   battleRewards: {
