@@ -34,21 +34,20 @@ const Config = {
 
   defaultMonsters: {
     1: [
-      { name: "Goblin", type: "monster", baseQuality: 15, augments: [], variant: -1, value: 0 },
-      { name: "Skeleton", type: "monster", baseQuality: 20, augments: [], variant: -1, value: 0 },
-      { name: "Slime", type: "monster", baseQuality: 10, augments: [], variant: -1, value: 0 }
+      { name: "Minotaur", type: "monster", baseQuality: 15, augments: [], variant: -1, value: 0 },
+      { name: "Hydra", type: "monster", baseQuality: 20, augments: [], variant: -1, value: 0 },
+      { name: "Medusa", type: "monster", baseQuality: 10, augments: [], variant: -1, value: 0 }
     ]
   },
 
   defaultItems: [
-    { name: "Iron Sword", type: "sword", baseQuality: 10, augments: [], variant: 0, value: 10 },
-    { name: "Wooden Shield", type: "shield", baseQuality: 8, augments: [], variant: 0, value: 8 },
-    { name: "Bronze Helm", type: "helm", baseQuality: 6, augments: [], variant: 0, value: 6 },
-    { name: "Chain Armor", type: "armor", baseQuality: 12, augments: [], variant: 0, value: 12 },
-    { name: "Ruby Ring", type: "ring", baseQuality: 5, augments: [], variant: 0, value: 5 },
-    { name: "Steel Sword", type: "sword", baseQuality: 15, augments: [], variant: 1, value: 15 },
-    { name: "Tower Shield", type: "shield", baseQuality: 14, augments: [], variant: 1, value: 14 },
-    { name: "Emerald Ring", type: "ring", baseQuality: 7, augments: [], variant: 1, value: 7 }
+    { name: "Sword", type: "sword", baseQuality: 10, augments: [], variant: 0, value: 10 },
+    { name: "Shield", type: "shield", baseQuality: 8, augments: [], variant: 0, value: 8 },
+    { name: "Helm", type: "helm", baseQuality: 6, augments: [], variant: 0, value: 6 },
+    { name: "Armor", type: "armor", baseQuality: 12, augments: [], variant: 0, value: 12 },
+    { name: "Net", type: "ring", baseQuality: 5, augments: [], variant: 0, value: 5 },
+    { name: "Bow", type: "sword", baseQuality: 15, augments: [], variant: 1, value: 15 },
+    { name: "Sandals", type: "ring", baseQuality: 7, augments: [], variant: 1, value: 7 }
   ],
 
   defaultFateCards: [
