@@ -13,7 +13,6 @@ header {
   padding: 12px 24px;
   border-bottom: 2px solid #e94560;
   text-align: center;
-  position: relative;
 }
 
 header h1 {
@@ -22,14 +21,18 @@ header h1 {
   letter-spacing: 2px;
 }
 
-#player-stats {
-  position: absolute;
-  top: 50%;
-  left: 24px;
-  transform: translateY(-50%);
+#header-bottom {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+#player-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
   font-size: 1rem;
   font-weight: bold;
   line-height: 1.2;
@@ -600,6 +603,11 @@ header h1 {
 }
 
 .augment-card:active { cursor: grabbing; }
+
+.augment-card--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
 .augment-name {
   font-weight: bold;
