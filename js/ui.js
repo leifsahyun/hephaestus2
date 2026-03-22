@@ -702,13 +702,14 @@ const UI = {
         name: nameInput.value || typeSelect.value,
         type: typeSelect.value,
         baseQuality: qualityVal,
-        value: 0,
+        value: qualityVal,
         augments: [],
         variant: 0
       });
       ItemPool.items.push(item);
       nameInput.value = "";
       this.showForgeMessage("Item created: " + item.name);
+      createBtn.disabled = true;
     });
     panel.appendChild(createBtn);
 
