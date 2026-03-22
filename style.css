@@ -194,6 +194,38 @@ header h1 {
 
 .stat-icon { margin-right: 4px; }
 
+/* ── Fate Cards Section ── */
+.fate-cards-section {
+  margin-bottom: 16px;
+}
+
+.fate-cards-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.fate-card {
+  background: #0f3460;
+  border: 2px solid #e9c46a;
+  border-radius: 8px;
+  width: 70px;
+  aspect-ratio: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+  color: #e9c46a;
+  font-size: 1rem;
+  animation: card-appear 0.3s ease-out;
+}
+
+@keyframes card-appear {
+  from { opacity: 0; transform: translateY(-10px) scale(0.85); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
 /* ── Battle Result ── */
 .battle-log { margin-top: 20px; }
 
@@ -226,8 +258,20 @@ header h1 {
 /* ── Forge Screen ── */
 .forge-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 16px;
+}
+
+.create-item-panel {
+  grid-column: span 2;
+}
+
+.upgrade-anvil-panel {
+  grid-column: span 4;
+}
+
+.augment-shelf-panel {
+  grid-column: span 6;
 }
 
 .forge-component {
@@ -323,7 +367,7 @@ header h1 {
 /* ── Upgrade Anvil ── */
 .upgrade-items {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
 }
 
@@ -331,6 +375,7 @@ header h1 {
   border: 1px solid #333;
   border-radius: 8px;
   padding: 8px;
+  flex: 1;
 }
 
 .upgrade-item-wrapper.drop-target-active {
@@ -348,8 +393,9 @@ header h1 {
 /* ── Augment Shelf ── */
 .augment-shelf-list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .augment-card {
@@ -357,6 +403,8 @@ header h1 {
   border-radius: 8px;
   padding: 12px;
   cursor: grab;
+  flex: 1;
+  min-width: 180px;
 }
 
 .augment-card:active { cursor: grabbing; }
@@ -398,4 +446,9 @@ header h1 {
 @media (max-width: 768px) {
   .battle-layout { grid-template-columns: 1fr; }
   .forge-layout { grid-template-columns: 1fr; }
+  .create-item-panel,
+  .upgrade-anvil-panel,
+  .augment-shelf-panel { grid-column: span 1; }
+  .upgrade-items { flex-direction: column; }
+  .augment-shelf-list { flex-direction: column; }
 }
