@@ -102,9 +102,14 @@ const UI = {
     const offerArea = document.createElement("div");
     offerArea.className = "offer-area";
     offerArea.innerHTML = "<h3>Offered Item</h3>";
+
+    // Wrapper so the card and buttons share the same width
+    const offerContent = document.createElement("div");
+    offerContent.className = "offer-content";
+
     const offerCard = document.createElement("div");
     offerCard.id = "offer-card";
-    offerArea.appendChild(offerCard);
+    offerContent.appendChild(offerCard);
 
     // Action buttons
     const actions = document.createElement("div");
@@ -142,7 +147,8 @@ const UI = {
     actions.appendChild(equipBtn);
     actions.appendChild(rerollBtn);
     actions.appendChild(fightBtn);
-    offerArea.appendChild(actions);
+    offerContent.appendChild(actions);
+    offerArea.appendChild(offerContent);
     container.appendChild(offerArea);
 
     // Battle log
