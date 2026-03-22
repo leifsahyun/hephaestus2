@@ -559,6 +559,55 @@ header h1 {
   min-height: 20px;
 }
 
+/* ── Event Timeline (header) ── */
+#event-timeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 8px 0 4px;
+}
+
+.timeline-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.timeline-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-node-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #0f3460;
+  border: 2px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: border-color 0.2s;
+}
+
+.timeline-node--current .timeline-node-circle {
+  border: 3px solid #e94560;
+  background: #16213e;
+  box-shadow: 0 0 8px rgba(233, 69, 96, 0.6);
+}
+
+.timeline-connector {
+  width: 24px;
+  height: 2px;
+  background: #444;
+  flex-shrink: 0;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #16213e; }
