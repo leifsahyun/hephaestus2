@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bwvbxc032bmoe"]
-
-[ext_resource type="Script" uid="uid://c43imeeiuyeu0" path="res://augment_pool.gd" id="1_3ircs"]
-
-[node name="AugmentPool" type="Node"]
-script = ExtResource("1_3ircs")
