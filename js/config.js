@@ -32,16 +32,16 @@ const Config = {
   },
 
   defaultHeroes: [
-    { name: "Ajax", type: "hero", baseQuality: 20, baseHubris: 0, augments: [], variant: -1, value: 0 },
-    { name: "Hector", type: "hero", baseQuality: 25, baseHubris: 0, augments: [], variant: -1, value: 0 },
-    { name: "Achilles", type: "hero", baseQuality: 30, baseHubris: 0, augments: [], variant: -1, value: 0 }
+    { name: "Ajax", type: "hero", baseQuality: 10, baseHubris: 0, augments: [], variant: -1, value: 0 },
+    { name: "Hector", type: "hero", baseQuality: 15, baseHubris: 0, augments: [], variant: -1, value: 0 },
+    { name: "Achilles", type: "hero", baseQuality: 20, baseHubris: 0, augments: [], variant: -1, value: 0 }
   ],
 
   defaultMonsters: {
     1: [
-      { name: "Minotaur", type: "monster", baseQuality: 15, augments: [], variant: -1, value: 0 },
-      { name: "Hydra", type: "monster", baseQuality: 20, augments: [], variant: -1, value: 0 },
-      { name: "Medusa", type: "monster", baseQuality: 10, augments: [], variant: -1, value: 0 }
+      { name: "Minotaur", type: "monster", baseQuality: 45, augments: [], variant: -1, value: 0 },
+      { name: "Hydra", type: "monster", baseQuality: 60, augments: [], variant: -1, value: 0 },
+      { name: "Medusa", type: "monster", baseQuality: 20, augments: [], variant: -1, value: 0 }
     ]
   },
 
