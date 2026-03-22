@@ -299,11 +299,20 @@ const UI = {
         // idx 0 = oldest shown layer, idx n-1 = most recently stacked (front)
         const depthFromFront = n - 1 - idx;
         const offset = depthFromFront * LAYER_OFFSET;
-        const cardEl = document.createElement("div");
+
+        let cardEl = null;
+        if (card instanceof HubrisThresholdFateCard) {
+          cardEl = this.renderHubrisThresholdFateCard(card, battle, () => {});
+        } else if (card instanceof ModalFateCard) {
+          cardEl = this.renderModalFateCard(card, battle, () => {});
+        } else {
+          cardEl = document.createElement("div");
+          cardEl.textContent = card.toString();
+        }
+        
         cardEl.className = "fate-stack-card";
-        cardEl.textContent = card.toString();
         cardEl.style.top = `${offset}px`;
-        cardEl.style.left = `${offset}px`;
+        cardEl.style.right = `${offset}px`;
         cardEl.style.zIndex = n - depthFromFront;
         cardEl.style.opacity = Math.max(MIN_OPACITY, MAX_OPACITY - depthFromFront * OPACITY_STEP);
         stackEl.appendChild(cardEl);
