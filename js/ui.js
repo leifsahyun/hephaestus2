@@ -112,12 +112,6 @@ const UI = {
     const container = document.createElement("div");
     container.className = "battle-screen";
 
-    // Title
-    const title = document.createElement("h2");
-    title.className = "screen-title";
-    title.textContent = event.description;
-    container.appendChild(title);
-
     // Main layout
     const layout = document.createElement("div");
     layout.className = "battle-layout";
@@ -564,11 +558,6 @@ const UI = {
 
     const container = document.createElement("div");
     container.className = "forge-screen";
-
-    const title = document.createElement("h2");
-    title.className = "screen-title";
-    title.textContent = "The Forge";
-    container.appendChild(title);
 
     const forgeLayout = document.createElement("div");
     forgeLayout.className = "forge-layout";
