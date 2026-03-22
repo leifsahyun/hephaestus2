@@ -119,7 +119,7 @@ const UI = {
       rerollBtn.disabled = true;
       fightBtn.disabled = true;
       const result = battle.resolveBattle();
-      this.showFateCards(battle.fateCards, () => {
+      this.showFateCards(battle.fateCards, battle, () => {
         this.showBattleResult(result, battle);
       });
     });
@@ -209,7 +209,7 @@ const UI = {
     `;
   },
 
-  showFateCards(fateCards, onComplete) {
+  showFateCards(fateCards, battle, onComplete) {
     const display = document.getElementById("fate-cards-display");
     if (!display) {
       if (onComplete) onComplete();
@@ -222,14 +222,83 @@ const UI = {
         if (onComplete) onComplete();
         return;
       }
-      const cardEl = document.createElement("div");
-      cardEl.className = "fate-card";
-      cardEl.textContent = fateCards[i].toString();
-      display.appendChild(cardEl);
+      const card = fateCards[i];
       i++;
-      setTimeout(drawNext, 600);
+      if (card instanceof ModalFateCard) {
+        const cardEl = this.renderModalFateCard(card, battle, () => {
+          setTimeout(drawNext, 300);
+        });
+        display.appendChild(cardEl);
+      } else {
+        const cardEl = document.createElement("div");
+        cardEl.className = "fate-card";
+        cardEl.textContent = card.toString();
+        display.appendChild(cardEl);
+        setTimeout(drawNext, 600);
+      }
     };
     drawNext();
+  },
+
+  renderModalFateCard(card, battle, onComplete) {
+    const el = document.createElement("div");
+    el.className = "fate-card modal-fate-card";
+
+    // Option A (top)
+    const optAEl = document.createElement("button");
+    optAEl.className = "modal-option";
+    const optAText = document.createElement("div");
+    optAText.className = "modal-option-text";
+    optAText.textContent = card.options[0].text;
+    const optADesc = document.createElement("div");
+    optADesc.className = "modal-option-desc";
+    optADesc.textContent = card.options[0].description;
+    optAEl.appendChild(optAText);
+    optAEl.appendChild(optADesc);
+
+    // Separator
+    const separator = document.createElement("div");
+    separator.className = "modal-separator";
+    const sepIcon = document.createElement("img");
+    sepIcon.src = card.separatorIcon;
+    sepIcon.className = "modal-separator-icon";
+    sepIcon.alt = "";
+    separator.appendChild(sepIcon);
+    if (card.separatorText) {
+      const sepText = document.createElement("span");
+      sepText.className = "modal-separator-text";
+      sepText.textContent = card.separatorText;
+      separator.appendChild(sepText);
+    }
+
+    // Option B (bottom)
+    const optBEl = document.createElement("button");
+    optBEl.className = "modal-option";
+    const optBText = document.createElement("div");
+    optBText.className = "modal-option-text";
+    optBText.textContent = card.options[1].text;
+    const optBDesc = document.createElement("div");
+    optBDesc.className = "modal-option-desc";
+    optBDesc.textContent = card.options[1].description;
+    optBEl.appendChild(optBText);
+    optBEl.appendChild(optBDesc);
+
+    const handleSelect = (index) => {
+      card.selectOption(index, battle);
+      optAEl.disabled = true;
+      optBEl.disabled = true;
+      el.classList.add("modal-selected");
+      onComplete();
+    };
+
+    optAEl.addEventListener("click", () => handleSelect(0));
+    optBEl.addEventListener("click", () => handleSelect(1));
+
+    el.appendChild(optAEl);
+    el.appendChild(separator);
+    el.appendChild(optBEl);
+
+    return el;
   },
 
   showBattleResult(result, battle) {

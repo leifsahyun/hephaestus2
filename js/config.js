@@ -60,7 +60,23 @@ const Config = {
     { value: 6, suit: "Wands", sign: "+", name: "Six of Wands" },
     { value: 8, suit: "Pentacles", sign: "+", name: "Eight of Pentacles" },
     { value: 10, suit: "Pentacles", sign: "+", name: "Ten of Pentacles" },
-    { value: 12, suit: "Stars", sign: "+", name: "Twelve of Stars" }
+    { value: 12, suit: "Stars", sign: "+", name: "Twelve of Stars" },
+    {
+      name: "Crossroads",
+      separatorText: "or",
+      options: [
+        {
+          text: "Press On",
+          description: "Continue the battle as normal.",
+          onSelect: null
+        },
+        {
+          text: "Offer",
+          description: "Reduce hubris by 5.",
+          onSelect: function(battle) { battle.addHubris(-5); }
+        }
+      ]
+    }
   ],
 
   defaultAugments: [

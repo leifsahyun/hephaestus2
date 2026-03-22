@@ -127,3 +127,31 @@ class FateCard {
     return `${this.value}${this.suit[0]} ${this.sign}`;
   }
 }
+
+class ModalFateCard {
+  constructor(data) {
+    if (!data.options || data.options.length !== 2) {
+      throw new Error("ModalFateCard requires exactly two options.");
+    }
+    this.value = 0;
+    this.name = data.name || "Choice";
+    this.separatorText = data.separatorText || "";
+    this.separatorIcon = data.separatorIcon || "ChoiceArrows.png";
+    this.options = data.options.map(opt => ({
+      text: opt.text || "",
+      description: opt.description || "",
+      onSelectFn: opt.onSelect || null
+    }));
+  }
+
+  selectOption(index, battle) {
+    const opt = this.options[index];
+    if (opt && opt.onSelectFn) {
+      opt.onSelectFn(battle);
+    }
+  }
+
+  toString() {
+    return this.name;
+  }
+}
