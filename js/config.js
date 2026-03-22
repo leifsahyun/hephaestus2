@@ -27,9 +27,9 @@ const Config = {
   },
 
   defaultHeroes: [
-    { name: "Ajax", type: "hero", baseQuality: 20, baseHubris: 10, augments: [], variant: -1, value: 0 },
-    { name: "Hector", type: "hero", baseQuality: 25, baseHubris: 15, augments: [], variant: -1, value: 0 },
-    { name: "Achilles", type: "hero", baseQuality: 30, baseHubris: 5, augments: [], variant: -1, value: 0 }
+    { name: "Ajax", type: "hero", baseQuality: 20, baseHubris: 0, augments: [], variant: -1, value: 0 },
+    { name: "Hector", type: "hero", baseQuality: 25, baseHubris: 0, augments: [], variant: -1, value: 0 },
+    { name: "Achilles", type: "hero", baseQuality: 30, baseHubris: 0, augments: [], variant: -1, value: 0 }
   ],
 
   defaultMonsters: {
@@ -51,41 +51,17 @@ const Config = {
   ],
 
   defaultFateCards: [
-    { value: 1, suit: "Swords", sign: "+", name: "Ace of Swords" },
-    { value: 2, suit: "Swords", sign: "+", name: "Two of Swords" },
-    { value: 3, suit: "Swords", sign: "+", name: "Three of Swords" },
-    { value: 5, suit: "Cups", sign: "+", name: "Five of Cups" },
-    { value: 7, suit: "Cups", sign: "+", name: "Seven of Cups" },
-    { value: 4, suit: "Wands", sign: "+", name: "Four of Wands" },
-    { value: 6, suit: "Wands", sign: "+", name: "Six of Wands" },
-    { value: 8, suit: "Pentacles", sign: "+", name: "Eight of Pentacles" },
-    { value: 10, suit: "Pentacles", sign: "+", name: "Ten of Pentacles" },
-    { value: 12, suit: "Stars", sign: "+", name: "Twelve of Stars" },
     {
-      name: "Crossroads",
-      separatorText: "Crossroads",
+      name: "Face Your Foe",
+      separatorText: "Face Your Foe",
       options: [
         {
-          text: "Press On",
-          effects: []
-        },
-        {
-          text: "Offer",
-          effects: [{ key: "hubris", amount: -5 }]
-        }
-      ]
-    },
-    {
-      name: "Burden",
-      separatorText: "Burden",
-      options: [
-        {
-          text: "Struggle",
+          text: "Recklessness",
           effects: [{ key: "monsterQualityMultiply", amount: 2 }]
         },
         {
-          text: "Brace",
-          effects: [{ key: "drawFateCards", amount: 1 }]
+          text: "Cowardice",
+          effects: [{ key: "drawFateCards", amount: 3 }]
         }
       ]
     },
@@ -98,53 +74,124 @@ const Config = {
           effects: [{ key: "heroQuality", amount: 3 }]
         },
         {
-          text: "Favour",
+          text: "Favour of the Gods",
           effects: [{ key: "hubris", amount: -3 }]
         }
       ]
     },
     {
-      name: "Trial",
-      separatorText: "Trial",
+      name: "Burden",
+      separatorText: "Burden",
       options: [
         {
           text: "Boulder",
-          effects: [{ key: "equipBoulder", amount: 1 }, { key: "monsterQuality", amount: 5 }]
+          effects: [{ key: "equipBoulder", amount: 1 }, { key: "hubris", amount: 5 }]
         },
         {
-          text: "Endure",
-          effects: [{ key: "hubris", amount: 5 }]
+          text: "Weakness",
+          effects: [{ key: "heroQuality", amount: -5 }]
         }
       ]
     },
     {
-      name: "Nemesis",
-      hubrisThreshold: 10,
+      hubrisThreshold: 5,
       options: [
         {
-          text: "Wrath",
           effects: [{ key: "monsterQuality", amount: 3 }]
         },
         {
-          text: "Mercy",
+          effects: [{ key: "equipBoulder", amount: 1 }]
+        }
+      ]
+    },
+    {
+      hubrisThreshold: 7,
+      options: [
+        {
+          effects: [{ key: "hubris", amount: 3 }]
+        },
+        {
           effects: [{ key: "drawFateCards", amount: 1 }]
         }
       ]
     },
     {
-      name: "Scales of Justice",
+      hubrisThreshold: 9,
+      options: [
+        {
+          effects: [{ key: "monsterQuality", amount: 10 }]
+        },
+        {
+          effects: [{ key: "heroQuality", amount: 3 }]
+        }
+      ]
+    },
+    {
+      hubrisThreshold: 13,
+      options: [
+        {
+          effects: [{ key: "monsterQuality", amount: 10 }, {key: "drawFateCards", amount:1}]
+        },
+        {
+          effects: [{ key: "hubris", amount: -1 }]
+        }
+      ]
+    },
+    {
+      hubrisThreshold: 14,
+      options: [
+        {
+          effects: [{ key: "monsterQuality", amount: 15 }, {key: "drawFateCards", amount:1}]
+        },
+        {
+          effects: [{ key: "monsterQuality", amount: 3 }]
+        }
+      ]
+    },
+    {
       hubrisThreshold: 15,
       options: [
         {
-          text: "Condemned",
-          effects: [{ key: "hubris", amount: 5 }]
+          effects: [{ key: "monsterQualityMultiply", amount: 2 }]
         },
         {
-          text: "Absolved",
-          effects: [{ key: "hubris", amount: -3 }]
+          effects: [{ key: "monsterQuality", amount: 5 }]
         }
       ]
-    }
+    },
+    {
+      hubrisThreshold: 16,
+      options: [
+        {
+          effects: [{ key: "drawFateCards", amount: 2 }]
+        },
+        {
+          effects: [{ key: "hubris", amount: -1 }]
+        }
+      ]
+    },
+    {
+      hubrisThreshold: 20,
+      options: [
+        {
+          effects: [{ key: "monsterQualityMultiply", amount: 2 }, {key: "drawFateCards", amount:1}]
+        },
+        {
+          effects: [{ key: "monsterQuality", amount: 5 }]
+        }
+      ]
+    },
+    {
+      hubrisThreshold: 21,
+      options: [
+        {
+          effects: [{ key: "drawFateCards", amount: 3 }]
+        },
+        {
+          effects: [{ key: "hubris", amount: -1 }]
+        }
+      ]
+    },
   ],
 
   defaultAugments: [
