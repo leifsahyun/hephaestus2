@@ -488,7 +488,7 @@ const UI = {
 
     card.selectOption(autoIndex, battle);
     el.classList.add("modal-selected");
-    setTimeout(onComplete, 1200);
+    setTimeout(onComplete, 300);
 
     return el;
   },
