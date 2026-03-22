@@ -26,8 +26,8 @@ const Config = {
   },
 
   qualitySelector: {
-    min: 10,
-    max: 50,
+    min: 5,
+    max: 20,
     increment: 5
   },
 
