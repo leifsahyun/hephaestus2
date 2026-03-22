@@ -14,6 +14,8 @@ class Battle {
 
     // Reset hero for new battle
     this.hero.reset();
+    // Reset monster also
+    this.monster.tempQuality = this.monster.baseQuality;
 
     // Activate hero augments
     for (const aug of this.hero.augments) {
