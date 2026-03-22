@@ -64,7 +64,12 @@ header h1 {
 .battle-layout {
   display: grid;
   grid-template-columns: 1fr 1.4fr 1fr;
+  grid-template-rows: auto auto;
   gap: 16px;
+}
+
+.hero-section {
+  grid-row: 1 / 3;
 }
 
 .battle-section {
@@ -202,12 +207,11 @@ header h1 {
   padding: 0;
 }
 
-/* ── Offer Area (below battle layout) ── */
+/* ── Offer Area (in battle layout row 2, col 2) ── */
 .offer-area {
   background: #16213e;
   border-radius: 10px;
   padding: 16px;
-  margin-top: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -376,8 +380,6 @@ header h1 {
 }
 
 /* ── Battle Result ── */
-.battle-log { margin-top: 20px; }
-
 .battle-result {
   border-radius: 10px;
   padding: 20px;
@@ -567,7 +569,8 @@ header h1 {
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .battle-layout { grid-template-columns: 1fr; }
+  .battle-layout { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .hero-section { grid-row: auto; }
   .forge-layout { grid-template-columns: 1fr; }
   .create-item-panel,
   .upgrade-anvil-panel,
