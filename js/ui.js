@@ -46,15 +46,6 @@ const UI = {
     title.textContent = event.description;
     container.appendChild(title);
 
-    // Fate Cards section (at the top, populated when battle is resolved)
-    const fateCardsSection = document.createElement("div");
-    fateCardsSection.className = "fate-cards-section";
-    const fateCardsDisplay = document.createElement("div");
-    fateCardsDisplay.id = "fate-cards-display";
-    fateCardsDisplay.className = "fate-cards-display";
-    fateCardsSection.appendChild(fateCardsDisplay);
-    container.appendChild(fateCardsSection);
-
     // Main layout
     const layout = document.createElement("div");
     layout.className = "battle-layout";
@@ -79,17 +70,45 @@ const UI = {
 
     layout.appendChild(heroSection);
 
-    // Center: Offer + Actions
-    const centerSection = document.createElement("div");
-    centerSection.className = "battle-section center-section";
+    // Center: Fate Cards section (populated when battle is resolved)
+    const fateCardsSection = document.createElement("div");
+    fateCardsSection.className = "battle-section fate-cards-section";
+    const fateCardsDisplay = document.createElement("div");
+    fateCardsDisplay.id = "fate-cards-display";
+    fateCardsDisplay.className = "fate-cards-display";
+    fateCardsSection.appendChild(fateCardsDisplay);
 
-    // Offer item
+    layout.appendChild(fateCardsSection);
+
+    // Right: Monster card + Expected stats
+    const monsterSection = document.createElement("div");
+    monsterSection.className = "battle-section monster-section";
+    monsterSection.innerHTML = "<h3>Monster</h3>";
+    const monsterCard = this.renderItemCard(battle.monster, false);
+    monsterCard.id = "monster-card";
+    monsterSection.appendChild(monsterCard);
+
+    // Expected stats
+    const expectedStats = document.createElement("div");
+    expectedStats.id = "expected-stats";
+    expectedStats.className = "expected-stats";
+    monsterSection.appendChild(expectedStats);
+    layout.appendChild(monsterSection);
+
+    container.appendChild(layout);
+
+    // Offered item area below the layout (centered)
     const offerArea = document.createElement("div");
     offerArea.className = "offer-area";
     offerArea.innerHTML = "<h3>Offered Item</h3>";
+
+    // Wrapper so the card and buttons share the same width
+    const offerContent = document.createElement("div");
+    offerContent.className = "offer-content";
+
     const offerCard = document.createElement("div");
     offerCard.id = "offer-card";
-    offerArea.appendChild(offerCard);
+    offerContent.appendChild(offerCard);
 
     // Action buttons
     const actions = document.createElement("div");
@@ -127,27 +146,9 @@ const UI = {
     actions.appendChild(equipBtn);
     actions.appendChild(rerollBtn);
     actions.appendChild(fightBtn);
-    offerArea.appendChild(actions);
-    centerSection.appendChild(offerArea);
-
-    layout.appendChild(centerSection);
-
-    // Right: Monster card + Expected stats
-    const monsterSection = document.createElement("div");
-    monsterSection.className = "battle-section monster-section";
-    monsterSection.innerHTML = "<h3>Monster</h3>";
-    const monsterCard = this.renderItemCard(battle.monster, false);
-    monsterCard.id = "monster-card";
-    monsterSection.appendChild(monsterCard);
-
-    // Expected stats
-    const expectedStats = document.createElement("div");
-    expectedStats.id = "expected-stats";
-    expectedStats.className = "expected-stats";
-    monsterSection.appendChild(expectedStats);
-    layout.appendChild(monsterSection);
-
-    container.appendChild(layout);
+    offerContent.appendChild(actions);
+    offerArea.appendChild(offerContent);
+    container.appendChild(offerArea);
 
     // Battle log
     const logArea = document.createElement("div");
