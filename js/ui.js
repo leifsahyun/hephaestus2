@@ -7,12 +7,58 @@ const UI = {
 
   init() {
     Timeline.onSceneChange = (sceneType) => {
+      this.renderTimeline();
       if (sceneType === "battle") {
         this.showBattle();
       } else if (sceneType === "forge") {
         this.showForge();
       }
     };
+  },
+
+  renderTimeline() {
+    const container = document.getElementById("event-timeline");
+    if (!container) return;
+
+    const ICONS = { battle: "⚔️", forge: "⚒" };
+    const MAX_UPCOMING_DISPLAYED = 9;
+    const events = [];
+    if (Timeline.currentEvent) {
+      events.push({ event: Timeline.currentEvent, isCurrent: true });
+    }
+    const upcoming = Timeline.upcomingEvents.slice(0, MAX_UPCOMING_DISPLAYED);
+    for (const evt of upcoming) {
+      events.push({ event: evt, isCurrent: false });
+    }
+
+    const track = document.createElement("div");
+    track.className = "timeline-track";
+
+    events.forEach(({ event, isCurrent }, i) => {
+      if (i > 0) {
+        const connector = document.createElement("div");
+        connector.className = "timeline-connector";
+        track.appendChild(connector);
+      }
+
+      const node = document.createElement("div");
+      node.className = "timeline-node" + (isCurrent ? " timeline-node--current" : "");
+
+      const circle = document.createElement("div");
+      circle.className = "timeline-node-circle";
+      const icon = ICONS[event.sceneType];
+      if (!icon) {
+        console.warn("Unknown event sceneType:", event.sceneType);
+      }
+      circle.textContent = icon || "●";
+      circle.title = event.name;
+
+      node.appendChild(circle);
+      track.appendChild(node);
+    });
+
+    container.innerHTML = "";
+    container.appendChild(track);
   },
 
   getApp() {
