@@ -790,6 +790,8 @@ const UI = {
           const newCard = this.renderItemCard(item, false);
           wrapper.replaceChild(newCard, card);
           card = newCard;
+          const shelfCard = document.querySelector(`[data-augment-name="${augName}"]`);
+          if (shelfCard) shelfCard.remove();
           this.showForgeMessage(`${augName} attached to ${item.name}!`);
         });
 
@@ -817,6 +819,7 @@ const UI = {
       augCard.className = "augment-card" + (canAfford ? "" : " augment-card--disabled");
       augCard.draggable = canAfford;
       augCard.dataset.augmentCost = aug.value;
+      augCard.dataset.augmentName = augData.name;
       augCard.addEventListener("dragstart", (e) => {
         e.dataTransfer.setData("text/plain", augData.name);
         e.dataTransfer.effectAllowed = "copy";
