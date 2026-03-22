@@ -224,7 +224,12 @@ const UI = {
       }
       const card = fateCards[i];
       i++;
-      if (card instanceof ModalFateCard) {
+      if (card instanceof HubrisThresholdFateCard) {
+        const cardEl = this.renderHubrisThresholdFateCard(card, battle, () => {
+          setTimeout(drawNext, 300);
+        });
+        display.appendChild(cardEl);
+      } else if (card instanceof ModalFateCard) {
         const cardEl = this.renderModalFateCard(card, battle, () => {
           setTimeout(drawNext, 300);
         });
@@ -280,11 +285,13 @@ const UI = {
     // Separator
     const separator = document.createElement("div");
     separator.className = "modal-separator";
-    const sepIcon = document.createElement("img");
-    sepIcon.src = card.separatorIcon;
-    sepIcon.className = "modal-separator-icon";
-    sepIcon.alt = "";
-    separator.appendChild(sepIcon);
+    if (card.separatorIcon) {
+      const sepIcon = document.createElement("img");
+      sepIcon.src = card.separatorIcon;
+      sepIcon.className = "modal-separator-icon";
+      sepIcon.alt = "";
+      separator.appendChild(sepIcon);
+    }
     if (card.separatorText) {
       const sepText = document.createElement("span");
       sepText.className = "modal-separator-text";
@@ -306,6 +313,64 @@ const UI = {
     el.appendChild(optAEl);
     el.appendChild(separator);
     el.appendChild(optBEl);
+
+    return el;
+  },
+
+  renderHubrisThresholdFateCard(card, battle, onComplete) {
+    const el = document.createElement("div");
+    el.className = "fate-card modal-fate-card";
+
+    const autoIndex = card.autoSelectIndex(battle);
+
+    const buildOptionEl = (opt, isSelected) => {
+      const optEl = document.createElement("div");
+      optEl.className = "modal-option " + (isSelected ? "modal-option-auto-selected" : "modal-option-not-selected");
+      const optText = document.createElement("div");
+      optText.className = "modal-option-text";
+      optText.textContent = opt.text;
+      optEl.appendChild(optText);
+      if (opt.effects && opt.effects.length > 0) {
+        const effectsEl = document.createElement("div");
+        effectsEl.className = "modal-option-effects";
+        for (const e of opt.effects) {
+          const effectDef = EffectPool.get(e.key);
+          if (effectDef) {
+            const badge = document.createElement("span");
+            badge.className = "effect-badge";
+            badge.textContent = effectDef.label(e.amount);
+            badge.style.color = effectDef.color(e.amount);
+            effectsEl.appendChild(badge);
+          }
+        }
+        optEl.appendChild(effectsEl);
+      } else if (opt.description) {
+        const optDesc = document.createElement("div");
+        optDesc.className = "modal-option-desc";
+        optDesc.textContent = opt.description;
+        optEl.appendChild(optDesc);
+      }
+      return optEl;
+    };
+
+    const optAEl = buildOptionEl(card.options[0], autoIndex === 0);
+    const optBEl = buildOptionEl(card.options[1], autoIndex === 1);
+
+    // Separator (no icon, hubris threshold text only)
+    const separator = document.createElement("div");
+    separator.className = "modal-separator";
+    const sepText = document.createElement("span");
+    sepText.className = "modal-separator-text";
+    sepText.textContent = card.separatorText;
+    separator.appendChild(sepText);
+
+    el.appendChild(optAEl);
+    el.appendChild(separator);
+    el.appendChild(optBEl);
+
+    card.selectOption(autoIndex, battle);
+    el.classList.add("modal-selected");
+    setTimeout(onComplete, 1200);
 
     return el;
   },
