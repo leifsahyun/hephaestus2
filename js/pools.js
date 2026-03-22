@@ -136,6 +136,8 @@ const FatePool = {
   },
 
   draw() {
+    if (FatePool.current.length == 0)
+      FatePool.shuffle();
     return this.current.pop() || null;
   },
 
