@@ -109,6 +109,15 @@ header h1 {
 .card-value { color: #e9c46a; font-size: 0.85rem; }
 .card-hubris { color: #e94560; font-weight: bold; margin-top: 4px; }
 
+.card-chroma { margin-top: 4px; font-size: 0.85rem; }
+.chroma-text-red { color: #ff6b6b; }
+.chroma-text-green { color: #6bff6b; }
+.chroma-text-blue { color: #6b9fff; }
+
+.chroma-border-red { border-color: #ff6b6b; }
+.chroma-border-green { border-color: #6bff6b; }
+.chroma-border-blue { border-color: #6b9fff; }
+
 .card-augments {
   margin-top: 8px;
   padding-top: 6px;
