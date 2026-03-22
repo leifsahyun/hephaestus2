@@ -130,10 +130,14 @@ class FateCard {
 
 class ModalFateCard {
   constructor(data) {
+    if (!data.options || data.options.length !== 2) {
+      throw new Error("ModalFateCard requires exactly two options.");
+    }
     this.value = 0;
     this.name = data.name || "Choice";
     this.separatorText = data.separatorText || "";
-    this.options = (data.options || []).map(opt => ({
+    this.separatorIcon = data.separatorIcon || "ChoiceArrows.png";
+    this.options = data.options.map(opt => ({
       text: opt.text || "",
       description: opt.description || "",
       onSelectFn: opt.onSelect || null

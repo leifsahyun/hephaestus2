@@ -249,10 +249,10 @@ const UI = {
     optAEl.className = "modal-option";
     const optAText = document.createElement("div");
     optAText.className = "modal-option-text";
-    optAText.textContent = card.options[0] ? card.options[0].text : "";
+    optAText.textContent = card.options[0].text;
     const optADesc = document.createElement("div");
     optADesc.className = "modal-option-desc";
-    optADesc.textContent = card.options[0] ? card.options[0].description : "";
+    optADesc.textContent = card.options[0].description;
     optAEl.appendChild(optAText);
     optAEl.appendChild(optADesc);
 
@@ -260,7 +260,7 @@ const UI = {
     const separator = document.createElement("div");
     separator.className = "modal-separator";
     const sepIcon = document.createElement("img");
-    sepIcon.src = "ChoiceArrows.png";
+    sepIcon.src = card.separatorIcon;
     sepIcon.className = "modal-separator-icon";
     sepIcon.alt = "";
     separator.appendChild(sepIcon);
@@ -276,10 +276,10 @@ const UI = {
     optBEl.className = "modal-option";
     const optBText = document.createElement("div");
     optBText.className = "modal-option-text";
-    optBText.textContent = card.options[1] ? card.options[1].text : "";
+    optBText.textContent = card.options[1].text;
     const optBDesc = document.createElement("div");
     optBDesc.className = "modal-option-desc";
-    optBDesc.textContent = card.options[1] ? card.options[1].description : "";
+    optBDesc.textContent = card.options[1].description;
     optBEl.appendChild(optBText);
     optBEl.appendChild(optBDesc);
 
