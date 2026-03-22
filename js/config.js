@@ -200,7 +200,7 @@ const Config = {
   ],
 
   fixedFateCards: [
-    [0, {
+    [0, new HubrisThresholdFateCard({
       name: "Death",
       hubrisThreshold: 1,
       options: [
@@ -211,7 +211,7 @@ const Config = {
           effects: [{ key: "monsterQuality", amount: 666 }]
         }
       ]
-    }]
+    })]
   ],
 
   defaultAugments: [
