@@ -407,7 +407,7 @@ const UI = {
         const wrapper = document.createElement("div");
         wrapper.className = "upgrade-item-wrapper";
 
-        const card = this.renderItemCard(item, false);
+        let card = this.renderItemCard(item, false);
         wrapper.appendChild(card);
 
         const btn = document.createElement("button");
@@ -417,10 +417,38 @@ const UI = {
           item.upgrade();
           btn.disabled = true;
           btn.textContent = "Upgraded!";
-          wrapper.replaceChild(this.renderItemCard(item, false), card);
+          const newCard = this.renderItemCard(item, false);
+          wrapper.replaceChild(newCard, card);
+          card = newCard;
           this.showForgeMessage(item.name + " upgraded!");
         });
         wrapper.appendChild(btn);
+
+        // Drop-target: allow augment cards to be dragged onto this item
+        wrapper.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          wrapper.classList.add("drop-target-active");
+        });
+        wrapper.addEventListener("dragleave", () => {
+          wrapper.classList.remove("drop-target-active");
+        });
+        wrapper.addEventListener("drop", (e) => {
+          e.preventDefault();
+          wrapper.classList.remove("drop-target-active");
+          const augName = e.dataTransfer.getData("text/plain");
+          const augData = Config.defaultAugments.find(
+            (a) => a.name === augName
+          );
+          if (!augData) return;
+          const newAug = new Augment(augData);
+          newAug.onAugment(item);
+          item.augments.push(newAug);
+          const newCard = this.renderItemCard(item, false);
+          wrapper.replaceChild(newCard, card);
+          card = newCard;
+          this.showForgeMessage(`${augName} attached to ${item.name}!`);
+        });
+
         itemContainer.appendChild(wrapper);
       }
     }
@@ -442,6 +470,11 @@ const UI = {
       const aug = new Augment(augData);
       const augCard = document.createElement("div");
       augCard.className = "augment-card";
+      augCard.draggable = true;
+      augCard.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", augData.name);
+        e.dataTransfer.effectAllowed = "copy";
+      });
 
       const augName = document.createElement("div");
       augName.className = "augment-name";
@@ -455,31 +488,9 @@ const UI = {
       augPrice.className = "augment-price";
       augPrice.textContent = "$" + aug.value;
 
-      const buyBtn = document.createElement("button");
-      buyBtn.className = "btn btn-sm btn-buy";
-      buyBtn.textContent = "Buy & Attach to Item";
-      buyBtn.addEventListener("click", () => {
-        // Attach to a random item in the pool
-        if (ItemPool.items.length > 0) {
-          const target =
-            ItemPool.items[
-              Math.floor(Math.random() * ItemPool.items.length)
-            ];
-          const newAug = new Augment(augData);
-          newAug.onAugment(target);
-          target.augments.push(newAug);
-          this.showForgeMessage(
-            `${aug.name} attached to ${target.name}!`
-          );
-        } else {
-          this.showForgeMessage("No items in pool to augment!");
-        }
-      });
-
       augCard.appendChild(augName);
       augCard.appendChild(augDesc);
       augCard.appendChild(augPrice);
-      augCard.appendChild(buyBtn);
       augmentList.appendChild(augCard);
     }
 

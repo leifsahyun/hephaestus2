@@ -51,7 +51,6 @@ header h1 {
 .btn-continue:hover { background: #3db890; }
 .btn-create { background: #4ecca3; border-color: #4ecca3; color: #1a1a2e; font-weight: bold; width: 100%; margin-top: 8px; }
 .btn-upgrade { border-color: #e9c46a; color: #e9c46a; white-space: pre-line; width: 100%; margin-top: 6px; }
-.btn-buy { border-color: #4ecca3; color: #4ecca3; margin-top: 6px; }
 
 /* ── Screen Titles ── */
 .screen-title {
@@ -334,6 +333,11 @@ header h1 {
   padding: 8px;
 }
 
+.upgrade-item-wrapper.drop-target-active {
+  border-color: #e9c46a;
+  background: rgba(233, 196, 106, 0.08);
+}
+
 .empty-msg {
   color: #666;
   font-style: italic;
@@ -352,7 +356,10 @@ header h1 {
   background: #0f3460;
   border-radius: 8px;
   padding: 12px;
+  cursor: grab;
 }
+
+.augment-card:active { cursor: grabbing; }
 
 .augment-name {
   font-weight: bold;
