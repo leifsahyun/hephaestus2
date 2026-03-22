@@ -202,6 +202,7 @@ header h1 {
 /* ── Fate Cards Section ── */
 .fate-cards-section {
   min-height: 320px;
+  min-width: 516px;
   background: transparent;
   border-radius: 0;
   padding: 0;
