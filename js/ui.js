@@ -141,9 +141,7 @@ const UI = {
     monsterSection.appendChild(expectedStats);
     layout.appendChild(monsterSection);
 
-    container.appendChild(layout);
-
-    // Offered item area below the layout (centered)
+    // Offered item area (in layout row 2, col 2)
     const offerArea = document.createElement("div");
     offerArea.className = "offer-area";
     offerArea.innerHTML = "<h3>Offered Item</h3>";
@@ -194,13 +192,15 @@ const UI = {
     actions.appendChild(fightBtn);
     offerContent.appendChild(actions);
     offerArea.appendChild(offerContent);
-    container.appendChild(offerArea);
+    layout.appendChild(offerArea);
 
-    // Battle log
+    // Battle log (in layout row 2, col 3)
     const logArea = document.createElement("div");
     logArea.id = "battle-log";
-    logArea.className = "battle-log";
-    container.appendChild(logArea);
+    logArea.className = "battle-log battle-section";
+    layout.appendChild(logArea);
+
+    container.appendChild(layout);
 
     app.appendChild(container);
 
@@ -493,15 +493,11 @@ const UI = {
   showBattleResult(result, battle) {
     const logArea = document.getElementById("battle-log");
     if (logArea) {
-      const fateStr = battle.fateCards
-        .map((c) => c.toString())
-        .join(", ");
       logArea.innerHTML = `
         <div class="battle-result ${result.won ? "result-win" : "result-lose"}">
           <h3>${result.won ? "Victory!" : "Defeat!"}</h3>
           <p>Hero Strength: <strong>${result.heroStrength}</strong></p>
           <p>Monster Strength: <strong>${result.monsterStrength}</strong></p>
-          <p>Fate Cards Drawn: ${fateStr || "none"}</p>
           <button class="btn btn-continue" id="continue-btn">Continue</button>
         </div>
       `;
