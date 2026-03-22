@@ -49,7 +49,6 @@ const UI = {
     // Fate Cards section (at the top, populated when battle is resolved)
     const fateCardsSection = document.createElement("div");
     fateCardsSection.className = "fate-cards-section";
-    fateCardsSection.innerHTML = "<h3>Fate Cards</h3>";
     const fateCardsDisplay = document.createElement("div");
     fateCardsDisplay.id = "fate-cards-display";
     fateCardsDisplay.className = "fate-cards-display";
