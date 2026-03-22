@@ -263,7 +263,7 @@ const UI = {
       const prev = heroStrengthEl.dataset.strength;
       if (prev !== undefined && parseInt(prev, 10) !== heroStrength) {
         heroStrengthEl.classList.remove("strength-flash");
-        void heroStrengthEl.offsetWidth; // force reflow to restart animation
+        void heroStrengthEl.offsetWidth; // trigger reflow to restart CSS animation
         heroStrengthEl.classList.add("strength-flash");
       }
       heroStrengthEl.textContent = heroStrength;
@@ -275,7 +275,7 @@ const UI = {
       const prev = monsterStrengthEl.dataset.strength;
       if (prev !== undefined && parseInt(prev, 10) !== monsterStrength) {
         monsterStrengthEl.classList.remove("strength-flash");
-        void monsterStrengthEl.offsetWidth; // force reflow to restart animation
+        void monsterStrengthEl.offsetWidth; // trigger reflow to restart CSS animation
         monsterStrengthEl.classList.add("strength-flash");
       }
       monsterStrengthEl.textContent = monsterStrength;
