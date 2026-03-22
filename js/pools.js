@@ -127,7 +127,9 @@ const FatePool = {
   current: [],
 
   init(cardDataArray) {
-    this.cards = cardDataArray.map(d => new FateCard(d));
+    this.cards = cardDataArray.map(d =>
+      d.options ? new ModalFateCard(d) : new FateCard(d)
+    );
     this.shuffle();
   },
 
