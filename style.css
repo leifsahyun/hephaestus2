@@ -249,10 +249,10 @@ header h1 {
 
 .fate-stack {
   position: relative;
-  /* card width (70px) + MAX_STACK_LAYERS(4) × LAYER_OFFSET(4px) = 82px */
-  width: 82px;
-  /* card height (70px × 3/2 = 105px) + MAX_STACK_LAYERS(4) × LAYER_OFFSET(4px) = 117px */
-  height: 117px;
+  /* card width (160px) + MAX_STACK_LAYERS(4) × LAYER_OFFSET(4px) = 176px */
+  width: 176px;
+  /* card height (160px × 2 = 320px) + MAX_STACK_LAYERS(4) × LAYER_OFFSET(4px) = 336px */
+  height: 336px;
   flex-shrink: 0;
 }
 
