@@ -40,6 +40,7 @@ function initGame() {
   HeroPool.init(Config.defaultHeroes);
   MonsterPool.init(Config.defaultMonsters);
   FatePool.init(Config.defaultFateCards);
+  FatePool.fixedCards = Config.fixedFateCards;
   AugmentPool.init(Config.defaultAugments);
 
   // Initialize UI
