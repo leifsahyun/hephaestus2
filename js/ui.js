@@ -264,7 +264,7 @@ const UI = {
     }
     display.innerHTML = "";
 
-    const MAX_VISIBLE = 3;
+    const MAX_VISIBLE = 2;
     const MAX_STACK_LAYERS = 4;
     const LAYER_OFFSET = 4; // px offset per depth level
     const MIN_OPACITY = 0.2;
@@ -303,14 +303,16 @@ const UI = {
         let cardEl = null;
         if (card instanceof HubrisThresholdFateCard) {
           cardEl = this.renderHubrisThresholdFateCard(card, battle, () => {});
+          cardEl.className = "fate-stack-card modal-fate-card";
         } else if (card instanceof ModalFateCard) {
           cardEl = this.renderModalFateCard(card, battle, () => {});
+          cardEl.className = "fate-stack-card modal-fate-card";
         } else {
           cardEl = document.createElement("div");
           cardEl.textContent = card.toString();
+          cardEl.className = "fate-stack-card";
         }
         
-        cardEl.className = "fate-stack-card";
         cardEl.style.top = `${offset}px`;
         cardEl.style.right = `${offset}px`;
         cardEl.style.zIndex = n - depthFromFront;
