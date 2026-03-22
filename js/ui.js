@@ -422,6 +422,7 @@ const UI = {
       optAEl.disabled = true;
       optBEl.disabled = true;
       el.classList.add("modal-selected");
+      updateBattleUI(battle);
       onComplete();
     };
 
@@ -488,6 +489,7 @@ const UI = {
 
     card.selectOption(autoIndex, battle);
     el.classList.add("modal-selected");
+    updateBattleUI(battle);
     setTimeout(onComplete, 300);
 
     return el;
