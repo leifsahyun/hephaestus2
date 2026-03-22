@@ -338,34 +338,6 @@ const UI = {
     typeGroup.appendChild(typeSelect);
     panel.appendChild(typeGroup);
 
-    // Chroma selector
-    const chromaGroup = document.createElement("div");
-    chromaGroup.className = "form-group";
-    chromaGroup.innerHTML = '<label>Chroma:</label>';
-    const chromaDiv = document.createElement("div");
-    chromaDiv.className = "chroma-selector";
-    let selectedChroma = "";
-    for (const color of ["red", "green", "blue"]) {
-      const btn = document.createElement("button");
-      btn.className = "chroma-btn chroma-" + color;
-      btn.textContent = capitalize(color);
-      btn.addEventListener("click", () => {
-        if (selectedChroma === color) {
-          selectedChroma = "";
-          btn.classList.remove("active");
-        } else {
-          selectedChroma = color;
-          chromaDiv
-            .querySelectorAll(".chroma-btn")
-            .forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-        }
-      });
-      chromaDiv.appendChild(btn);
-    }
-    chromaGroup.appendChild(chromaDiv);
-    panel.appendChild(chromaGroup);
-
     // Quality selector
     const qualGroup = document.createElement("div");
     qualGroup.className = "form-group";
@@ -406,7 +378,6 @@ const UI = {
       const item = new Item({
         name: nameInput.value || typeSelect.value,
         type: typeSelect.value,
-        chroma: selectedChroma,
         baseQuality: qualityVal,
         value: 0,
         augments: [],
@@ -554,8 +525,7 @@ const UI = {
 
   renderItemCard(item, isHero) {
     const card = document.createElement("div");
-    const chromaClass = item.chroma ? " chroma-border-" + item.chroma : "";
-    card.className = "card item-card" + chromaClass;
+    card.className = "card item-card";
 
     const nameEl = document.createElement("div");
     nameEl.className = "card-name";
@@ -581,13 +551,6 @@ const UI = {
       card.appendChild(hubEl);
     }
 
-    if (item.chroma) {
-      const chromaEl = document.createElement("div");
-      chromaEl.className = "card-chroma chroma-text-" + item.chroma;
-      chromaEl.textContent = "Chroma: " + capitalize(item.chroma);
-      card.appendChild(chromaEl);
-    }
-
     if (item.augments && item.augments.length > 0) {
       const augList = document.createElement("div");
       augList.className = "card-augments";
@@ -605,8 +568,7 @@ const UI = {
 
   renderCompactItemCard(item) {
     const card = document.createElement("div");
-    const chromaClass = item.chroma ? " chroma-border-" + item.chroma : "";
-    card.className = "card compact-card" + chromaClass;
+    card.className = "card compact-card";
 
     const nameEl = document.createElement("span");
     nameEl.className = "compact-name";
