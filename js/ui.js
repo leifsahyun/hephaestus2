@@ -22,6 +22,24 @@ const UI = {
     if (moneyEl) moneyEl.textContent = "$" + PlayerState.money;
     const bondsEl = document.getElementById("player-bonds");
     if (bondsEl) bondsEl.textContent = "🔗" + PlayerState.bonds;
+    if (this.currentScreen === "forge") {
+      this.updateForgeAffordability();
+    }
+  },
+
+  updateForgeAffordability() {
+    for (const btn of document.querySelectorAll("[data-upgrade-cost]")) {
+      if (!btn.hasAttribute("data-upgraded")) {
+        const cost = parseInt(btn.dataset.upgradeCost, 10);
+        btn.disabled = PlayerState.money < cost;
+      }
+    }
+    for (const card of document.querySelectorAll("[data-augment-cost]")) {
+      const cost = parseInt(card.dataset.augmentCost, 10);
+      const canAfford = PlayerState.money >= cost;
+      card.classList.toggle("augment-card--disabled", !canAfford);
+      card.draggable = canAfford;
+    }
   },
 
   renderTimeline() {
@@ -699,9 +717,15 @@ const UI = {
         const btn = document.createElement("button");
         btn.className = "btn btn-upgrade";
         btn.textContent = `Upgrade\n-$${item.baseQuality} +5◈`;
+        btn.dataset.upgradeCost = item.baseQuality;
+        btn.disabled = PlayerState.money < item.baseQuality;
         btn.addEventListener("click", () => {
+          const cost = item.baseQuality;
+          if (PlayerState.money < cost) return;
+          PlayerState.addMoney(-cost);
           item.upgrade();
           btn.disabled = true;
+          btn.dataset.upgraded = "1";
           btn.textContent = "Upgraded!";
           const newCard = this.renderItemCard(item, false);
           wrapper.replaceChild(newCard, card);
@@ -726,9 +750,14 @@ const UI = {
             (a) => a.name === augName
           );
           if (!augData) return;
+          if (PlayerState.money < augData.value) {
+            this.showForgeMessage(`Cannot afford ${augName} ($${augData.value})`);
+            return;
+          }
           const newAug = new Augment(augData);
           newAug.onAugment(item);
           item.augments.push(newAug);
+          PlayerState.addMoney(-augData.value);
           const newCard = this.renderItemCard(item, false);
           wrapper.replaceChild(newCard, card);
           card = newCard;
@@ -755,8 +784,10 @@ const UI = {
     for (const augData of Config.defaultAugments) {
       const aug = new Augment(augData);
       const augCard = document.createElement("div");
-      augCard.className = "augment-card";
-      augCard.draggable = true;
+      const canAfford = PlayerState.money >= aug.value;
+      augCard.className = "augment-card" + (canAfford ? "" : " augment-card--disabled");
+      augCard.draggable = canAfford;
+      augCard.dataset.augmentCost = aug.value;
       augCard.addEventListener("dragstart", (e) => {
         e.dataTransfer.setData("text/plain", augData.name);
         e.dataTransfer.effectAllowed = "copy";
