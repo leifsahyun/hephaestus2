@@ -125,6 +125,7 @@ const MonsterPool = {
 const FatePool = {
   cards: [],
   current: [],
+  fixedCards: new Map(),
 
   init(cardDataArray) {
     this.cards = cardDataArray.map(d => {
@@ -136,8 +137,11 @@ const FatePool = {
   },
 
   draw() {
-    if (FatePool.current.length == 0)
-      FatePool.shuffle();
+    if (fixedCards.has(FatePool.current.length)) {
+      const fixedCard = fixedCards.get(FatePool.current.length);
+      fixedCards.delete(FatePool.current.length);
+      return fixedCard;
+    }
     return this.current.pop() || null;
   },
 
