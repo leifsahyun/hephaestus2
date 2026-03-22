@@ -14,6 +14,14 @@ const UI = {
         this.showForge();
       }
     };
+    this.updatePlayerStats();
+  },
+
+  updatePlayerStats() {
+    const moneyEl = document.getElementById("player-money");
+    if (moneyEl) moneyEl.textContent = "$" + PlayerState.money;
+    const bondsEl = document.getElementById("player-bonds");
+    if (bondsEl) bondsEl.textContent = "🔗" + PlayerState.bonds;
   },
 
   renderTimeline() {
@@ -498,11 +506,21 @@ const UI = {
   showBattleResult(result, battle) {
     const logArea = document.getElementById("battle-log");
     if (logArea) {
+      let rewardText = "";
+      if (result.won) {
+        const earned = PlayerState.awardBattleReward();
+        rewardText = `<p>Earned: <strong>$${earned}</strong></p>`;
+      } else {
+        PlayerState.removeBond();
+        rewardText = `<p>Lost: <strong>🔗1</strong></p>`;
+      }
+
       logArea.innerHTML = `
         <div class="battle-result ${result.won ? "result-win" : "result-lose"}">
           <h3>${result.won ? "Victory!" : "Defeat!"}</h3>
           <p>Hero Strength: <strong>${result.heroStrength}</strong></p>
           <p>Monster Strength: <strong>${result.monsterStrength}</strong></p>
+          ${rewardText}
           <button class="btn btn-continue" id="continue-btn">Continue</button>
         </div>
       `;

@@ -13,12 +13,34 @@ header {
   padding: 12px 24px;
   border-bottom: 2px solid #e94560;
   text-align: center;
+  position: relative;
 }
 
 header h1 {
   color: #e94560;
   font-size: 1.6rem;
   letter-spacing: 2px;
+}
+
+#player-stats {
+  position: absolute;
+  top: 50%;
+  left: 24px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+#player-money {
+  color: #4ecca3;
+}
+
+#player-bonds {
+  color: #e9c46a;
 }
 
 #app {
