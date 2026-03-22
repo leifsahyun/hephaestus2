@@ -78,7 +78,7 @@ class Battle {
 
     let monsterStrength = this.monster.tempQuality != null ? this.monster.tempQuality : this.monster.baseQuality;
     for (const card of this.fateCards) {
-      monsterStrength += card.value;
+      monsterStrength += card.value ?? 0;
     }
 
     const won = heroStrength >= monsterStrength;
