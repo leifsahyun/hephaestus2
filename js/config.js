@@ -63,7 +63,7 @@ const Config = {
     { value: 12, suit: "Stars", sign: "+", name: "Twelve of Stars" },
     {
       name: "Crossroads",
-      separatorText: "or",
+      separatorText: "Crossroads",
       options: [
         {
           text: "Press On",
