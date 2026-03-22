@@ -162,3 +162,16 @@ class ModalFateCard {
     return this.name;
   }
 }
+
+class HubrisThresholdFateCard extends ModalFateCard {
+  constructor(data) {
+    super(data);
+    this.hubrisThreshold = data.hubrisThreshold;
+    this.separatorIcon = "";
+    this.separatorText = `${this.hubrisThreshold}H\u21C5`;
+  }
+
+  autoSelectIndex(battle) {
+    return battle.hero.hubris >= this.hubrisThreshold ? 0 : 1;
+  }
+}

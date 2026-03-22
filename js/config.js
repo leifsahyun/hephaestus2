@@ -116,6 +116,34 @@ const Config = {
           effects: [{ key: "hubris", amount: 5 }]
         }
       ]
+    },
+    {
+      name: "Nemesis",
+      hubrisThreshold: 10,
+      options: [
+        {
+          text: "Wrath",
+          effects: [{ key: "monsterQuality", amount: 3 }]
+        },
+        {
+          text: "Mercy",
+          effects: [{ key: "drawFateCards", amount: 1 }]
+        }
+      ]
+    },
+    {
+      name: "Scales of Justice",
+      hubrisThreshold: 15,
+      options: [
+        {
+          text: "Condemned",
+          effects: [{ key: "hubris", amount: 5 }]
+        },
+        {
+          text: "Absolved",
+          effects: [{ key: "hubris", amount: -3 }]
+        }
+      ]
     }
   ],
 

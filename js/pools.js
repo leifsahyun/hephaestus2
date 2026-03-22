@@ -127,9 +127,11 @@ const FatePool = {
   current: [],
 
   init(cardDataArray) {
-    this.cards = cardDataArray.map(d =>
-      d.options ? new ModalFateCard(d) : new FateCard(d)
-    );
+    this.cards = cardDataArray.map(d => {
+      if (d.options && 'hubrisThreshold' in d) return new HubrisThresholdFateCard(d);
+      if (d.options) return new ModalFateCard(d);
+      return new FateCard(d);
+    });
     this.shuffle();
   },
 
