@@ -50,27 +50,7 @@ class Battle {
       for (const aug of this.offerItem.augments) {
         aug.onEquip(this, this.offerItem);
       }
-      this.setHeroChroma();
       this.rerollFree();
-    }
-  }
-
-  setHeroChroma() {
-    const chromaCounts = { red: 0, blue: 0, green: 0 };
-    for (const item of this.equippedItems) {
-      if (item.chroma && chromaCounts[item.chroma] !== undefined) {
-        chromaCounts[item.chroma]++;
-      }
-    }
-    const sortedKeys = Object.keys(chromaCounts).sort(
-      (a, b) => chromaCounts[b] - chromaCounts[a]
-    );
-    if (
-      sortedKeys.length > 1 &&
-      chromaCounts[sortedKeys[0]] > 0 &&
-      chromaCounts[sortedKeys[0]] > chromaCounts[sortedKeys[1]]
-    ) {
-      this.hero.chroma = sortedKeys[0];
     }
   }
 

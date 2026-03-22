@@ -7,7 +7,6 @@ class Item {
     this.name = data.name || data.type || "";
     this.type = data.type || "";
     this.variant = data.variant != null ? data.variant : 0;
-    this.chroma = data.chroma || "";
     this.baseQuality = data.baseQuality || 0;
     this.tempQuality = null;
     this.value = data.value || 0;
@@ -37,7 +36,6 @@ class Item {
       name: this.name,
       type: this.type,
       variant: this.variant,
-      chroma: this.chroma,
       baseQuality: this.baseQuality,
       value: this.value,
       augments: this.augments.map(a => a.clone())
@@ -58,7 +56,6 @@ class Hero extends Item {
 
   reset() {
     this.hubris = this.baseHubris;
-    this.chroma = "";
     this.tempQuality = null;
   }
 
@@ -72,7 +69,6 @@ class Hero extends Item {
       name: this.name,
       type: this.type,
       variant: this.variant,
-      chroma: this.chroma,
       baseQuality: this.baseQuality,
       baseHubris: this.baseHubris,
       value: this.value,

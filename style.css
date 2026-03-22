@@ -109,15 +109,6 @@ header h1 {
 .card-value { color: #e9c46a; font-size: 0.85rem; }
 .card-hubris { color: #e94560; font-weight: bold; margin-top: 4px; }
 
-.card-chroma { margin-top: 4px; font-size: 0.85rem; }
-.chroma-text-red { color: #ff6b6b; }
-.chroma-text-green { color: #6bff6b; }
-.chroma-text-blue { color: #6b9fff; }
-
-.chroma-border-red { border-color: #ff6b6b; }
-.chroma-border-green { border-color: #6bff6b; }
-.chroma-border-blue { border-color: #6b9fff; }
-
 .card-augments {
   margin-top: 8px;
   padding-top: 6px;
@@ -278,32 +269,6 @@ header h1 {
 .form-input:focus, .form-select:focus {
   outline: none;
   border-color: #4ecca3;
-}
-
-/* ── Chroma Selector ── */
-.chroma-selector {
-  display: flex;
-  gap: 6px;
-}
-
-.chroma-btn {
-  padding: 4px 12px;
-  border: 2px solid #444;
-  border-radius: 4px;
-  background: transparent;
-  color: #aaa;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.15s;
-}
-
-.chroma-red { border-color: #ff6b6b; color: #ff6b6b; }
-.chroma-green { border-color: #6bff6b; color: #6bff6b; }
-.chroma-blue { border-color: #6b9fff; color: #6b9fff; }
-
-.chroma-btn.active {
-  background: rgba(255, 255, 255, 0.15);
-  transform: scale(1.1);
 }
 
 /* ── Number Selector ── */
