@@ -69,12 +69,12 @@ class Battle {
     this.resolved = true;
 
     // Calculate strengths
-    let heroStrength = battle.hero.tempQuality != null ? battle.hero.tempQuality : battle.hero.baseQuality;
+    let heroStrength = this.hero.tempQuality != null ? this.hero.tempQuality : this.hero.baseQuality;
     for (const item of this.equippedItems) {
       heroStrength += item.quality;
     }
 
-    let monsterStrength = battle.monster.tempQuality != null ? battle.monster.tempQuality : battle.monster.baseQuality;
+    let monsterStrength = this.monster.tempQuality != null ? this.monster.tempQuality : this.monster.baseQuality;
     for (const card of this.fateCards) {
       monsterStrength += card.value;
     }
