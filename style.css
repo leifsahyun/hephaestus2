@@ -227,8 +227,20 @@ header h1 {
 /* ── Forge Screen ── */
 .forge-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 16px;
+}
+
+.create-item-panel {
+  grid-column: span 2;
+}
+
+.upgrade-anvil-panel {
+  grid-column: span 4;
+}
+
+.augment-shelf-panel {
+  grid-column: span 6;
 }
 
 .forge-component {
@@ -324,7 +336,7 @@ header h1 {
 /* ── Upgrade Anvil ── */
 .upgrade-items {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
 }
 
@@ -332,6 +344,7 @@ header h1 {
   border: 1px solid #333;
   border-radius: 8px;
   padding: 8px;
+  flex: 1;
 }
 
 .empty-msg {
@@ -344,14 +357,17 @@ header h1 {
 /* ── Augment Shelf ── */
 .augment-shelf-list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .augment-card {
   background: #0f3460;
   border-radius: 8px;
   padding: 12px;
+  flex: 1;
+  min-width: 180px;
 }
 
 .augment-name {
@@ -391,4 +407,9 @@ header h1 {
 @media (max-width: 768px) {
   .battle-layout { grid-template-columns: 1fr; }
   .forge-layout { grid-template-columns: 1fr; }
+  .create-item-panel,
+  .upgrade-anvil-panel,
+  .augment-shelf-panel { grid-column: span 1; }
+  .upgrade-items { flex-direction: column; }
+  .augment-shelf-list { flex-direction: column; }
 }
