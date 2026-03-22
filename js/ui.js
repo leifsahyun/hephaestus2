@@ -120,6 +120,10 @@ const UI = {
     const heroSection = document.createElement("div");
     heroSection.className = "battle-section hero-section";
     heroSection.innerHTML = "<h3>Hero</h3>";
+    const heroStrengthDisplay = document.createElement("div");
+    heroStrengthDisplay.id = "hero-strength-display";
+    heroStrengthDisplay.className = "strength-display hero-strength-display";
+    heroSection.appendChild(heroStrengthDisplay);
     const heroCard = this.renderItemCard(battle.hero, true);
     heroCard.id = "hero-card";
     heroSection.appendChild(heroCard);
@@ -150,6 +154,10 @@ const UI = {
     const monsterSection = document.createElement("div");
     monsterSection.className = "battle-section monster-section";
     monsterSection.innerHTML = "<h3>Monster</h3>";
+    const monsterStrengthDisplay = document.createElement("div");
+    monsterStrengthDisplay.id = "monster-strength-display";
+    monsterStrengthDisplay.className = "strength-display monster-strength-display";
+    monsterSection.appendChild(monsterStrengthDisplay);
     const monsterCard = this.renderItemCard(battle.monster, false);
     monsterCard.id = "monster-card";
     monsterSection.appendChild(monsterCard);
@@ -235,6 +243,37 @@ const UI = {
       const newHeroCard = this.renderItemCard(battle.hero, true);
       newHeroCard.id = "hero-card";
       heroCard.replaceWith(newHeroCard);
+    }
+
+    // Update strength displays
+    let heroStrength = battle.hero.quality;
+    for (const item of battle.equippedItems) {
+      heroStrength += item.quality;
+    }
+    const monsterStrength = battle.monster.quality;
+
+    const heroStrengthEl = document.getElementById("hero-strength-display");
+    if (heroStrengthEl) {
+      const prev = heroStrengthEl.dataset.strength;
+      if (prev !== undefined && parseInt(prev, 10) !== heroStrength) {
+        heroStrengthEl.classList.remove("strength-flash");
+        void heroStrengthEl.offsetWidth; // trigger reflow to restart CSS animation
+        heroStrengthEl.classList.add("strength-flash");
+      }
+      heroStrengthEl.textContent = heroStrength;
+      heroStrengthEl.dataset.strength = heroStrength;
+    }
+
+    const monsterStrengthEl = document.getElementById("monster-strength-display");
+    if (monsterStrengthEl) {
+      const prev = monsterStrengthEl.dataset.strength;
+      if (prev !== undefined && parseInt(prev, 10) !== monsterStrength) {
+        monsterStrengthEl.classList.remove("strength-flash");
+        void monsterStrengthEl.offsetWidth; // trigger reflow to restart CSS animation
+        monsterStrengthEl.classList.add("strength-flash");
+      }
+      monsterStrengthEl.textContent = monsterStrength;
+      monsterStrengthEl.dataset.strength = monsterStrength;
     }
 
     // Update offer card
