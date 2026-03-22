@@ -361,7 +361,7 @@ const UI = {
     const separator = document.createElement("div");
     separator.className = "modal-separator";
     const sepText = document.createElement("span");
-    sepText.className = "modal-separator-text";
+    sepText.className = "modal-separator-text modal-separator-text--hubris";
     sepText.textContent = card.separatorText;
     separator.appendChild(sepText);
 
