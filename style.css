@@ -357,6 +357,11 @@ header h1 {
   font-style: italic;
 }
 
+.modal-separator-text--hubris {
+  color: red;
+  font-style: normal;
+}
+
 .modal-fate-card.modal-selected {
   opacity: 0.6;
 }
