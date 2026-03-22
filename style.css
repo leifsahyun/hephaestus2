@@ -171,7 +171,7 @@ header h1 {
 }
 
 .equipped-list {
-  max-height: 240px;
+  max-height: 300px;
   overflow-y: auto;
 }
 
