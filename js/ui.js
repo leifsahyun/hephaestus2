@@ -46,20 +46,41 @@ const UI = {
     title.textContent = event.description;
     container.appendChild(title);
 
+    // Fate Cards section (at the top, populated when battle is resolved)
+    const fateCardsSection = document.createElement("div");
+    fateCardsSection.className = "fate-cards-section";
+    fateCardsSection.innerHTML = "<h3>Fate Cards</h3>";
+    const fateCardsDisplay = document.createElement("div");
+    fateCardsDisplay.id = "fate-cards-display";
+    fateCardsDisplay.className = "fate-cards-display";
+    fateCardsSection.appendChild(fateCardsDisplay);
+    container.appendChild(fateCardsSection);
+
     // Main layout
     const layout = document.createElement("div");
     layout.className = "battle-layout";
 
-    // Left: Hero card
+    // Left: Hero card + Equipped Items
     const heroSection = document.createElement("div");
     heroSection.className = "battle-section hero-section";
     heroSection.innerHTML = "<h3>Hero</h3>";
     const heroCard = this.renderItemCard(battle.hero, true);
     heroCard.id = "hero-card";
     heroSection.appendChild(heroCard);
+
+    // Equipped items (under hero card)
+    const equippedArea = document.createElement("div");
+    equippedArea.className = "equipped-area";
+    equippedArea.innerHTML = "<h3>Equipped Items</h3>";
+    const equippedList = document.createElement("div");
+    equippedList.id = "equipped-list";
+    equippedList.className = "equipped-list";
+    equippedArea.appendChild(equippedList);
+    heroSection.appendChild(equippedArea);
+
     layout.appendChild(heroSection);
 
-    // Center: Offer + Equipped + Actions
+    // Center: Offer + Actions
     const centerSection = document.createElement("div");
     centerSection.className = "battle-section center-section";
 
@@ -95,8 +116,13 @@ const UI = {
     fightBtn.className = "btn btn-fight";
     fightBtn.textContent = "Fight!";
     fightBtn.addEventListener("click", () => {
+      equipBtn.disabled = true;
+      rerollBtn.disabled = true;
+      fightBtn.disabled = true;
       const result = battle.resolveBattle();
-      this.showBattleResult(result, battle);
+      this.showFateCards(battle.fateCards, () => {
+        this.showBattleResult(result, battle);
+      });
     });
 
     actions.appendChild(equipBtn);
@@ -104,16 +130,6 @@ const UI = {
     actions.appendChild(fightBtn);
     offerArea.appendChild(actions);
     centerSection.appendChild(offerArea);
-
-    // Equipped items
-    const equippedArea = document.createElement("div");
-    equippedArea.className = "equipped-area";
-    equippedArea.innerHTML = "<h3>Equipped Items</h3>";
-    const equippedList = document.createElement("div");
-    equippedList.id = "equipped-list";
-    equippedList.className = "equipped-list";
-    equippedArea.appendChild(equippedList);
-    centerSection.appendChild(equippedArea);
 
     layout.appendChild(centerSection);
 
@@ -192,6 +208,29 @@ const UI = {
         <div class="stat-row"><span class="stat-icon">◈</span> ${minQ} - ${maxQ} quality</div>
       </div>
     `;
+  },
+
+  showFateCards(fateCards, onComplete) {
+    const display = document.getElementById("fate-cards-display");
+    if (!display) {
+      if (onComplete) onComplete();
+      return;
+    }
+    display.innerHTML = "";
+    let i = 0;
+    const drawNext = () => {
+      if (i >= fateCards.length) {
+        if (onComplete) onComplete();
+        return;
+      }
+      const cardEl = document.createElement("div");
+      cardEl.className = "fate-card";
+      cardEl.textContent = fateCards[i].toString();
+      display.appendChild(cardEl);
+      i++;
+      setTimeout(drawNext, 600);
+    };
+    drawNext();
   },
 
   showBattleResult(result, battle) {
