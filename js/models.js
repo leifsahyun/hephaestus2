@@ -140,14 +140,21 @@ class ModalFateCard {
     this.options = data.options.map(opt => ({
       text: opt.text || "",
       description: opt.description || "",
+      effects: (opt.effects || []).map(e => ({ key: e.key, amount: e.amount != null ? e.amount : 1 })),
       onSelectFn: opt.onSelect || null
     }));
   }
 
   selectOption(index, battle) {
     const opt = this.options[index];
-    if (opt && opt.onSelectFn) {
-      opt.onSelectFn(battle);
+    if (opt) {
+      for (const e of opt.effects) {
+        const effectDef = EffectPool.get(e.key);
+        if (effectDef) effectDef.apply(battle, e.amount);
+      }
+      if (opt.onSelectFn) {
+        opt.onSelectFn(battle);
+      }
     }
   }
 

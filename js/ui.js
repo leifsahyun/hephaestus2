@@ -244,17 +244,38 @@ const UI = {
     const el = document.createElement("div");
     el.className = "fate-card modal-fate-card";
 
-    // Option A (top)
-    const optAEl = document.createElement("button");
-    optAEl.className = "modal-option";
-    const optAText = document.createElement("div");
-    optAText.className = "modal-option-text";
-    optAText.textContent = card.options[0].text;
-    const optADesc = document.createElement("div");
-    optADesc.className = "modal-option-desc";
-    optADesc.textContent = card.options[0].description;
-    optAEl.appendChild(optAText);
-    optAEl.appendChild(optADesc);
+    const buildOptionEl = (opt) => {
+      const optEl = document.createElement("button");
+      optEl.className = "modal-option";
+      const optText = document.createElement("div");
+      optText.className = "modal-option-text";
+      optText.textContent = opt.text;
+      optEl.appendChild(optText);
+      if (opt.effects && opt.effects.length > 0) {
+        const effectsEl = document.createElement("div");
+        effectsEl.className = "modal-option-effects";
+        for (const e of opt.effects) {
+          const effectDef = EffectPool.get(e.key);
+          if (effectDef) {
+            const badge = document.createElement("span");
+            badge.className = "effect-badge";
+            badge.textContent = effectDef.label(e.amount);
+            badge.style.color = effectDef.color(e.amount);
+            effectsEl.appendChild(badge);
+          }
+        }
+        optEl.appendChild(effectsEl);
+      } else if (opt.description) {
+        const optDesc = document.createElement("div");
+        optDesc.className = "modal-option-desc";
+        optDesc.textContent = opt.description;
+        optEl.appendChild(optDesc);
+      }
+      return optEl;
+    };
+
+    const optAEl = buildOptionEl(card.options[0]);
+    const optBEl = buildOptionEl(card.options[1]);
 
     // Separator
     const separator = document.createElement("div");
@@ -270,18 +291,6 @@ const UI = {
       sepText.textContent = card.separatorText;
       separator.appendChild(sepText);
     }
-
-    // Option B (bottom)
-    const optBEl = document.createElement("button");
-    optBEl.className = "modal-option";
-    const optBText = document.createElement("div");
-    optBText.className = "modal-option-text";
-    optBText.textContent = card.options[1].text;
-    const optBDesc = document.createElement("div");
-    optBDesc.className = "modal-option-desc";
-    optBDesc.textContent = card.options[1].description;
-    optBEl.appendChild(optBText);
-    optBEl.appendChild(optBDesc);
 
     const handleSelect = (index) => {
       card.selectOption(index, battle);

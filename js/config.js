@@ -67,13 +67,53 @@ const Config = {
       options: [
         {
           text: "Press On",
-          description: "Continue the battle as normal.",
-          onSelect: null
+          effects: []
         },
         {
           text: "Offer",
-          description: "Reduce hubris by 5.",
-          onSelect: function(battle) { battle.addHubris(-5); }
+          effects: [{ key: "hubris", amount: -5 }]
+        }
+      ]
+    },
+    {
+      name: "Burden",
+      separatorText: "Burden",
+      options: [
+        {
+          text: "Struggle",
+          effects: [{ key: "monsterQualityMultiply", amount: 2 }]
+        },
+        {
+          text: "Brace",
+          effects: [{ key: "drawFateCards", amount: 1 }]
+        }
+      ]
+    },
+    {
+      name: "Gift of the Gods",
+      separatorText: "Gift",
+      options: [
+        {
+          text: "Strength",
+          effects: [{ key: "heroQuality", amount: 3 }]
+        },
+        {
+          text: "Favour",
+          effects: [{ key: "hubris", amount: -3 }]
+        }
+      ]
+    },
+    {
+      name: "Trial",
+      separatorText: "Trial",
+      options: [
+        {
+          text: "Boulder",
+          effects: [{ key: "equipBoulder", amount: 1 }, { key: "monsterQuality", amount: 5 }]
+        },
+        {
+          text: "Endure",
+          effects: [{ key: "hubris", amount: 5 }]
         }
       ]
     }
