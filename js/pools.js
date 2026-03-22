@@ -126,6 +126,7 @@ const FatePool = {
   cards: [],
   current: [],
   fixedCards: new Map(),
+  indexed: [],
 
   init(cardDataArray) {
     this.cards = cardDataArray.map(d => {
@@ -137,10 +138,9 @@ const FatePool = {
   },
 
   draw() {
-    if (fixedCards.has(FatePool.current.length)) {
-      const fixedCard = fixedCards.get(FatePool.current.length);
-      fixedCards.delete(FatePool.current.length);
-      return fixedCard;
+    if (this.fixedCards.has(this.current.length) && !this.indexed.includes(this.current.length)) {
+      this.indexed.push(this.current.length);
+      return fixedCards.get(this.current.length);
     }
     return this.current.pop() || null;
   },
@@ -150,6 +150,7 @@ const FatePool = {
   },
 
   shuffle() {
+    this.indexed = [];
     this.current = shuffleArray(this.cards);
   }
 };
