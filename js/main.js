@@ -8,8 +8,8 @@ const PlayerState = {
   bonds: 0,
 
   init() {
-    this.money = 0;
-    this.bonds = 0;
+    this.money = 10;
+    this.bonds = 10;
   },
 
   addMoney(amount) {
@@ -44,6 +44,7 @@ function initGame() {
 
   // Initialize UI
   UI.init();
+  UI.updatePlayerStats();
 
   // Start the timeline
   Timeline.init();
