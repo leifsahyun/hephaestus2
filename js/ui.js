@@ -182,7 +182,7 @@ const UI = {
       rerollBtn.disabled = true;
       fightBtn.disabled = true;
       battle.drawFateCards();
-      this.showFateCards(battle.fateCards, battle, () => {
+      this.showFateCards(battle, () => {
         const result = battle.resolveBattle();
         this.showBattleResult(result, battle);
       });
@@ -257,7 +257,7 @@ const UI = {
     `;
   },
 
-  showFateCards(fateCards, battle, onComplete) {
+  showFateCards(battle, onComplete) {
     const display = document.getElementById("fate-cards-display");
     if (!display) {
       if (onComplete) onComplete();
@@ -324,11 +324,11 @@ const UI = {
 
     let i = 0;
     const drawNext = () => {
-      if (i >= fateCards.length) {
+      if (i >= battle.fateCards.length) {
         if (onComplete) onComplete();
         return;
       }
-      const card = fateCards[i];
+      const card = battle.fateCards[i];
       i++;
 
       // If already at max visible, move oldest to the stack
