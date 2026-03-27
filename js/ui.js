@@ -915,13 +915,6 @@ const UI = {
     qualEl.textContent = "◈ " + item.quality;
     card.appendChild(qualEl);
 
-    if (item.value > 0) {
-      const valEl = document.createElement("div");
-      valEl.className = "card-value";
-      valEl.textContent = "$" + item.value;
-      card.appendChild(valEl);
-    }
-
     if (isHero && item.hubris > 0) {
       const hubEl = document.createElement("div");
       hubEl.className = "card-hubris";
@@ -944,15 +937,21 @@ const UI = {
           ? `${slot.augment.name}: ${slot.augment.description}`
           : `Empty ${slot.type} slot`;
         slotRow.appendChild(slotImg);
-        if (slot.augment) {
-          const augInfo = document.createElement("div");
-          augInfo.className = "slot-augment-info";
-          augInfo.innerHTML = `<strong>${slot.augment.name}</strong>: ${slot.augment.description}`;
-          slotRow.appendChild(augInfo);
-        }
         slotsEl.appendChild(slotRow);
       }
       card.appendChild(slotsEl);
+    }
+
+    if (item.augments && item.augments.length > 0) {
+      const augList = document.createElement("div");
+      augList.className = "card-augments";
+      for (const aug of item.augments) {
+        const augEl = document.createElement("div");
+        augEl.className = "card-augment";
+        augEl.innerHTML = `<strong>${aug.name}</strong>: ${aug.description}`;
+        augList.appendChild(augEl);
+      }
+      card.appendChild(augList);
     }
 
     return card;
