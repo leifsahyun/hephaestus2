@@ -5,6 +5,8 @@
 const Config = {
   itemTypes: ["sword", "shield", "helm", "armor", "ring"],
 
+  augmentSlotTypes: ["edge", "haft", "patina", "blessing"],
+
   forgeComponents: {
     createItem: true,
     upgradeAnvil: true,
@@ -213,6 +215,7 @@ const Config = {
     {
       name: "Featherweight",
       description: "Refunds Hubris cost on equip. Item is destroyed on use.",
+      type: "haft",
       value: 15,
       onEquip: function (battle, item) {
         battle.addHubris(-item.hubrisCost);
@@ -224,6 +227,7 @@ const Config = {
     {
       name: "Sharpened",
       description: "Adds +3 quality when equipped.",
+      type: "edge",
       value: 10,
       onEquip: function (battle, item) {
         item.tempQuality = (item.tempQuality || item.baseQuality) + 3;

@@ -663,6 +663,64 @@ header h1 {
   font-size: 0.9rem;
 }
 
+.card-slots {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-slot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.slot-augment-info {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.slot-augment-info strong { color: #e9c46a; }
+
+.slot-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.slot-icon--compact {
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+}
+
+.slot-icon--sm {
+  width: 14px;
+  height: 14px;
+}
+
+.compact-slots {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 4px;
+}
+
+.augment-type {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-bottom: 4px;
+}
+
+
+
 /* ── Forge Message ── */
 .forge-message {
   text-align: center;
