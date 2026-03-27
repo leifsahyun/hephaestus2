@@ -1,6 +1,6 @@
 /**
  * Battle logic - manages a single battle encounter.
- * Handles equipping items, hubris, rerolling, and resolution.
+ * Handles equipping items, hubris, and resolution.
  */
 
 class Battle {
@@ -9,7 +9,7 @@ class Battle {
     this.monster = monster;
     this.equippedItems = [];
     this.fateCards = [];
-    this.offerItem = null;
+    this.offerItems = [];
     this.resolved = false;
 
     // Reset hero for new battle
@@ -27,33 +27,34 @@ class Battle {
       aug.onEquip(this, this.monster);
     }
 
-    // Shuffle item pool and draw first offer
+    // Shuffle item pool and draw first three offers
     ItemPool.shuffle();
-    this.rerollFree();
+    this.drawOffers();
   }
 
-  reroll() {
-    this.addHubris(Config.hubrisCosts.reroll);
-    this.rerollFree();
-  }
-
-  rerollFree() {
-    this.offerItem = ItemPool.draw();
-  }
-
-  equip() {
-    this.addHubris(Config.hubrisCosts.equip);
-    this.equipFree();
-  }
-
-  equipFree() {
-    if (this.offerItem) {
-      this.equippedItems.push(this.offerItem);
-      for (const aug of this.offerItem.augments) {
-        aug.onEquip(this, this.offerItem);
-      }
-      this.rerollFree();
+  drawOffers() {
+    this.offerItems = [];
+    for (let i = 0; i < 3; i++) {
+      const item = ItemPool.draw();
+      if (item) this.offerItems.push(item);
     }
+  }
+
+  equipItem(item) {
+    // Return the other offered items to the pool
+    for (const other of this.offerItems) {
+      if (other !== item) {
+        ItemPool.returnItem(other);
+      }
+    }
+    // Equip the chosen item
+    this.equippedItems.push(item);
+    this.addHubris(item.hubrisCost);
+    for (const aug of item.augments) {
+      aug.onEquip(this, item);
+    }
+    // Draw three new offers
+    this.drawOffers();
   }
 
   addHubris(amount) {

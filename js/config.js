@@ -15,11 +15,6 @@ const Config = {
 
   minTimelineLength: 10,
 
-  hubrisCosts: {
-    reroll: 2,
-    equip: 5
-  },
-
   battleRewards: {
     moneyMin: 5,
     moneyMax: 25
@@ -46,13 +41,13 @@ const Config = {
   },
 
   defaultItems: [
-    { name: "Sword", type: "sword", baseQuality: 10, augments: [], variant: 0, value: 10 },
-    { name: "Shield", type: "shield", baseQuality: 8, augments: [], variant: 0, value: 8 },
-    { name: "Helm", type: "helm", baseQuality: 6, augments: [], variant: 0, value: 6 },
-    { name: "Armor", type: "armor", baseQuality: 12, augments: [], variant: 0, value: 12 },
-    { name: "Net", type: "ring", baseQuality: 5, augments: [], variant: 0, value: 5 },
-    { name: "Bow", type: "sword", baseQuality: 15, augments: [], variant: 1, value: 15 },
-    { name: "Sandals", type: "ring", baseQuality: 7, augments: [], variant: 1, value: 7 }
+    { name: "Sword", type: "sword", baseQuality: 10, augments: [], variant: 0, value: 10, hubrisCost: 5 },
+    { name: "Shield", type: "shield", baseQuality: 8, augments: [], variant: 0, value: 8, hubrisCost: 4 },
+    { name: "Helm", type: "helm", baseQuality: 6, augments: [], variant: 0, value: 6, hubrisCost: 3 },
+    { name: "Armor", type: "armor", baseQuality: 12, augments: [], variant: 0, value: 12, hubrisCost: 6 },
+    { name: "Net", type: "ring", baseQuality: 5, augments: [], variant: 0, value: 5, hubrisCost: 2 },
+    { name: "Bow", type: "sword", baseQuality: 15, augments: [], variant: 1, value: 15, hubrisCost: 7 },
+    { name: "Sandals", type: "ring", baseQuality: 7, augments: [], variant: 1, value: 7, hubrisCost: 3 }
   ],
 
   defaultFateCards: [
@@ -220,7 +215,7 @@ const Config = {
       description: "Refunds Hubris cost on equip. Item is destroyed on use.",
       value: 15,
       onEquip: function (battle, item) {
-        battle.addHubris(-Config.hubrisCosts.equip);
+        battle.addHubris(-item.hubrisCost);
       },
       onBattleComplete: function (battle, item) {
         ItemPool.erase(item);

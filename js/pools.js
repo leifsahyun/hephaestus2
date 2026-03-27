@@ -39,6 +39,10 @@ const ItemPool = {
     if (idx !== -1) this.items.splice(idx, 1);
   },
 
+  returnItem(item) {
+    this.current.push(item);
+  },
+
   shuffle() {
     this.current = shuffleArray(this.items);
   }
