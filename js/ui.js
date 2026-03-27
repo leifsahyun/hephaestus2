@@ -798,8 +798,17 @@ const UI = {
             this.showForgeMessage(`Cannot afford ${augName} ($${augData.value})`);
             return;
           }
+          const matchingSlot = augData.type
+            ? item.slots.find(s => s.type === augData.type && !s.augment)
+            : null;
+          if (!matchingSlot) {
+            const slotType = augData.type || "unknown";
+            this.showForgeMessage(`No matching ${slotType} slot on ${item.name}`);
+            return;
+          }
           const newAug = new Augment(augData);
           newAug.onAugment(item);
+          matchingSlot.augment = newAug;
           item.augments.push(newAug);
           PlayerState.addMoney(-augData.value);
           const newCard = this.renderItemCard(item, false);
@@ -844,6 +853,19 @@ const UI = {
       augName.className = "augment-name";
       augName.textContent = aug.name;
 
+      const augType = document.createElement("div");
+      augType.className = "augment-type";
+      if (augData.type) {
+        const augTypeImg = document.createElement("img");
+        augTypeImg.src = `icons/augment_slot/${augData.type}_slot_filled.png`;
+        augTypeImg.className = "slot-icon slot-icon--sm";
+        augTypeImg.alt = augData.type;
+        augType.appendChild(augTypeImg);
+        const augTypeLabel = document.createElement("span");
+        augTypeLabel.textContent = capitalize(augData.type);
+        augType.appendChild(augTypeLabel);
+      }
+
       const augDesc = document.createElement("div");
       augDesc.className = "augment-desc";
       augDesc.textContent = aug.description;
@@ -853,6 +875,7 @@ const UI = {
       augPrice.textContent = "$" + aug.value;
 
       augCard.appendChild(augName);
+      augCard.appendChild(augType);
       augCard.appendChild(augDesc);
       augCard.appendChild(augPrice);
       augmentList.appendChild(augCard);
@@ -906,16 +929,30 @@ const UI = {
       card.appendChild(hubEl);
     }
 
-    if (item.augments && item.augments.length > 0) {
-      const augList = document.createElement("div");
-      augList.className = "card-augments";
-      for (const aug of item.augments) {
-        const augEl = document.createElement("div");
-        augEl.className = "card-augment";
-        augEl.innerHTML = `<strong>${aug.name}</strong>: ${aug.description}`;
-        augList.appendChild(augEl);
+    if (item.slots && item.slots.length > 0) {
+      const slotsEl = document.createElement("div");
+      slotsEl.className = "card-slots";
+      for (const slot of item.slots) {
+        const slotRow = document.createElement("div");
+        slotRow.className = "card-slot" + (slot.augment ? " card-slot--filled" : " card-slot--empty");
+        const slotImg = document.createElement("img");
+        const state = slot.augment ? "filled" : "empty";
+        slotImg.src = `icons/augment_slot/${slot.type}_slot_${state}.png`;
+        slotImg.className = "slot-icon";
+        slotImg.alt = slot.augment ? slot.augment.name : `${slot.type} slot`;
+        slotImg.title = slot.augment
+          ? `${slot.augment.name}: ${slot.augment.description}`
+          : `Empty ${slot.type} slot`;
+        slotRow.appendChild(slotImg);
+        if (slot.augment) {
+          const augInfo = document.createElement("div");
+          augInfo.className = "slot-augment-info";
+          augInfo.innerHTML = `<strong>${slot.augment.name}</strong>: ${slot.augment.description}`;
+          slotRow.appendChild(augInfo);
+        }
+        slotsEl.appendChild(slotRow);
       }
-      card.appendChild(augList);
+      card.appendChild(slotsEl);
     }
 
     return card;
@@ -936,17 +973,21 @@ const UI = {
     card.appendChild(nameEl);
     card.appendChild(qualEl);
 
-    if (item.augments && item.augments.length > 0) {
-      const augIcons = document.createElement("span");
-      augIcons.className = "compact-augments";
-      for (const aug of item.augments) {
-        const icon = document.createElement("span");
-        icon.className = "augment-icon";
-        icon.title = aug.name + ": " + aug.description;
-        icon.textContent = "✦";
-        augIcons.appendChild(icon);
+    if (item.slots && item.slots.length > 0) {
+      const filledSlots = item.slots.filter(s => s.augment);
+      if (filledSlots.length > 0) {
+        const slotsEl = document.createElement("span");
+        slotsEl.className = "compact-slots";
+        for (const slot of filledSlots) {
+          const slotImg = document.createElement("img");
+          slotImg.src = `icons/augment_slot/${slot.type}_slot_filled.png`;
+          slotImg.className = "slot-icon slot-icon--compact";
+          slotImg.alt = slot.augment.name;
+          slotImg.title = `${slot.augment.name}: ${slot.augment.description}`;
+          slotsEl.appendChild(slotImg);
+        }
+        card.appendChild(slotsEl);
       }
-      card.appendChild(augIcons);
     }
 
     return card;

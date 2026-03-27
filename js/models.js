@@ -15,6 +15,18 @@ class Item {
     );
     this.hubris = 0;
     this.hubrisCost = data.hubrisCost != null ? data.hubrisCost : 0;
+    if (data.slots) {
+      this.slots = data.slots.map(s => ({
+        type: s.type,
+        augment: s.augment instanceof Augment ? s.augment : (s.augment ? new Augment(s.augment) : null)
+      }));
+    } else {
+      const types = Config.augmentSlotTypes;
+      this.slots = Array.from({ length: 3 }, () => ({
+        type: types[Math.floor(Math.random() * types.length)],
+        augment: null
+      }));
+    }
   }
 
   get quality() {
@@ -40,7 +52,8 @@ class Item {
       baseQuality: this.baseQuality,
       value: this.value,
       hubrisCost: this.hubrisCost,
-      augments: this.augments.map(a => a.clone())
+      augments: this.augments.map(a => a.clone()),
+      slots: this.slots.map(s => ({ type: s.type, augment: s.augment ? s.augment.clone() : null }))
     };
     const item = new Item(data);
     item.tempQuality = this.tempQuality;
@@ -74,7 +87,8 @@ class Hero extends Item {
       baseQuality: this.baseQuality,
       baseHubris: this.baseHubris,
       value: this.value,
-      augments: this.augments.map(a => a.clone())
+      augments: this.augments.map(a => a.clone()),
+      slots: this.slots.map(s => ({ type: s.type, augment: s.augment ? s.augment.clone() : null }))
     };
     return new Hero(data);
   }
@@ -83,6 +97,7 @@ class Hero extends Item {
 class Augment {
   constructor(data) {
     this.name = data.name || "";
+    this.type = data.type || "";
     this.description = data.description || "";
     this.value = data.value || 0;
     this.onEquipFn = data.onEquip || null;
@@ -109,6 +124,7 @@ class Augment {
   clone() {
     return new Augment({
       name: this.name,
+      type: this.type,
       description: this.description,
       value: this.value,
       onEquip: this.onEquipFn,
