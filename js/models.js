@@ -14,6 +14,7 @@ class Item {
       a instanceof Augment ? a : new Augment(a)
     );
     this.hubris = 0;
+    this.hubrisCost = data.hubrisCost != null ? data.hubrisCost : 0;
   }
 
   get quality() {
@@ -38,6 +39,7 @@ class Item {
       variant: this.variant,
       baseQuality: this.baseQuality,
       value: this.value,
+      hubrisCost: this.hubrisCost,
       augments: this.augments.map(a => a.clone())
     };
     const item = new Item(data);

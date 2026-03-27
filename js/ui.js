@@ -169,45 +169,50 @@ const UI = {
     monsterSection.appendChild(expectedStats);
     layout.appendChild(monsterSection);
 
-    // Offered item area (in layout row 2, col 2)
+    // Offered items area (in layout row 2, col 2)
     const offerArea = document.createElement("div");
     offerArea.className = "offer-area";
-    offerArea.innerHTML = "<h3>Offered Item</h3>";
+    offerArea.innerHTML = "<h3>Offered Items</h3>";
 
-    // Wrapper so the card and buttons share the same width
-    const offerContent = document.createElement("div");
-    offerContent.className = "offer-content";
+    const offerRow = document.createElement("div");
+    offerRow.id = "offer-items-row";
+    offerRow.className = "offer-items-row";
 
-    const offerCard = document.createElement("div");
-    offerCard.id = "offer-card";
-    offerContent.appendChild(offerCard);
+    for (let i = 0; i < 3; i++) {
+      const slot = document.createElement("div");
+      slot.className = "offer-slot";
 
-    // Action buttons
+      const cardDiv = document.createElement("div");
+      cardDiv.id = `offer-slot-${i}`;
+      slot.appendChild(cardDiv);
+
+      const equipBtn = document.createElement("button");
+      equipBtn.id = `offer-equip-${i}`;
+      equipBtn.className = "btn btn-equip";
+      equipBtn.textContent = "Equip";
+      equipBtn.addEventListener("click", () => {
+        const item = battle.offerItems[i];
+        if (!item) return;
+        battle.equipItem(item);
+        this.updateBattleUI(battle);
+      });
+      slot.appendChild(equipBtn);
+
+      offerRow.appendChild(slot);
+    }
+    offerArea.appendChild(offerRow);
+
+    // Action buttons (fight only)
     const actions = document.createElement("div");
     actions.className = "battle-actions";
-
-    const equipBtn = document.createElement("button");
-    equipBtn.className = "btn btn-equip";
-    equipBtn.textContent = `Equip (+${Config.hubrisCosts.equip} Hubris)`;
-    equipBtn.addEventListener("click", () => {
-      battle.equip();
-      this.updateBattleUI(battle);
-    });
-
-    const rerollBtn = document.createElement("button");
-    rerollBtn.className = "btn btn-reroll";
-    rerollBtn.textContent = `Reroll (+${Config.hubrisCosts.reroll} Hubris)`;
-    rerollBtn.addEventListener("click", () => {
-      battle.reroll();
-      this.updateBattleUI(battle);
-    });
 
     const fightBtn = document.createElement("button");
     fightBtn.className = "btn btn-fight";
     fightBtn.textContent = "Fight!";
     fightBtn.addEventListener("click", () => {
-      equipBtn.disabled = true;
-      rerollBtn.disabled = true;
+      for (const btn of document.querySelectorAll(".btn-equip")) {
+        btn.disabled = true;
+      }
       fightBtn.disabled = true;
       battle.drawFateCards();
       this.showFateCards(battle, () => {
@@ -216,11 +221,8 @@ const UI = {
       });
     });
 
-    actions.appendChild(equipBtn);
-    actions.appendChild(rerollBtn);
     actions.appendChild(fightBtn);
-    offerContent.appendChild(actions);
-    offerArea.appendChild(offerContent);
+    offerArea.appendChild(actions);
     layout.appendChild(offerArea);
 
     // Battle log (in layout row 2, col 3)
@@ -276,15 +278,28 @@ const UI = {
       monsterStrengthEl.dataset.strength = monsterStrength;
     }
 
-    // Update offer card
-    const offerCard = document.getElementById("offer-card");
-    if (offerCard) {
-      offerCard.innerHTML = "";
-      if (battle.offerItem) {
-        offerCard.appendChild(this.renderItemCard(battle.offerItem, false));
-      } else {
-        offerCard.innerHTML =
-          '<div class="card empty-card">No items available</div>';
+    // Update offer slots
+    for (let i = 0; i < 3; i++) {
+      const slotEl = document.getElementById(`offer-slot-${i}`);
+      const equipBtn = document.getElementById(`offer-equip-${i}`);
+      if (slotEl) {
+        slotEl.innerHTML = "";
+        const item = battle.offerItems[i];
+        if (item) {
+          slotEl.appendChild(this.renderItemCard(item, false));
+        } else {
+          slotEl.innerHTML = '<div class="card empty-card">Empty</div>';
+        }
+      }
+      if (equipBtn) {
+        const item = battle.offerItems[i];
+        if (item) {
+          equipBtn.textContent = `Equip (+${item.hubrisCost}H)`;
+          equipBtn.disabled = false;
+        } else {
+          equipBtn.textContent = "Equip";
+          equipBtn.disabled = true;
+        }
       }
     }
 
@@ -581,7 +596,7 @@ const UI = {
 
       // Disable battle action buttons
       for (const btn of document.querySelectorAll(
-        ".btn-equip, .btn-reroll, .btn-fight"
+        ".btn-equip, .btn-fight"
       )) {
         btn.disabled = true;
       }
