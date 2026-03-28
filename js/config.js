@@ -64,7 +64,7 @@ const Config = {
         onEquip: function (battle, hero) {
           battle.onItemEquippedCallbacks.push(function (b, item) {
             const types = new Set(b.equippedItems.map(i => i.type));
-            hero.tempQuality = types.size * 3;
+            hero.tempQuality = hero.baseQuality + types.size * 3;
           });
         },
         onBattleComplete: function (battle, hero) {
