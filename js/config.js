@@ -225,12 +225,12 @@ const Config = {
       }
     },
     {
-      name: "Sharpened",
-      description: "Adds +3 quality when equipped.",
+      name: "Hone",
+      description: "+1◈ when equipped.",
       type: "edge",
       value: 10,
       onEquip: function (battle, item) {
-        item.tempQuality = (item.tempQuality || item.baseQuality) + 3;
+        item.baseQuality = item.baseQuality + 1;
       },
       onBattleComplete: null
     }
