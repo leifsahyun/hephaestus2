@@ -634,7 +634,6 @@ const UI = {
     // Type selector
     const typeGroup = document.createElement("div");
     typeGroup.className = "form-group";
-    typeGroup.innerHTML = '<label>Type:</label>';
     const typeSelect = document.createElement("select");
     typeSelect.className = "form-select";
     for (const t of Config.itemTypes) {
@@ -648,8 +647,8 @@ const UI = {
 
     // Quality selector (0 allowed as minimum)
     const qualGroup = document.createElement("div");
-    qualGroup.className = "form-group";
-    qualGroup.innerHTML = '<label>Quality:</label>';
+    qualGroup.className = "form-group qual-group";
+    qualGroup.innerHTML = '<label class="qual-label">Quality:</label>';
     const qualDiv = document.createElement("div");
     qualDiv.className = "number-selector";
     let qualityVal = Config.qualitySelector.min;
@@ -667,8 +666,6 @@ const UI = {
     // Value and Hubris cost display
     const statsDiv = document.createElement("div");
     statsDiv.className = "create-item-stats";
-    const valueDisplay = document.createElement("span");
-    valueDisplay.className = "create-item-stat-value";
     const hubrisDisplay = document.createElement("span");
     hubrisDisplay.className = "create-item-stat-hubris";
 
@@ -679,8 +676,7 @@ const UI = {
       return q === 0 ? 1 : Math.round(getItemValue(q) * 0.4);
     }
     function updateStats() {
-      valueDisplay.textContent = "Value: $" + getItemValue(qualityVal);
-      hubrisDisplay.textContent = "Hubris Cost: " + getHubrisCost(qualityVal);
+      hubrisDisplay.textContent = "Hubris: " + getHubrisCost(qualityVal);
     }
 
     qualDown.addEventListener("click", () => {
@@ -698,11 +694,8 @@ const UI = {
     qualDiv.appendChild(qualLabel);
     qualDiv.appendChild(qualUp);
     qualGroup.appendChild(qualDiv);
-    panel.appendChild(qualGroup);
 
-    statsDiv.appendChild(valueDisplay);
     statsDiv.appendChild(hubrisDisplay);
-    panel.appendChild(statsDiv);
     updateStats();
 
     // Augment slot carousels (3 slots)
@@ -723,14 +716,14 @@ const UI = {
 
       const prevBtn = document.createElement("button");
       prevBtn.className = "btn btn-sm slot-carousel-btn";
-      prevBtn.textContent = "◀";
+      prevBtn.textContent = "▲";
 
       const img = document.createElement("img");
       img.className = "slot-icon slot-carousel-icon";
 
       const nextBtn = document.createElement("button");
       nextBtn.className = "btn btn-sm slot-carousel-btn";
-      nextBtn.textContent = "▶";
+      nextBtn.textContent = "▼";
 
       carousel.appendChild(prevBtn);
       carousel.appendChild(img);
@@ -745,6 +738,7 @@ const UI = {
       const suffix = state.augData ? "filled" : "empty";
       carouselEls[i].img.src = `icons/augment_slot/${typeName}_slot_${suffix}.png`;
       carouselEls[i].img.alt = typeName;
+      carouselEls[i].img.title = state.augData ? `${state.augData.name}: ${state.augData.description}` : "";
       carouselEls[i].prevBtn.style.visibility = state.locked ? "hidden" : "";
       carouselEls[i].nextBtn.style.visibility = state.locked ? "hidden" : "";
     }
@@ -801,8 +795,6 @@ const UI = {
       });
     }
 
-    panel.appendChild(slotsDiv);
-
     // Create button
     const createBtn = document.createElement("button");
     createBtn.className = "btn btn-create";
@@ -834,6 +826,9 @@ const UI = {
       this.showForgeMessage("Item created: " + capitalize(item.name));
       createBtn.disabled = true;
     });
+    panel.appendChild(slotsDiv);
+    panel.appendChild(qualGroup);
+    panel.appendChild(statsDiv);
     panel.appendChild(createBtn);
 
     return panel;
