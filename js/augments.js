@@ -23,7 +23,7 @@ const defaultAugments = [
     value: 10,
     onEquip: function (battle, item) {
       item.baseQuality = item.baseQuality + 1;
-      item.tempQuality = item.tempQuality + 1;
+      item.tempQuality = item.tempQuality ? item.tempQuality + 1 : item.baseQuality;
     },
     onBattleComplete: null
   },
