@@ -164,7 +164,7 @@ const defaultAugments = [
   },
   {
     name: "Nike",
-    description: "Add quality equal to this item's Glory on equip (wears off after battle). On win, +7 Glory to this item.",
+    description: "Add ◈ equal to this item's Glory. On win, +7 Glory.",
     type: "blessing",
     value: 15,
     onEquip: function (battle, item) {
