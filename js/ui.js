@@ -154,6 +154,10 @@ const UI = {
     const monsterSection = document.createElement("div");
     monsterSection.className = "battle-section monster-section";
     monsterSection.innerHTML = "<h3>Monster</h3>";
+    const monsterStrengthDisplay = document.createElement("div");
+    monsterStrengthDisplay.id = "monster-strength-display";
+    monsterStrengthDisplay.className = "strength-display monster-strength-display";
+    monsterSection.appendChild(monsterStrengthDisplay);
     const monsterCard = this.renderItemCard(battle.monster, false);
     monsterCard.id = "monster-card";
     monsterSection.appendChild(monsterCard);
@@ -243,6 +247,7 @@ const UI = {
     for (const item of battle.equippedItems) {
       heroStrength += item.quality;
     }
+    const monsterStrength = battle.monster.quality;
 
     const heroStrengthEl = document.getElementById("hero-strength-display");
     if (heroStrengthEl) {
@@ -254,6 +259,18 @@ const UI = {
       }
       heroStrengthEl.textContent = heroStrength;
       heroStrengthEl.dataset.strength = heroStrength;
+    }
+
+    const monsterStrengthEl = document.getElementById("monster-strength-display");
+    if (monsterStrengthEl) {
+      const prev = monsterStrengthEl.dataset.strength;
+      if (prev !== undefined && parseInt(prev, 10) !== monsterStrength) {
+        monsterStrengthEl.classList.remove("strength-flash");
+        void monsterStrengthEl.offsetWidth; // trigger reflow to restart CSS animation
+        monsterStrengthEl.classList.add("strength-flash");
+      }
+      monsterStrengthEl.textContent = monsterStrength;
+      monsterStrengthEl.dataset.strength = monsterStrength;
     }
 
     // Update offer slots
