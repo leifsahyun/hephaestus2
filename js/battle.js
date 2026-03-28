@@ -11,6 +11,8 @@ class Battle {
     this.fateCards = [];
     this.offerItems = [];
     this.resolved = false;
+    this.won = false;
+    this.onItemEquippedCallbacks = [];
 
     // Reset hero for new battle
     this.hero.reset();
@@ -50,8 +52,14 @@ class Battle {
     // Equip the chosen item
     this.equippedItems.push(item);
     this.addHubris(item.hubrisCost);
+    // Snapshot callbacks registered before this equip so new callbacks added
+    // during onEquip (e.g. augments that register item-equipped listeners) don't fire for the current item.
+    const callbackSnapshot = this.onItemEquippedCallbacks.slice();
     for (const aug of item.augments) {
       aug.onEquip(this, item);
+    }
+    for (const cb of callbackSnapshot) {
+      cb(this, item);
     }
     // Draw three new offers
     this.drawOffers();
@@ -83,6 +91,7 @@ class Battle {
     }
 
     const won = heroStrength >= monsterStrength;
+    this.won = won;
 
     // Trigger augment battle complete callbacks
     for (const item of this.equippedItems) {

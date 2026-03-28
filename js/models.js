@@ -15,6 +15,7 @@ class Item {
     );
     this.hubris = 0;
     this.hubrisCost = data.hubrisCost != null ? data.hubrisCost : 0;
+    this.glory = data.glory || 0;
     if (data.slots) {
       this.slots = data.slots.map(s => ({
         type: s.type,
@@ -48,6 +49,7 @@ class Item {
       baseQuality: this.baseQuality,
       value: this.value,
       hubrisCost: this.hubrisCost,
+      glory: this.glory,
       augments: this.augments.map(a => a.clone()),
       slots: this.slots.map(s => ({ type: s.type, augment: s.augment ? s.augment.clone() : null }))
     };
