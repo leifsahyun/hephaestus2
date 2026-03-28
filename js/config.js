@@ -95,9 +95,9 @@ const Config = {
 
   defaultMonsters: {
     1: [
-      { name: "Minotaur", type: "monster", baseQuality: 45, augments: [], variant: -1, value: 0 },
-      { name: "Hydra", type: "monster", baseQuality: 60, augments: [], variant: -1, value: 0 },
-      { name: "Medusa", type: "monster", baseQuality: 20, augments: [], variant: -1, value: 0 }
+      { name: "Minotaur", type: "monster", baseQuality: 45, fateCards: 3, augments: [], variant: -1, value: 0 },
+      { name: "Hydra", type: "monster", baseQuality: 60, fateCards: 2, augments: [], variant: -1, value: 0 },
+      { name: "Medusa", type: "monster", baseQuality: 20, fateCards: 5, augments: [], variant: -1, value: 0 }
     ]
   },
 
