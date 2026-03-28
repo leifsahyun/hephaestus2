@@ -186,7 +186,12 @@ header h1 {
 
 .card-quality { color: #4ecca3; font-weight: bold; }
 .card-value { color: #e9c46a; font-size: 0.85rem; }
-.card-hubris { color: #e94560; font-weight: bold; margin-top: 4px; }
+.card-hubris { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.card-hubris-label { color: #e94560; font-weight: bold; white-space: nowrap; }
+.hubris-bar-track { flex: 1; height: 10px; background: #222; overflow: hidden; clip-path: polygon(0 30%, 100% 0%, 100% 100%, 0% 70%); }
+.hubris-bar-fill { height: 100%; background: linear-gradient(to right, #ff8c00, #cc0000); }
+.hubris-danger-icon { color: #ff2222; font-size: 1.1em; animation: hubris-pulse 0.8s ease-in-out 1; }
+@keyframes hubris-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
 .card-chroma { margin-top: 4px; font-size: 0.85rem; }
 .chroma-text-red { color: #ff6b6b; }

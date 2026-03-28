@@ -893,10 +893,31 @@ const UI = {
     card.appendChild(qualEl);
 
     if (isHero) {
-      const hubEl = document.createElement("div");
-      hubEl.className = "card-hubris";
-      hubEl.textContent = "Hubris: " + item.hubris;
-      card.appendChild(hubEl);
+      const MAX_HUBRIS = 21;
+      const hubRow = document.createElement("div");
+      hubRow.className = "card-hubris";
+
+      const hubLabel = document.createElement("span");
+      hubLabel.className = "card-hubris-label";
+      hubLabel.textContent = "Hubris: " + item.hubris;
+      hubRow.appendChild(hubLabel);
+
+      const barTrack = document.createElement("div");
+      barTrack.className = "hubris-bar-track";
+      const barFill = document.createElement("div");
+      barFill.className = "hubris-bar-fill";
+      barFill.style.width = Math.min(100, (item.hubris / MAX_HUBRIS) * 100) + "%";
+      barTrack.appendChild(barFill);
+      hubRow.appendChild(barTrack);
+
+      if (item.hubris >= MAX_HUBRIS) {
+        const dangerIcon = document.createElement("span");
+        dangerIcon.className = "hubris-danger-icon";
+        dangerIcon.textContent = "⚠";
+        hubRow.appendChild(dangerIcon);
+      }
+
+      card.appendChild(hubRow);
     }
 
     if (!isHero && item.fateCards != null) {
