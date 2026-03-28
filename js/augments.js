@@ -41,11 +41,8 @@ const defaultAugments = [
         boulderAugments.push(aug);
         boulderSlots.push({type:"blessing",augment:aug});
       }
-      const boulder = new Item({ name: "Boulder", type: "boulder", baseQuality: 5, augments: boulderAugments, slots: boulderSlots });
-      battle.equippedItems.push(boulder);
-      for (const aug of boulder.augments) {
-        aug.onEquip(battle, boulder);
-      }
+      const boulder = new Item({ name: "Boulder", type: "boulder", baseQuality: 5, hubrisCost: 0, augments: boulderAugments, slots: boulderSlots });
+      battle.equipItem(boulder);
     },
     onBattleComplete: null
   },
