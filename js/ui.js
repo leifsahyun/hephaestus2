@@ -906,7 +906,7 @@ const UI = {
       barTrack.className = "hubris-bar-track";
       const barFill = document.createElement("div");
       barFill.className = "hubris-bar-fill";
-      barFill.style.width = Math.min(100, (item.hubris / MAX_HUBRIS) * 100) + "%";
+      barFill.style.width = Math.min(100, (Math.max(0, item.hubris) / MAX_HUBRIS) * 100) + "%";
       barTrack.appendChild(barFill);
       hubRow.appendChild(barTrack);
 
