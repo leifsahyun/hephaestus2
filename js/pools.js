@@ -40,7 +40,7 @@ const ItemPool = {
   },
 
   returnItem(item) {
-    this.current.push(item);
+    this.current.unshift(item);
   },
 
   shuffle() {
