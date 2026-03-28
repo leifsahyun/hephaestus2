@@ -835,8 +835,8 @@ const UI = {
     const augmentList = document.createElement("div");
     augmentList.className = "augment-shelf-list";
 
-    // Show available augments
-    for (const augData of defaultAugments) {
+    // Show 3 randomly selected augments from the pool
+    for (const augData of AugmentPool.sample(3)) {
       const aug = new Augment(augData);
       const augCard = document.createElement("div");
       const canAfford = PlayerState.money >= aug.value;
