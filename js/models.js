@@ -21,11 +21,7 @@ class Item {
         augment: s.augment instanceof Augment ? s.augment : (s.augment ? new Augment(s.augment) : null)
       }));
     } else {
-      const types = Config.augmentSlotTypes;
-      this.slots = Array.from({ length: 3 }, () => ({
-        type: types[Math.floor(Math.random() * types.length)],
-        augment: null
-      }));
+      this.slots = [];
     }
   }
 
