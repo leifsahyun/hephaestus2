@@ -42,7 +42,7 @@ class Item {
   }
 
   upgrade() {
-    this.value = this.value * 1.5;
+    this.value = Math.floor(this.value * 1.5);
     if (this.tempQuality == null) this.tempQuality = this.baseQuality;
     this.tempQuality += 5;
     this.baseQuality += 5;
