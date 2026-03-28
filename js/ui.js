@@ -289,7 +289,11 @@ const UI = {
       if (equipBtn) {
         const item = battle.offerItems[i];
         if (item) {
-          equipBtn.textContent = `Equip (+${item.hubrisCost}H)`;
+          equipBtn.textContent = "Equip ";
+          const hubrisSpan = document.createElement("span");
+          hubrisSpan.className = "equip-btn-hubris-cost";
+          hubrisSpan.textContent = `(+${item.hubrisCost}H)`;
+          equipBtn.appendChild(hubrisSpan);
           equipBtn.disabled = false;
         } else {
           equipBtn.textContent = "Equip";
