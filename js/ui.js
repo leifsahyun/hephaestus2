@@ -915,7 +915,7 @@ const UI = {
     qualEl.textContent = "◈ " + item.quality;
     card.appendChild(qualEl);
 
-    if (isHero && item.hubris > 0) {
+    if (isHero) {
       const hubEl = document.createElement("div");
       hubEl.className = "card-hubris";
       hubEl.textContent = "Hubris: " + item.hubris;
