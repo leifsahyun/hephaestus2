@@ -29,9 +29,63 @@ const Config = {
   },
 
   defaultHeroes: [
-    { name: "Ajax", type: "hero", baseQuality: 10, baseHubris: 0, augments: [], variant: -1, value: 0 },
-    { name: "Hector", type: "hero", baseQuality: 15, baseHubris: 0, augments: [], variant: -1, value: 0 },
-    { name: "Achilles", type: "hero", baseQuality: 20, baseHubris: 0, augments: [], variant: -1, value: 0 }
+    {
+      name: "Ajax", type: "hero", baseQuality: 10, baseHubris: 0, variant: -1, value: 0,
+      augments: [{
+        name: "Bulwark",
+        description: "When a shield is equipped, +3◈.",
+        type: "hero",
+        value: 0,
+        onEquip: function (battle, hero) {
+          battle.onItemEquippedCallbacks.push(function (b, item) {
+            if (item.type === "shield") {
+              hero.tempQuality = (hero.tempQuality != null ? hero.tempQuality : hero.baseQuality) + 3;
+            }
+          });
+        },
+        onBattleComplete: function (battle, hero) {
+          hero.tempQuality = null;
+        }
+      }]
+    },
+    {
+      name: "Hector", type: "hero", baseQuality: 15, baseHubris: 0, variant: -1, value: 0,
+      augments: [{
+        name: "Swordmaster",
+        description: "When a sword is equipped, +3◈.",
+        type: "hero",
+        value: 0,
+        onEquip: function (battle, hero) {
+          battle.onItemEquippedCallbacks.push(function (b, item) {
+            if (item.type === "sword") {
+              hero.tempQuality = (hero.tempQuality != null ? hero.tempQuality : hero.baseQuality) + 3;
+            }
+          });
+        },
+        onBattleComplete: function (battle, hero) {
+          hero.tempQuality = null;
+        }
+      }]
+    },
+    {
+      name: "Achilles", type: "hero", baseQuality: 20, baseHubris: 0, variant: -1, value: 0,
+      augments: [{
+        name: "Ironclad",
+        description: "When armor is equipped, +3◈.",
+        type: "hero",
+        value: 0,
+        onEquip: function (battle, hero) {
+          battle.onItemEquippedCallbacks.push(function (b, item) {
+            if (item.type === "armor") {
+              hero.tempQuality = (hero.tempQuality != null ? hero.tempQuality : hero.baseQuality) + 3;
+            }
+          });
+        },
+        onBattleComplete: function (battle, hero) {
+          hero.tempQuality = null;
+        }
+      }]
+    }
   ],
 
   defaultMonsters: {
