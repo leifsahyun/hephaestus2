@@ -3,6 +3,15 @@
  * Loaded after models.js and config.js, before pools.js and main.js.
  */
 
+function countUniqueEquippedTypes(equippedItems) {
+  const types = new Set();
+  for (const i of equippedItems) {
+    if (i.allTypes) { for (const t of Config.itemTypes) types.add(t); }
+    else { types.add(i.type); }
+  }
+  return types.size;
+}
+
 const defaultAugments = [
   {
     name: "Featherweight",
@@ -66,12 +75,7 @@ const defaultAugments = [
     type: "patina",
     value: 12,
     onEquip: function (battle, item) {
-      const types = new Set();
-      for (const i of battle.equippedItems) {
-        if (i.allTypes) { for (const t of Config.itemTypes) types.add(t); }
-        else { types.add(i.type); }
-      }
-      const bonus = types.size * 3;
+      const bonus = countUniqueEquippedTypes(battle.equippedItems) * 3;
       item.tempQuality = (item.tempQuality != null ? item.tempQuality : item.baseQuality) + bonus;
     },
     onBattleComplete: function (battle, item) {
@@ -144,12 +148,7 @@ const defaultAugments = [
     type: "patina",
     value: 15,
     onEquip: function (battle, item) {
-      const types = new Set();
-      for (const i of battle.equippedItems) {
-        if (i.allTypes) { for (const t of Config.itemTypes) types.add(t); }
-        else { types.add(i.type); }
-      }
-      const multiplier = Math.pow(1.5, types.size);
+      const multiplier = Math.pow(1.5, countUniqueEquippedTypes(battle.equippedItems));
       item.tempQuality = Math.floor((item.tempQuality != null ? item.tempQuality : item.baseQuality) * multiplier);
     },
     onBattleComplete: function (battle, item) {

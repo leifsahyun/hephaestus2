@@ -63,12 +63,7 @@ const Config = {
         value: 0,
         onEquip: function (battle, hero) {
           battle.onItemEquippedCallbacks.push(function (b, item) {
-            const types = new Set();
-            for (const i of b.equippedItems) {
-              if (i.allTypes) { for (const t of Config.itemTypes) types.add(t); }
-              else { types.add(i.type); }
-            }
-            hero.tempQuality = hero.baseQuality + types.size * 3;
+            hero.tempQuality = hero.baseQuality + countUniqueEquippedTypes(b.equippedItems) * 3;
           });
         },
         onBattleComplete: function (battle, hero) {
