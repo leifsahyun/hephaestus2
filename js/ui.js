@@ -863,7 +863,7 @@ const UI = {
 
         const btn = document.createElement("button");
         btn.className = "btn btn-upgrade";
-        btn.textContent = `Upgrade\n-$${item.baseQuality} +5◈`;
+        btn.textContent = `Upgrade\n-$${item.value} +5◈`;
         btn.dataset.upgradeCost = item.value;
         btn.disabled = PlayerState.money < item.value;
         btn.addEventListener("click", () => {
