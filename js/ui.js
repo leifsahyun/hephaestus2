@@ -631,17 +631,6 @@ const UI = {
     panel.className = "forge-component create-item-panel";
     panel.innerHTML = "<h3>Create Item</h3>";
 
-    // Name input
-    const nameGroup = document.createElement("div");
-    nameGroup.className = "form-group";
-    nameGroup.innerHTML = '<label>Name:</label>';
-    const nameInput = document.createElement("input");
-    nameInput.type = "text";
-    nameInput.className = "form-input";
-    nameInput.placeholder = "Item name";
-    nameGroup.appendChild(nameInput);
-    panel.appendChild(nameGroup);
-
     // Type selector
     const typeGroup = document.createElement("div");
     typeGroup.className = "form-group";
@@ -657,7 +646,7 @@ const UI = {
     typeGroup.appendChild(typeSelect);
     panel.appendChild(typeGroup);
 
-    // Quality selector
+    // Quality selector (0 allowed as minimum)
     const qualGroup = document.createElement("div");
     qualGroup.className = "form-group";
     qualGroup.innerHTML = '<label>Quality:</label>';
@@ -671,16 +660,38 @@ const UI = {
     const qualDown = document.createElement("button");
     qualDown.className = "btn btn-sm";
     qualDown.textContent = "−";
-    qualDown.addEventListener("click", () => {
-      qualityVal = Math.max(Config.qualitySelector.min, qualityVal - Config.qualitySelector.increment);
-      qualLabel.textContent = String(qualityVal);
-    });
     const qualUp = document.createElement("button");
     qualUp.className = "btn btn-sm";
     qualUp.textContent = "+";
+
+    // Value and Hubris cost display
+    const statsDiv = document.createElement("div");
+    statsDiv.className = "create-item-stats";
+    const valueDisplay = document.createElement("span");
+    valueDisplay.className = "create-item-stat-value";
+    const hubrisDisplay = document.createElement("span");
+    hubrisDisplay.className = "create-item-stat-hubris";
+
+    function getItemValue(q) {
+      return q === 0 ? 3 : q;
+    }
+    function getHubrisCost(q) {
+      return q === 0 ? 1 : Math.round(getItemValue(q) * 0.4);
+    }
+    function updateStats() {
+      valueDisplay.textContent = "Value: $" + getItemValue(qualityVal);
+      hubrisDisplay.textContent = "Hubris Cost: " + getHubrisCost(qualityVal);
+    }
+
+    qualDown.addEventListener("click", () => {
+      qualityVal = Math.max(0, qualityVal - Config.qualitySelector.increment);
+      qualLabel.textContent = String(qualityVal);
+      updateStats();
+    });
     qualUp.addEventListener("click", () => {
       qualityVal = Math.min(Config.qualitySelector.max, qualityVal + Config.qualitySelector.increment);
       qualLabel.textContent = String(qualityVal);
+      updateStats();
     });
 
     qualDiv.appendChild(qualDown);
@@ -689,22 +700,138 @@ const UI = {
     qualGroup.appendChild(qualDiv);
     panel.appendChild(qualGroup);
 
+    statsDiv.appendChild(valueDisplay);
+    statsDiv.appendChild(hubrisDisplay);
+    panel.appendChild(statsDiv);
+    updateStats();
+
+    // Augment slot carousels (3 slots)
+    const slotTypes = Config.augmentSlotTypes;
+    const slotsDiv = document.createElement("div");
+    slotsDiv.className = "create-item-slots";
+
+    const slotStates = [
+      { typeIdx: 0, augData: null, locked: false },
+      { typeIdx: 1, augData: null, locked: false },
+      { typeIdx: 2, augData: null, locked: false },
+    ];
+    const carouselEls = [];
+
+    for (let i = 0; i < 3; i++) {
+      const carousel = document.createElement("div");
+      carousel.className = "slot-carousel";
+
+      const prevBtn = document.createElement("button");
+      prevBtn.className = "btn btn-sm slot-carousel-btn";
+      prevBtn.textContent = "◀";
+
+      const img = document.createElement("img");
+      img.className = "slot-icon slot-carousel-icon";
+
+      const nextBtn = document.createElement("button");
+      nextBtn.className = "btn btn-sm slot-carousel-btn";
+      nextBtn.textContent = "▶";
+
+      carousel.appendChild(prevBtn);
+      carousel.appendChild(img);
+      carousel.appendChild(nextBtn);
+      slotsDiv.appendChild(carousel);
+      carouselEls.push({ el: carousel, img, prevBtn, nextBtn });
+    }
+
+    function updateCarouselIcon(i) {
+      const state = slotStates[i];
+      const typeName = slotTypes[state.typeIdx];
+      const suffix = state.augData ? "filled" : "empty";
+      carouselEls[i].img.src = `icons/augment_slot/${typeName}_slot_${suffix}.png`;
+      carouselEls[i].img.alt = typeName;
+      carouselEls[i].prevBtn.style.visibility = state.locked ? "hidden" : "";
+      carouselEls[i].nextBtn.style.visibility = state.locked ? "hidden" : "";
+    }
+
+    for (let i = 0; i < 3; i++) {
+      updateCarouselIcon(i);
+      const idx = i;
+
+      carouselEls[i].prevBtn.addEventListener("click", () => {
+        if (slotStates[idx].locked) return;
+        slotStates[idx].typeIdx = (slotStates[idx].typeIdx - 1 + slotTypes.length) % slotTypes.length;
+        updateCarouselIcon(idx);
+      });
+
+      carouselEls[i].nextBtn.addEventListener("click", () => {
+        if (slotStates[idx].locked) return;
+        slotStates[idx].typeIdx = (slotStates[idx].typeIdx + 1) % slotTypes.length;
+        updateCarouselIcon(idx);
+      });
+
+      carouselEls[i].el.addEventListener("dragover", (e) => {
+        if (slotStates[idx].locked) return;
+        e.preventDefault();
+        carouselEls[idx].el.classList.add("drop-target-active");
+      });
+
+      carouselEls[i].el.addEventListener("dragleave", () => {
+        carouselEls[idx].el.classList.remove("drop-target-active");
+      });
+
+      carouselEls[i].el.addEventListener("drop", (e) => {
+        e.preventDefault();
+        carouselEls[idx].el.classList.remove("drop-target-active");
+        if (slotStates[idx].locked) return;
+        const augName = e.dataTransfer.getData("text/plain");
+        const augData = defaultAugments.find(a => a.name === augName);
+        if (!augData) return;
+        if (PlayerState.money < augData.value) {
+          this.showForgeMessage(`Cannot afford ${augName} ($${augData.value})`);
+          return;
+        }
+        const currentSlotType = slotTypes[slotStates[idx].typeIdx];
+        if (augData.type !== currentSlotType) {
+          this.showForgeMessage(`${augName} requires a ${augData.type} slot`);
+          return;
+        }
+        PlayerState.addMoney(-augData.value);
+        slotStates[idx].augData = augData;
+        slotStates[idx].locked = true;
+        updateCarouselIcon(idx);
+        const shelfCard = document.querySelector(`[data-augment-name="${augName}"]`);
+        if (shelfCard) shelfCard.remove();
+        this.showForgeMessage(`${augName} reserved for new item!`);
+      });
+    }
+
+    panel.appendChild(slotsDiv);
+
     // Create button
     const createBtn = document.createElement("button");
     createBtn.className = "btn btn-create";
     createBtn.textContent = "Create Item";
     createBtn.addEventListener("click", () => {
+      const value = getItemValue(qualityVal);
+      const hubrisCost = getHubrisCost(qualityVal);
+      const slots = slotStates.map(s => ({ type: slotTypes[s.typeIdx], augment: null }));
       const item = new Item({
-        name: nameInput.value || typeSelect.value,
+        name: capitalize(typeSelect.value),
         type: typeSelect.value,
         baseQuality: qualityVal,
-        value: qualityVal,
+        value,
+        hubrisCost,
         augments: [],
-        variant: 0
+        variant: 0,
+        slots
       });
+      for (let i = 0; i < slotStates.length; i++) {
+        const state = slotStates[i];
+        if (state.augData) {
+          const aug = new Augment(state.augData);
+          aug.onAugment(item);
+          item.slots[i].augment = aug;
+          item.augments.push(aug);
+        }
+      }
       ItemPool.items.push(item);
-      nameInput.value = "";
-      this.showForgeMessage("Item created: " + item.name);
+      this.showForgeMessage("Item created: " + capitalize(item.name));
       createBtn.disabled = true;
     });
     panel.appendChild(createBtn);
