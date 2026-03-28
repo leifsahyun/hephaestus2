@@ -790,7 +790,7 @@ const UI = {
           e.preventDefault();
           wrapper.classList.remove("drop-target-active");
           const augName = e.dataTransfer.getData("text/plain");
-          const augData = Config.defaultAugments.find(
+          const augData = defaultAugments.find(
             (a) => a.name === augName
           );
           if (!augData) return;
@@ -836,7 +836,7 @@ const UI = {
     augmentList.className = "augment-shelf-list";
 
     // Show available augments
-    for (const augData of Config.defaultAugments) {
+    for (const augData of defaultAugments) {
       const aug = new Augment(augData);
       const augCard = document.createElement("div");
       const canAfford = PlayerState.money >= aug.value;
