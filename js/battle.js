@@ -105,11 +105,12 @@ class Battle {
 
   countUniqueEquippedTypes() {
     const types = new Set();
+    var allTypesBonus = 0;
     for (const i of this.equippedItems) {
-      if (i.allTypes) { for (const t of Config.itemTypes) types.add(t); }
+      if (i.allTypes) { allTypesBonus++; }
       else { types.add(i.type); }
     }
-    return types.size;
+    return types.size + allTypesBonus;
   }
 
   drawFateCards() {
