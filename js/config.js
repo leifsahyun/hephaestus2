@@ -3,7 +3,13 @@
  * Forge components can be toggled on/off here.
  */
 const Config = {
-  itemTypes: ["sword", "shield", "helm", "armor", "ring"],
+  itemTypes: ["sword", "spear", "bow", "tool", "shield", "helm", "armor", "sandals"],
+  /*
+  * Some typical item slots for these types should be:
+  * sword, spear, bow: 2 edge, 1 blessing/patina/haft
+  * tool, sandals: 1 haft, 1 patina, 1 edge/blessing
+  * helm, armor, shield: 2 patina, 1 edge/blessing/haft
+  */
 
   augmentSlotTypes: ["edge", "haft", "patina", "blessing"],
 
@@ -33,7 +39,7 @@ const Config = {
       name: "Ajax", type: "hero", baseQuality: 10, baseHubris: 0, variant: -1, value: 0,
       augments: [{
         name: "Bulwark",
-        description: "When a shield is equipped, +3◈.",
+        description: "+3◈ per shield equipped.",
         type: "hero",
         value: 0,
         onEquip: function (battle, hero) {
@@ -49,17 +55,16 @@ const Config = {
       }]
     },
     {
-      name: "Hector", type: "hero", baseQuality: 15, baseHubris: 0, variant: -1, value: 0,
+      name: "Agamemnon", type: "hero", baseQuality: 5, baseHubris: 0, variant: -1, value: 0,
       augments: [{
-        name: "Swordmaster",
-        description: "When a sword is equipped, +3◈.",
+        name: "Armaments",
+        description: "+3◈ per unique item type equipped.",
         type: "hero",
         value: 0,
         onEquip: function (battle, hero) {
           battle.onItemEquippedCallbacks.push(function (b, item) {
-            if (item.type === "sword") {
-              hero.tempQuality = (hero.tempQuality != null ? hero.tempQuality : hero.baseQuality) + 3;
-            }
+            const types = new Set(b.equippedItems.map(i => i.type));
+            hero.tempQuality = types.size * 3;
           });
         },
         onBattleComplete: function (battle, hero) {
@@ -68,16 +73,16 @@ const Config = {
       }]
     },
     {
-      name: "Achilles", type: "hero", baseQuality: 20, baseHubris: 0, variant: -1, value: 0,
+      name: "Achilles", type: "hero", baseQuality: 0, baseHubris: 0, variant: -1, value: 0,
       augments: [{
-        name: "Ironclad",
-        description: "When armor is equipped, +3◈.",
+        name: "Nearly Invulnerable",
+        description: "-20◈ while barefoot.",
         type: "hero",
         value: 0,
         onEquip: function (battle, hero) {
           battle.onItemEquippedCallbacks.push(function (b, item) {
-            if (item.type === "armor") {
-              hero.tempQuality = (hero.tempQuality != null ? hero.tempQuality : hero.baseQuality) + 3;
+            if (item.type === "sandals") {
+              hero.tempQuality = 20;
             }
           });
         },
@@ -97,13 +102,14 @@ const Config = {
   },
 
   defaultItems: [
-    { name: "Sword", type: "sword", baseQuality: 10, augments: [], variant: 0, value: 10, hubrisCost: 5, slots: [{type:"edge"},{type:"edge"},{type:"haft"}] },
-    { name: "Shield", type: "shield", baseQuality: 8, augments: [], variant: 0, value: 8, hubrisCost: 4, slots: [{type:"patina"},{type:"haft"},{type:"blessing"}] },
-    { name: "Helm", type: "helm", baseQuality: 6, augments: [], variant: 0, value: 6, hubrisCost: 3, slots: [{type:"edge"},{type:"patina"},{type:"blessing"}] },
-    { name: "Armor", type: "armor", baseQuality: 12, augments: [], variant: 0, value: 12, hubrisCost: 6, slots: [{type:"patina"},{type:"patina"},{type:"haft"}] },
-    { name: "Net", type: "ring", baseQuality: 5, augments: [], variant: 0, value: 5, hubrisCost: 2, slots: [{type:"patina"},{type:"haft"},{type:"haft"}] },
-    { name: "Bow", type: "sword", baseQuality: 15, augments: [], variant: 1, value: 15, hubrisCost: 7, slots: [{type:"edge"},{type:"haft"},{type:"haft"}] },
-    { name: "Sandals", type: "ring", baseQuality: 7, augments: [], variant: 1, value: 7, hubrisCost: 3, slots: [{type:"haft"},{type:"haft"},{type:"blessing"}] }
+    { name: "Sword", type: "sword", baseQuality: 10, augments: [], variant: 0, value: 10, hubrisCost: 5, slots: [{type:"edge"},{type:"edge"},{type:"blessing"}] },
+    { name: "Spear", type: "spear", baseQuality: 10, augments: [], variant: 0, value: 10, hubrisCost: 5, slots: [{type:"edge"},{type:"edge"},{type:"patina"}] },
+    { name: "Bow", type: "bow", baseQuality: 15, augments: [], variant: 1, value: 15, hubrisCost: 7, slots: [{type:"edge"},{type:"edge"},{type:"haft"}] },
+    { name: "Shield", type: "shield", baseQuality: 8, augments: [], variant: 0, value: 8, hubrisCost: 4, slots: [{type:"patina"},{type:"patina"},{type:"haft"}] },
+    { name: "Helm", type: "helm", baseQuality: 6, augments: [], variant: 0, value: 6, hubrisCost: 3, slots: [{type:"patina"},{type:"patina"},{type:"edge"}] },
+    { name: "Armor", type: "armor", baseQuality: 12, augments: [], variant: 0, value: 12, hubrisCost: 6, slots: [{type:"patina"},{type:"patina"},{type:"blessing"}] },
+    { name: "Net", type: "tool", baseQuality: 5, augments: [], variant: 0, value: 5, hubrisCost: 2, slots: [{type:"haft"},{type:"patina"},{type:"edge"}] },
+    { name: "Sandals", type: "sandals", baseQuality: 7, augments: [], variant: 1, value: 7, hubrisCost: 3, slots: [{type:"haft"},{type:"patina"},{type:"blessing"}] }
   ],
 
   defaultFateCards: [
