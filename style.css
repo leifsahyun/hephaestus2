@@ -756,10 +756,25 @@ header h1 {
   margin-bottom: 10px;
   font-size: 0.9rem;
   font-weight: bold;
+  justify-content: center;
 }
 
 .create-item-stat-value { color: #e9c46a; }
 .create-item-stat-hubris { color: #e94560; }
+
+.qual-group {
+  text-align: center;
+}
+
+.qual-group .number-selector {
+  justify-content: center;
+}
+
+.qual-label {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #4ecca3;
+}
 
 .create-item-slots {
   display: flex;
@@ -785,8 +800,8 @@ header h1 {
 }
 
 .slot-carousel-icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 
 /* ── Forge Message ── */
