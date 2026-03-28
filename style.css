@@ -749,6 +749,46 @@ header h1 {
 
 
 
+/* ── Create Item Slots ── */
+.create-item-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.create-item-stat-value { color: #e9c46a; }
+.create-item-stat-hubris { color: #e94560; }
+
+.create-item-slots {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+.slot-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  flex: 1;
+}
+
+.slot-carousel.drop-target-active {
+  border-color: #e9c46a;
+  background: rgba(233, 196, 106, 0.08);
+}
+
+.slot-carousel-icon {
+  width: 40px;
+  height: 40px;
+}
+
 /* ── Forge Message ── */
 .forge-message {
   text-align: center;
