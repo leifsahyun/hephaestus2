@@ -103,6 +103,15 @@ class Battle {
     return { won, heroStrength, monsterStrength };
   }
 
+  countUniqueEquippedTypes() {
+    const types = new Set();
+    for (const i of this.equippedItems) {
+      if (i.allTypes) { for (const t of Config.itemTypes) types.add(t); }
+      else { types.add(i.type); }
+    }
+    return types.size;
+  }
+
   drawFateCards() {
     FatePool.shuffle();
     const cardsToDraw = this.monster.fateCards ?? 0;
