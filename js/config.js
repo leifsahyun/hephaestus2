@@ -43,13 +43,13 @@ const Config = {
   },
 
   defaultItems: [
-    { name: "Sword", type: "sword", baseQuality: 10, augments: [], variant: 0, value: 10, hubrisCost: 5 },
-    { name: "Shield", type: "shield", baseQuality: 8, augments: [], variant: 0, value: 8, hubrisCost: 4 },
-    { name: "Helm", type: "helm", baseQuality: 6, augments: [], variant: 0, value: 6, hubrisCost: 3 },
-    { name: "Armor", type: "armor", baseQuality: 12, augments: [], variant: 0, value: 12, hubrisCost: 6 },
-    { name: "Net", type: "ring", baseQuality: 5, augments: [], variant: 0, value: 5, hubrisCost: 2 },
-    { name: "Bow", type: "sword", baseQuality: 15, augments: [], variant: 1, value: 15, hubrisCost: 7 },
-    { name: "Sandals", type: "ring", baseQuality: 7, augments: [], variant: 1, value: 7, hubrisCost: 3 }
+    { name: "Sword", type: "sword", baseQuality: 10, augments: [], variant: 0, value: 10, hubrisCost: 5, slots: [{type:"edge"},{type:"edge"},{type:"haft"}] },
+    { name: "Shield", type: "shield", baseQuality: 8, augments: [], variant: 0, value: 8, hubrisCost: 4, slots: [{type:"patina"},{type:"haft"},{type:"blessing"}] },
+    { name: "Helm", type: "helm", baseQuality: 6, augments: [], variant: 0, value: 6, hubrisCost: 3, slots: [{type:"edge"},{type:"patina"},{type:"blessing"}] },
+    { name: "Armor", type: "armor", baseQuality: 12, augments: [], variant: 0, value: 12, hubrisCost: 6, slots: [{type:"patina"},{type:"patina"},{type:"haft"}] },
+    { name: "Net", type: "ring", baseQuality: 5, augments: [], variant: 0, value: 5, hubrisCost: 2, slots: [{type:"patina"},{type:"haft"},{type:"haft"}] },
+    { name: "Bow", type: "sword", baseQuality: 15, augments: [], variant: 1, value: 15, hubrisCost: 7, slots: [{type:"edge"},{type:"haft"},{type:"haft"}] },
+    { name: "Sandals", type: "ring", baseQuality: 7, augments: [], variant: 1, value: 7, hubrisCost: 3, slots: [{type:"haft"},{type:"haft"},{type:"blessing"}] }
   ],
 
   defaultFateCards: [
