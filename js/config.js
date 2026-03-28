@@ -209,30 +209,5 @@ const Config = {
         }
       ]
     })]
-  ],
-
-  defaultAugments: [
-    {
-      name: "Featherweight",
-      description: "Refunds Hubris cost on equip. Item is destroyed on use.",
-      type: "haft",
-      value: 15,
-      onEquip: function (battle, item) {
-        battle.addHubris(-item.hubrisCost);
-      },
-      onBattleComplete: function (battle, item) {
-        ItemPool.erase(item);
-      }
-    },
-    {
-      name: "Hone",
-      description: "+1◈ when equipped.",
-      type: "edge",
-      value: 10,
-      onEquip: function (battle, item) {
-        item.baseQuality = item.baseQuality + 1;
-      },
-      onBattleComplete: null
-    }
   ]
 };

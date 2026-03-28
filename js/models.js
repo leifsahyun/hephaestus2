@@ -15,6 +15,9 @@ class Item {
     );
     this.hubris = 0;
     this.hubrisCost = data.hubrisCost != null ? data.hubrisCost : 0;
+    this.counters = data.counters instanceof Map
+      ? new Map(data.counters)
+      : new Map(Object.entries(data.counters || {}));
     if (data.slots) {
       this.slots = data.slots.map(s => ({
         type: s.type,
@@ -48,6 +51,7 @@ class Item {
       baseQuality: this.baseQuality,
       value: this.value,
       hubrisCost: this.hubrisCost,
+      counters: new Map(this.counters),
       augments: this.augments.map(a => a.clone()),
       slots: this.slots.map(s => ({ type: s.type, augment: s.augment ? s.augment.clone() : null }))
     };

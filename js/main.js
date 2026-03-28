@@ -41,7 +41,7 @@ function initGame() {
   MonsterPool.init(Config.defaultMonsters);
   FatePool.init(Config.defaultFateCards);
   FatePool.fixedCards = new Map(Config.fixedFateCards);
-  AugmentPool.init(Config.defaultAugments);
+  AugmentPool.init(defaultAugments);
 
   // Initialize UI
   UI.init();
