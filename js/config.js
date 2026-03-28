@@ -262,7 +262,7 @@ const Config = {
       hubrisThreshold: 1,
       options: [
         {
-          effects: [{ key: "monsterQuality", amount: 999999999 }]
+          effects: [{ key: "monsterQuality", amount: 999999 }]
         },
         {
           effects: [{ key: "monsterQuality", amount: 666 }]
