@@ -102,9 +102,9 @@ const Config = {
   },
 
   defaultItems: [
-    { name: "Sword", type: "sword", baseQuality: 10, augments: [], variant: 0, value: 10, hubrisCost: 5, slots: [{type:"edge"},{type:"edge"},{type:"blessing"}] },
+    { name: "Sword", type: "sword", baseQuality: 15, augments: [], variant: 0, value: 10, hubrisCost: 7, slots: [{type:"edge"},{type:"edge"},{type:"blessing"}] },
     { name: "Spear", type: "spear", baseQuality: 10, augments: [], variant: 0, value: 10, hubrisCost: 5, slots: [{type:"edge"},{type:"edge"},{type:"patina"}] },
-    { name: "Bow", type: "bow", baseQuality: 15, augments: [], variant: 1, value: 15, hubrisCost: 7, slots: [{type:"edge"},{type:"edge"},{type:"haft"}] },
+    { name: "Bow", type: "bow", baseQuality: 9, augments: [], variant: 1, value: 15, hubrisCost: 4, slots: [{type:"edge"},{type:"edge"},{type:"haft"}] },
     { name: "Shield", type: "shield", baseQuality: 8, augments: [], variant: 0, value: 8, hubrisCost: 4, slots: [{type:"patina"},{type:"patina"},{type:"haft"}] },
     { name: "Helm", type: "helm", baseQuality: 6, augments: [], variant: 0, value: 6, hubrisCost: 3, slots: [{type:"patina"},{type:"patina"},{type:"edge"}] },
     { name: "Armor", type: "armor", baseQuality: 12, augments: [], variant: 0, value: 12, hubrisCost: 6, slots: [{type:"patina"},{type:"patina"},{type:"blessing"}] },
