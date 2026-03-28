@@ -42,13 +42,19 @@ class Battle {
     }
   }
 
-  equipItem(item) {
+  selectOffer(item) {
     // Return the other offered items to the pool
     for (const other of this.offerItems) {
       if (other !== item) {
         ItemPool.returnItem(other);
       }
     }
+    this.equipItem(item);
+    // Draw three new offers
+    this.drawOffers();
+  }
+
+  equipItem(item) {
     // Equip the chosen item
     this.equippedItems.push(item);
     this.addHubris(item.hubrisCost);
@@ -61,8 +67,6 @@ class Battle {
     for (const cb of callbackSnapshot) {
       cb(this, item);
     }
-    // Draw three new offers
-    this.drawOffers();
   }
 
   addHubris(amount) {

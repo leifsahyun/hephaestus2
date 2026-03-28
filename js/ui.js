@@ -193,7 +193,7 @@ const UI = {
       equipBtn.addEventListener("click", () => {
         const item = battle.offerItems[i];
         if (!item) return;
-        battle.equipItem(item);
+        battle.selectOffer(item);
         this.updateBattleUI(battle);
       });
       slot.appendChild(equipBtn);
