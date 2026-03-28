@@ -169,12 +169,12 @@ const defaultAugments = [
     type: "blessing",
     value: 15,
     onEquip: function (battle, item) {
-      item.tempQuality = (item.tempQuality != null ? item.tempQuality : item.baseQuality) + (item.glory || 0);
+      item.tempQuality = (item.tempQuality != null ? item.tempQuality : item.baseQuality) + (item.counters.get("glory") || 0);
     },
     onBattleComplete: function (battle, item) {
       item.tempQuality = null;
       if (battle.won) {
-        item.glory = (item.glory || 0) + 7;
+        item.counters.set("glory", (item.counters.get("glory") || 0) + 7);
       }
     }
   },
