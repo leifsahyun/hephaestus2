@@ -18,7 +18,7 @@ const defaultAugments = [
   },
   {
     name: "Hone",
-    description: "+1◈ when equipped.",
+    description: "Permanent +1◈ on equip.",
     type: "edge",
     value: 10,
     onEquip: function (battle, item) {
@@ -33,11 +33,14 @@ const defaultAugments = [
     value: 12,
     onEquip: function (battle, item) {
       const boulderAugments = [];
+      const boulderSlots = [];
       if (Math.random() < 0.5) {
         const sisyphusData = defaultAugments.find(a => a.name === "Sisyphus");
-        boulderAugments.push(new Augment(sisyphusData));
+        const aug = new Augment(sisyphusData);
+        boulderAugments.push(aug);
+        boulderSlots.push({type:"blessing",augment:aug});
       }
-      const boulder = new Item({ name: "Boulder", type: "boulder", baseQuality: 5, augments: boulderAugments });
+      const boulder = new Item({ name: "Boulder", type: "boulder", baseQuality: 5, augments: boulderAugments, slots: boulderSlots });
       battle.equippedItems.push(boulder);
       for (const aug of boulder.augments) {
         aug.onEquip(battle, boulder);
@@ -47,7 +50,7 @@ const defaultAugments = [
   },
   {
     name: "Foundation",
-    description: "When another item is equipped, +3◈ (wears off after battle).",
+    description: "When another item is equipped +3◈",
     type: "patina",
     value: 12,
     onEquip: function (battle, item) {
@@ -61,7 +64,7 @@ const defaultAugments = [
   },
   {
     name: "Hoplite",
-    description: "On equip, +3◈ for each unique item type equipped (wears off after battle).",
+    description: "On equip, +3◈ for each unique item type equipped.",
     type: "patina",
     value: 12,
     onEquip: function (battle, item) {
@@ -75,7 +78,7 @@ const defaultAugments = [
   },
   {
     name: "Sharp",
-    description: "+6◈ on equip (wears off after battle).",
+    description: "+6◈ on equip.",
     type: "edge",
     value: 10,
     onEquip: function (battle, item) {
@@ -97,13 +100,12 @@ const defaultAugments = [
   },
   {
     name: "Narcissus",
-    description: "On equip, duplicate each other augment on this item.",
+    description: "Mirrors the effects of each other augment on this item.",
     type: "blessing",
     value: 15,
     onEquip: function (battle, item) {
       const duplicates = item.augments.filter(a => a.name !== "Narcissus").map(a => a.clone());
       for (const dup of duplicates) {
-        item.augments.push(dup);
         dup.onEquip(battle, item);
       }
     },
@@ -111,7 +113,7 @@ const defaultAugments = [
   },
   {
     name: "Damocles",
-    description: "+5H on equip, then add quality equal to total Hubris (wears off after battle).",
+    description: "+5H on equip, then add quality equal to Hubris.",
     type: "blessing",
     value: 12,
     onEquip: function (battle, item) {
@@ -124,7 +126,7 @@ const defaultAugments = [
   },
   {
     name: "Glass",
-    description: "Double quality on equip. Item is destroyed on use.",
+    description: "2x◈, item is destroyed on use.",
     type: "edge",
     value: 12,
     onEquip: function (battle, item) {
@@ -136,7 +138,7 @@ const defaultAugments = [
   },
   {
     name: "Prism",
-    description: "1.5x quality for each unique item type equipped. Item is destroyed on use.",
+    description: "1.5x◈ for each unique item type equipped. Item is destroyed on use.",
     type: "patina",
     value: 15,
     onEquip: function (battle, item) {
@@ -150,7 +152,7 @@ const defaultAugments = [
   },
   {
     name: "Obsidian",
-    description: "On equip, equip 4 Boulders. Item is destroyed on use.",
+    description: "On equip, equip 4 Boulders and destroy item.",
     type: "blessing",
     value: 15,
     onEquip: function (battle, item) {
@@ -158,8 +160,7 @@ const defaultAugments = [
         const boulder = new Item({ name: "Boulder", type: "boulder", baseQuality: 5, augments: [] });
         battle.equippedItems.push(boulder);
       }
-    },
-    onBattleComplete: function (battle, item) {
+      battle.equippedItems = battle.equippedItems.filter(i => i !== item);
       ItemPool.erase(item);
     }
   },
@@ -180,7 +181,7 @@ const defaultAugments = [
   },
   {
     name: "Lodestone",
-    description: "Refund the Hubris cost of the next item equipped if the cost is less than 3.",
+    description: "Refund the Hubris cost of the next item equipped if the cost is 3 or less.",
     type: "haft",
     value: 12,
     onEquip: function (battle, item) {
@@ -188,7 +189,7 @@ const defaultAugments = [
       battle.onItemEquippedCallbacks.push(function (b, equippedItem) {
         if (fired) return;
         fired = true;
-        if (equippedItem.hubrisCost < 3) {
+        if (equippedItem.hubrisCost <= 3) {
           b.addHubris(-equippedItem.hubrisCost);
         }
       });
