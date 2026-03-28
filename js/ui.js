@@ -914,6 +914,7 @@ const UI = {
         const dangerIcon = document.createElement("span");
         dangerIcon.className = "hubris-danger-icon";
         dangerIcon.textContent = "⚠";
+        dangerIcon.title = "Hubris over 21 will trigger every bad fate card and lead to almost certain death.";
         hubRow.appendChild(dangerIcon);
       }
 
