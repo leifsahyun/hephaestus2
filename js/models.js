@@ -15,6 +15,7 @@ class Item {
     );
     this.hubris = 0;
     this.hubrisCost = data.hubrisCost != null ? data.hubrisCost : 0;
+    this.fateCards = data.fateCards != null ? data.fateCards : null;
     this.counters = data.counters instanceof Map
       ? new Map(data.counters)
       : new Map(Object.entries(data.counters || {}));
