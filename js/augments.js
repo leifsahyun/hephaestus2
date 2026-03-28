@@ -155,8 +155,8 @@ const defaultAugments = [
     value: 15,
     onEquip: function (battle, item) {
       for (let i = 0; i < 4; i++) {
-        const boulder = new Item({ name: "Boulder", type: "boulder", baseQuality: 5, augments: [] });
-        battle.equippedItems.push(boulder);
+        const boulder = new Item({ name: "Boulder", type: "boulder", baseQuality: 5, hubrisCost: 0, augments: [] });
+        battle.equipItem(boulder);
       }
       battle.equippedItems = battle.equippedItems.filter(i => i !== item);
       ItemPool.erase(item);
