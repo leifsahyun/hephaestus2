@@ -954,6 +954,18 @@ const UI = {
       card.appendChild(augList);
     }
 
+    if (item.counters && item.counters.size > 0) {
+      const namedCounters = Array.from(item.counters.entries()).filter(([, val]) => val > 0);
+      if (namedCounters.length > 0) {
+        const total = namedCounters.reduce((sum, [, val]) => sum + val, 0);
+        const badge = document.createElement("div");
+        badge.className = "counter-badge";
+        badge.textContent = total;
+        badge.title = namedCounters.map(([name, val]) => `${val} ${capitalize(name)}`).join("\n");
+        card.appendChild(badge);
+      }
+    }
+
     return card;
   },
 

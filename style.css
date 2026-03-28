@@ -154,6 +154,29 @@ header h1 {
   margin-bottom: 8px;
 }
 
+.item-card {
+  position: relative;
+}
+
+.counter-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 4px;
+  background: #e9c46a;
+  border-radius: 11px;
+  color: #1a1a2e;
+  font-size: 0.75rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  cursor: help;
+}
+
 .item-card .card-name {
   font-weight: bold;
   font-size: 1.05rem;
