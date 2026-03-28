@@ -73,13 +73,6 @@ class Battle {
     this.hero.hubris += amount;
   }
 
-  getExpectedDraw() {
-    return Math.max(
-      0,
-      Math.floor(0.08 * Math.pow(0.1 * (this.hero.hubris + 10), 3) + 1.03)
-    );
-  }
-
   resolveBattle() {
     this.resolved = true;
 
@@ -112,7 +105,7 @@ class Battle {
 
   drawFateCards() {
     FatePool.shuffle();
-    const cardsToDraw = this.getExpectedDraw();
+    const cardsToDraw = this.monster.fateCards ?? 0;
     for (let i = 0; i < cardsToDraw; i++) {
       const card = FatePool.draw();
       if (card) this.fateCards.push(card);

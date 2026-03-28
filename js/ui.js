@@ -150,7 +150,7 @@ const UI = {
 
     layout.appendChild(fateCardsSection);
 
-    // Right: Monster card + Expected stats
+    // Right: Monster card
     const monsterSection = document.createElement("div");
     monsterSection.className = "battle-section monster-section";
     monsterSection.innerHTML = "<h3>Monster</h3>";
@@ -162,11 +162,6 @@ const UI = {
     monsterCard.id = "monster-card";
     monsterSection.appendChild(monsterCard);
 
-    // Expected stats
-    const expectedStats = document.createElement("div");
-    expectedStats.id = "expected-stats";
-    expectedStats.className = "expected-stats";
-    monsterSection.appendChild(expectedStats);
     layout.appendChild(monsterSection);
 
     // Offered items area (in layout row 2, col 2)
@@ -311,24 +306,6 @@ const UI = {
         equippedList.appendChild(this.renderCompactItemCard(item));
       }
     }
-
-    // Update expected stats
-    this.updateExpectedStats(battle);
-  },
-
-  updateExpectedStats(battle) {
-    const el = document.getElementById("expected-stats");
-    if (!el) return;
-    const expectedDraw = battle.getExpectedDraw();
-    const minQ = battle.monster.quality + expectedDraw;
-    const maxQ = battle.monster.quality + 12 * expectedDraw;
-    el.innerHTML = `
-      <div class="stat-box">
-        <h4>Expected Monster Strength</h4>
-        <div class="stat-row"><span class="stat-icon">▋</span> ${expectedDraw} fate cards</div>
-        <div class="stat-row"><span class="stat-icon">◈</span> ${minQ} - ${maxQ} quality</div>
-      </div>
-    `;
   },
 
   showFateCards(battle, onComplete) {
@@ -920,6 +897,13 @@ const UI = {
       hubEl.className = "card-hubris";
       hubEl.textContent = "Hubris: " + item.hubris;
       card.appendChild(hubEl);
+    }
+
+    if (!isHero && item.fateCards != null) {
+      const fateEl = document.createElement("div");
+      fateEl.className = "card-fate-cards";
+      fateEl.textContent = "▋ " + item.fateCards + " fate cards";
+      card.appendChild(fateEl);
     }
 
     if (item.slots && item.slots.length > 0) {
