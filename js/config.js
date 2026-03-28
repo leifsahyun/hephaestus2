@@ -44,7 +44,7 @@ const Config = {
         value: 0,
         onEquip: function (battle, hero) {
           battle.onItemEquippedCallbacks.push(function (b, item) {
-            if (item.type === "shield") {
+            if (item.isType("shield")) {
               hero.tempQuality = (hero.tempQuality != null ? hero.tempQuality : hero.baseQuality) + 3;
             }
           });
@@ -63,8 +63,7 @@ const Config = {
         value: 0,
         onEquip: function (battle, hero) {
           battle.onItemEquippedCallbacks.push(function (b, item) {
-            const types = new Set(b.equippedItems.map(i => i.type));
-            hero.tempQuality = hero.baseQuality + types.size * 3;
+            hero.tempQuality = hero.baseQuality + b.countUniqueEquippedTypes() * 3;
           });
         },
         onBattleComplete: function (battle, hero) {
@@ -81,7 +80,7 @@ const Config = {
         value: 0,
         onEquip: function (battle, hero) {
           battle.onItemEquippedCallbacks.push(function (b, item) {
-            if (item.type === "sandals") {
+            if (item.isType("sandals")) {
               hero.tempQuality = 20;
             }
           });

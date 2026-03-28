@@ -66,8 +66,7 @@ const defaultAugments = [
     type: "patina",
     value: 12,
     onEquip: function (battle, item) {
-      const types = new Set(battle.equippedItems.map(i => i.type));
-      const bonus = types.size * 3;
+      const bonus = battle.countUniqueEquippedTypes() * 3;
       item.tempQuality = (item.tempQuality != null ? item.tempQuality : item.baseQuality) + bonus;
     },
     onBattleComplete: function (battle, item) {
@@ -140,8 +139,7 @@ const defaultAugments = [
     type: "patina",
     value: 15,
     onEquip: function (battle, item) {
-      const types = new Set(battle.equippedItems.map(i => i.type));
-      const multiplier = Math.pow(1.5, types.size);
+      const multiplier = Math.pow(1.5, battle.countUniqueEquippedTypes());
       item.tempQuality = Math.floor((item.tempQuality != null ? item.tempQuality : item.baseQuality) * multiplier);
     },
     onBattleComplete: function (battle, item) {
@@ -193,5 +191,17 @@ const defaultAugments = [
       });
     },
     onBattleComplete: null
+  },
+  {
+    name: "Iris",
+    description: "This item counts as every item type.",
+    type: "blessing",
+    value: 15,
+    onEquip: function (battle, item) {
+      item.allTypes = true;
+    },
+    onBattleComplete: function (battle, item) {
+      delete item.allTypes;
+    }
   }
 ];

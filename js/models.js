@@ -29,6 +29,10 @@ class Item {
     }
   }
 
+  isType(type) {
+    return !!this.allTypes || this.type === type;
+  }
+
   get quality() {
     return this.tempQuality != null ? this.tempQuality : this.baseQuality;
   }
