@@ -17,6 +17,11 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+/** Returns a random integer in the range [-variance, variance]. */
+function randomOffset(variance) {
+  return Math.round((Math.random() * 2 - 1) * variance);
+}
+
 const ItemPool = {
   items: [],
   current: [],
@@ -45,6 +50,66 @@ const ItemPool = {
 
   shuffle() {
     this.current = shuffleArray(this.items);
+  },
+
+  /**
+   * Creates a random Item from a template.
+   *
+   * @param {object} template  - Partial item data: type, name, variant, slots, zodiacTags.
+   * @param {number} value     - Nominal value; drives quality and hubris targets.
+   * @param {number} variance  - Spread applied to quality and hubrisCost rolls.
+   *                             0 = deterministic targets; higher = wider random range.
+   * @returns {Item}
+   */
+  generateRandomItem(template, value, variance) {
+    // Quality is random around the value, clamped to at least 1.
+    let baseQuality = Math.max(1, value + randomOffset(variance));
+
+    // HubrisCost targets floor(value / 2); variance spreads the result.
+    const hubrisTarget = Math.floor(value / 2);
+    const hubrisCost = Math.max(0, hubrisTarget + randomOffset(variance));
+
+    // Copy slots; higher-value items have a proportional chance per slot to receive an augment.
+    const slots = (template.slots || []).map(s => ({ type: s.type, augment: null }));
+    const augmentChance = Math.min(1, value / 20);
+    for (const slot of slots) {
+      if (Math.random() < augmentChance) {
+        const aug = AugmentPool.draw();
+        if (aug) {
+          slot.augment = aug;
+          // Quality is reduced by the augment's cost.
+          baseQuality = Math.max(1, baseQuality - aug.value);
+        }
+      }
+    }
+
+    return new Item({
+      name: template.name || capitalize(template.type || "item"),
+      type: template.type || "item",
+      variant: template.variant != null ? template.variant : 0,
+      baseQuality,
+      value,
+      hubrisCost,
+      slots,
+      zodiacTags: template.zodiacTags ? template.zodiacTags.slice() : [],
+      augments: [],
+      counters: {}
+    });
+  },
+
+  /**
+   * Generates a random item and appends it to the pool.
+   *
+   * @param {object} template - See generateRandomItem.
+   * @param {number} value    - See generateRandomItem.
+   * @param {number} variance - See generateRandomItem.
+   * @returns {Item} The newly added item.
+   */
+  addRandomItem(template, value, variance) {
+    const item = this.generateRandomItem(template, value, variance);
+    this.items.push(item);
+    this.current.push(item);
+    return item;
   }
 };
 
