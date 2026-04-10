@@ -100,6 +100,8 @@ const Config = {
     ]
   },
 
+  cloakedFigure: { name: "Cloaked Figure", type: "monster", baseQuality: 100, fateCards: 4, augments: [], variant: -1, value: 0 },
+
   defaultItems: [
     { name: "Sword", type: "sword", baseQuality: 15, augments: [], variant: 0, value: 10, hubrisCost: 7, slots: [{type:"edge"},{type:"edge"},{type:"blessing"}] },
     { name: "Spear", type: "spear", baseQuality: 10, augments: [], variant: 0, value: 10, hubrisCost: 5, slots: [{type:"edge"},{type:"edge"},{type:"patina"}] },

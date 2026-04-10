@@ -57,6 +57,21 @@ class DialogTimelineEvent extends TimelineEvent {
   }
 }
 
+class CloakedFigureBattleTimelineEvent extends TimelineEvent {
+  constructor() {
+    super({ name: "Battle", sceneType: "battle" });
+    this.hero = null;
+    this.monster = new Item(Config.cloakedFigure);
+  }
+
+  initialize() {
+    this.hero = HeroPool.draw();
+    if (this.hero) {
+      this.description = this.hero.name + " vs. The Cloaked Figure";
+    }
+  }
+}
+
 const Timeline = {
   eventCycles: [],
   minLength: 10,
@@ -74,7 +89,22 @@ const Timeline = {
       return evt;
     });
     this.upcomingEvents = dialogEvents;
+
+    // Populate enough events so the Cloaked Figure battle can be inserted after 10 cycles.
+    // Each cycle is 2 events (battle + forge), so 10 cycles = 20 events.
+    const BOSS_CYCLES = 10;
+    const eventsPerCycle = this.eventCycles[0].length;
+    const bossInsertIndex = dialogEvents.length + BOSS_CYCLES * eventsPerCycle;
+    const savedMinLength = this.minLength;
+    this.minLength = bossInsertIndex;
     this.populate();
+    this.minLength = savedMinLength;
+
+    // Insert Cloaked Figure battle at the fixed position after 10 battle/forge cycles
+    const bossEvt = new CloakedFigureBattleTimelineEvent();
+    bossEvt.initialize();
+    this.upcomingEvents.splice(bossInsertIndex, 0, bossEvt);
+
     this.next();
   },
 
