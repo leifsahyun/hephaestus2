@@ -22,6 +22,7 @@ const PlayerState = {
     const max = Config.battleRewards.moneyMax;
     const earned = Math.floor(Math.random() * (max - min + 1)) + min;
     this.addMoney(earned);
+    RunStats.recordMoney(earned);
     return earned;
   },
 
@@ -34,6 +35,9 @@ const PlayerState = {
 function initGame() {
   // Initialize player state
   PlayerState.init();
+
+  // Initialize run statistics
+  RunStats.init();
 
   // Initialize pools with default data from config
   ItemPool.init(Config.defaultItems);
@@ -56,4 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("title-screen").style.display = "none";
     initGame();
   });
+
+  document.getElementById("btn-history").addEventListener("click", () => {
+    UI.showHistoryScreen();
+  });
+
+  UI.updateHistoryButton();
 });
