@@ -51,4 +51,9 @@ function initGame() {
   Timeline.init();
 }
 
-document.addEventListener("DOMContentLoaded", initGame);
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("btn-play").addEventListener("click", () => {
+    document.getElementById("title-screen").style.display = "none";
+    initGame();
+  });
+});
