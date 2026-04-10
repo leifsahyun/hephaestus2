@@ -756,8 +756,8 @@ header h1 {
 
 .item-zodiac-badges {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: 2px;
+  right: 2px;
   display: flex;
   flex-direction: row-reverse;
   gap: 3px;
