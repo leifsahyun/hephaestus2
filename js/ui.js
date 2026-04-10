@@ -95,6 +95,40 @@ const UI = {
     this.getApp().innerHTML = "";
   },
 
+  showTitleScreen() {
+    document.getElementById("title-screen").style.display = "";
+  },
+
+  showGameOverPopup(title, message) {
+    const overlay = document.createElement("div");
+    overlay.className = "game-over-overlay";
+
+    const popup = document.createElement("div");
+    popup.className = "game-over-popup";
+
+    const heading = document.createElement("h2");
+    heading.textContent = title;
+
+    const text = document.createElement("p");
+    text.textContent = message;
+
+    const btn = document.createElement("button");
+    btn.className = "btn btn-continue";
+    btn.id = "game-over-continue-btn";
+    btn.textContent = "Continue";
+
+    popup.appendChild(heading);
+    popup.appendChild(text);
+    popup.appendChild(btn);
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+
+    btn.addEventListener("click", () => {
+      overlay.remove();
+      this.showTitleScreen();
+    });
+  },
+
   // ── Battle Screen ──
 
   showBattle() {
@@ -676,15 +710,26 @@ const UI = {
           <button class="btn btn-continue" id="continue-btn">Continue</button>
         </div>
       `;
-      document.getElementById("continue-btn").addEventListener("click", () => {
-        Timeline.next();
-      });
 
       // Disable battle action buttons
       for (const btn of document.querySelectorAll(
         ".btn-equip, .btn-fight"
       )) {
         btn.disabled = true;
+      }
+
+      if (result.won && battle.monster.name === "Cloaked Figure") {
+        document.getElementById("continue-btn").addEventListener("click", () => {
+          this.showGameOverPopup("Victory!", "You have defeated the Cloaked Figure and brought peace to the land.");
+        });
+      } else if (!result.won && PlayerState.bonds <= 0) {
+        document.getElementById("continue-btn").addEventListener("click", () => {
+          this.showGameOverPopup("Defeat!", "You have broken all your bonds. Your heroes can fight no more.");
+        });
+      } else {
+        document.getElementById("continue-btn").addEventListener("click", () => {
+          Timeline.next();
+        });
       }
     }
   },
