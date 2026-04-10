@@ -14,6 +14,7 @@ class Battle {
     this.won = false;
     this.onItemEquippedCallbacks = [];
     this.onItemCriticalCallbacks = [];
+    this.onZodiacResolvedCallbacks = [];
 
     // Reset hero for new battle
     this.hero.reset();

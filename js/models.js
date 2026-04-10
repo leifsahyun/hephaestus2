@@ -190,6 +190,9 @@ class ModalFateCard {
             battle.markCritical(item);
           }
         }
+        for (const cb of (battle.onZodiacResolvedCallbacks || [])) {
+          cb(battle, opt.zodiac);
+        }
       }
     }
   }
