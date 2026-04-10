@@ -170,7 +170,8 @@ class ModalFateCard {
       response: opt.response || "",
       zodiac: opt.zodiac || "",
       effects: (opt.effects || []).map(e => ({ key: e.key, amount: e.amount != null ? e.amount : 1 })),
-      onSelectFn: opt.onSelect || null
+      onSelectFn: opt.onSelect || null,
+      onDrawFn: opt.onDraw || null
     }));
   }
 
@@ -182,7 +183,7 @@ class ModalFateCard {
         if (effectDef) effectDef.apply(battle, e.amount);
       }
       if (opt.onSelectFn) {
-        opt.onSelectFn(battle);
+        opt.onSelectFn.call(opt, battle);
       }
       if (opt.zodiac && battle && battle.equippedItems) {
         for (const item of battle.equippedItems) {
