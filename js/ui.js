@@ -101,31 +101,26 @@ const UI = {
     this.currentScreen = "battle";
     this.clearApp();
     const event = Timeline.currentEvent;
+    const isDialog = event instanceof DialogTimelineEvent;
 
-    if (event instanceof DialogTimelineEvent) {
-      this.showDialogBattle(event);
-      return;
-    }
-
-    if (!event || !event.hero || !event.monster) {
+    if (!isDialog && (!event || !event.hero || !event.monster)) {
       this.getApp().innerHTML = "<p>No battle event available.</p>";
       return;
     }
 
-    const battle = new Battle(event.hero, event.monster);
+    const battle = isDialog ? new DialogBattle(event) : new Battle(event.hero, event.monster);
     const app = this.getApp();
 
     const container = document.createElement("div");
     container.className = "battle-screen";
 
-    // Main layout
     const layout = document.createElement("div");
     layout.className = "battle-layout";
 
-    // Left: Hero card + Equipped Items
+    // Left: Hero card
     const heroSection = document.createElement("div");
     heroSection.className = "battle-section hero-section";
-    heroSection.innerHTML = "<h3>Hero</h3>";
+    heroSection.innerHTML = "<h3>" + (isDialog ? event.heroName : "Hero") + "</h3>";
     const heroStrengthDisplay = document.createElement("div");
     heroStrengthDisplay.id = "hero-strength-display";
     heroStrengthDisplay.className = "strength-display hero-strength-display";
@@ -134,32 +129,56 @@ const UI = {
     heroCard.id = "hero-card";
     heroSection.appendChild(heroCard);
 
-    // Equipped items (under hero card)
-    const equippedArea = document.createElement("div");
-    equippedArea.className = "equipped-area";
-    equippedArea.innerHTML = "<h3>Equipped Items</h3>";
-    const equippedList = document.createElement("div");
-    equippedList.id = "equipped-list";
-    equippedList.className = "equipped-list";
-    equippedArea.appendChild(equippedList);
-    heroSection.appendChild(equippedArea);
+    let dialogTextBlock = null;
+    if (isDialog) {
+      // Dialog container holds text block and optionally equipped items
+      const dialogContainer = document.createElement("div");
+      dialogContainer.id = "dialog-container";
+      dialogContainer.className = "dialog-container dialog-container--text-only";
+
+      dialogTextBlock = document.createElement("div");
+      dialogTextBlock.id = "dialog-text-block";
+      dialogTextBlock.className = "dialog-text-block";
+      dialogContainer.appendChild(dialogTextBlock);
+
+      const equippedArea = document.createElement("div");
+      equippedArea.id = "dialog-equipped-area";
+      equippedArea.className = "equipped-area dialog-equipped-area";
+      equippedArea.innerHTML = "<h3>Equipped Items</h3>";
+      const equippedList = document.createElement("div");
+      equippedList.id = "equipped-list";
+      equippedList.className = "equipped-list";
+      equippedArea.appendChild(equippedList);
+      dialogContainer.appendChild(equippedArea);
+
+      heroSection.appendChild(dialogContainer);
+    } else {
+      // Equipped items (under hero card)
+      const equippedArea = document.createElement("div");
+      equippedArea.className = "equipped-area";
+      equippedArea.innerHTML = "<h3>Equipped Items</h3>";
+      const equippedList = document.createElement("div");
+      equippedList.id = "equipped-list";
+      equippedList.className = "equipped-list";
+      equippedArea.appendChild(equippedList);
+      heroSection.appendChild(equippedArea);
+    }
 
     layout.appendChild(heroSection);
 
-    // Center: Fate Cards section (populated when battle is resolved)
+    // Center: Fate Cards section
     const fateCardsSection = document.createElement("div");
     fateCardsSection.className = "battle-section fate-cards-section";
     const fateCardsDisplay = document.createElement("div");
     fateCardsDisplay.id = "fate-cards-display";
     fateCardsDisplay.className = "fate-cards-display";
     fateCardsSection.appendChild(fateCardsDisplay);
-
     layout.appendChild(fateCardsSection);
 
     // Right: Monster card
     const monsterSection = document.createElement("div");
     monsterSection.className = "battle-section monster-section";
-    monsterSection.innerHTML = "<h3>Monster</h3>";
+    monsterSection.innerHTML = "<h3>" + (isDialog ? event.enemyName : "Monster") + "</h3>";
     const monsterStrengthDisplay = document.createElement("div");
     monsterStrengthDisplay.id = "monster-strength-display";
     monsterStrengthDisplay.className = "strength-display monster-strength-display";
@@ -167,164 +186,88 @@ const UI = {
     const monsterCard = this.renderItemCard(battle.monster, false);
     monsterCard.id = "monster-card";
     monsterSection.appendChild(monsterCard);
-
     layout.appendChild(monsterSection);
 
-    // Offered items area (in layout row 2, col 2)
-    const offerArea = document.createElement("div");
-    offerArea.className = "offer-area";
-    offerArea.innerHTML = "<h3>Offered Items</h3>";
+    if (!isDialog) {
+      // Offered items area (row 2, col 2)
+      const offerArea = document.createElement("div");
+      offerArea.className = "offer-area";
+      offerArea.innerHTML = "<h3>Offered Items</h3>";
 
-    const offerRow = document.createElement("div");
-    offerRow.id = "offer-items-row";
-    offerRow.className = "offer-items-row";
+      const offerRow = document.createElement("div");
+      offerRow.id = "offer-items-row";
+      offerRow.className = "offer-items-row";
 
-    for (let i = 0; i < 3; i++) {
-      const slot = document.createElement("div");
-      slot.className = "offer-slot";
+      for (let i = 0; i < 3; i++) {
+        const slot = document.createElement("div");
+        slot.className = "offer-slot";
 
-      const cardDiv = document.createElement("div");
-      cardDiv.id = `offer-slot-${i}`;
-      slot.appendChild(cardDiv);
+        const cardDiv = document.createElement("div");
+        cardDiv.id = `offer-slot-${i}`;
+        slot.appendChild(cardDiv);
 
-      const equipBtn = document.createElement("button");
-      equipBtn.id = `offer-equip-${i}`;
-      equipBtn.className = "btn btn-equip";
-      equipBtn.textContent = "Equip";
-      equipBtn.addEventListener("click", () => {
-        const item = battle.offerItems[i];
-        if (!item) return;
-        battle.selectOffer(item);
-        this.updateBattleUI(battle);
-      });
-      slot.appendChild(equipBtn);
+        const equipBtn = document.createElement("button");
+        equipBtn.id = `offer-equip-${i}`;
+        equipBtn.className = "btn btn-equip";
+        equipBtn.textContent = "Equip";
+        equipBtn.addEventListener("click", () => {
+          const item = battle.offerItems[i];
+          if (!item) return;
+          battle.selectOffer(item);
+          this.updateBattleUI(battle);
+        });
+        slot.appendChild(equipBtn);
 
-      offerRow.appendChild(slot);
-    }
-    offerArea.appendChild(offerRow);
-
-    // Action buttons (fight only)
-    const actions = document.createElement("div");
-    actions.className = "battle-actions";
-
-    const fightBtn = document.createElement("button");
-    fightBtn.className = "btn btn-fight";
-    fightBtn.textContent = "Fight!";
-    fightBtn.addEventListener("click", () => {
-      for (const btn of document.querySelectorAll(".btn-equip")) {
-        btn.disabled = true;
+        offerRow.appendChild(slot);
       }
-      fightBtn.disabled = true;
-      battle.drawFateCards();
+      offerArea.appendChild(offerRow);
+
+      // Action buttons (fight only)
+      const actions = document.createElement("div");
+      actions.className = "battle-actions";
+
+      const fightBtn = document.createElement("button");
+      fightBtn.className = "btn btn-fight";
+      fightBtn.textContent = "Fight!";
+      fightBtn.addEventListener("click", () => {
+        for (const btn of document.querySelectorAll(".btn-equip")) {
+          btn.disabled = true;
+        }
+        fightBtn.disabled = true;
+        battle.drawFateCards();
+        this.showFateCards(battle, () => {
+          const result = battle.resolveBattle();
+          this.showBattleResult(result, battle);
+        });
+      });
+
+      actions.appendChild(fightBtn);
+      offerArea.appendChild(actions);
+      layout.appendChild(offerArea);
+    }
+
+    // Battle log (spans cols 2-3 in dialog layout, standalone in battle layout)
+    const logArea = document.createElement("div");
+    logArea.id = "battle-log";
+    logArea.className = "battle-log battle-section";
+    if (isDialog) {
+      logArea.style.gridColumn = "2 / 4";
+    }
+    layout.appendChild(logArea);
+
+    container.appendChild(layout);
+    app.appendChild(container);
+
+    this.updateBattleUI(battle);
+
+    if (isDialog) {
+      // Load dialog steps as fate cards and auto-start
+      battle.fateCards = battle.dialogSteps;
       this.showFateCards(battle, () => {
         const result = battle.resolveBattle();
-        this.showBattleResult(result, battle);
-      });
-    });
-
-    actions.appendChild(fightBtn);
-    offerArea.appendChild(actions);
-    layout.appendChild(offerArea);
-
-    // Battle log (in layout row 2, col 3)
-    const logArea = document.createElement("div");
-    logArea.id = "battle-log";
-    logArea.className = "battle-log battle-section";
-    layout.appendChild(logArea);
-
-    container.appendChild(layout);
-
-    app.appendChild(container);
-
-    this.updateBattleUI(battle);
-  },
-
-  showDialogBattle(event) {
-    const battle = new DialogBattle(event);
-    const app = this.getApp();
-
-    const container = document.createElement("div");
-    container.className = "battle-screen";
-
-    const layout = document.createElement("div");
-    layout.className = "battle-layout";
-
-    // Left: Hero card + dialog container (text block / equip items)
-    const heroSection = document.createElement("div");
-    heroSection.className = "battle-section hero-section";
-    heroSection.innerHTML = "<h3>" + event.heroName + "</h3>";
-    const heroStrengthDisplay = document.createElement("div");
-    heroStrengthDisplay.id = "hero-strength-display";
-    heroStrengthDisplay.className = "strength-display hero-strength-display";
-    heroSection.appendChild(heroStrengthDisplay);
-    const heroCard = this.renderItemCard(battle.hero, true);
-    heroCard.id = "hero-card";
-    heroSection.appendChild(heroCard);
-
-    // Dialog container holds text block and optionally equipped items
-    const dialogContainer = document.createElement("div");
-    dialogContainer.id = "dialog-container";
-    dialogContainer.className = "dialog-container dialog-container--text-only";
-
-    const dialogTextBlock = document.createElement("div");
-    dialogTextBlock.id = "dialog-text-block";
-    dialogTextBlock.className = "dialog-text-block";
-    dialogContainer.appendChild(dialogTextBlock);
-
-    // Equipped items area (hidden by default in dialog mode, shown when needed)
-    const equippedArea = document.createElement("div");
-    equippedArea.id = "dialog-equipped-area";
-    equippedArea.className = "equipped-area dialog-equipped-area";
-    equippedArea.innerHTML = "<h3>Equipped Items</h3>";
-    const equippedList = document.createElement("div");
-    equippedList.id = "equipped-list";
-    equippedList.className = "equipped-list";
-    equippedArea.appendChild(equippedList);
-    dialogContainer.appendChild(equippedArea);
-
-    heroSection.appendChild(dialogContainer);
-    layout.appendChild(heroSection);
-
-    // Center: Fate cards section
-    const fateCardsSection = document.createElement("div");
-    fateCardsSection.className = "battle-section fate-cards-section";
-    const fateCardsDisplay = document.createElement("div");
-    fateCardsDisplay.id = "fate-cards-display";
-    fateCardsDisplay.className = "fate-cards-display";
-    fateCardsSection.appendChild(fateCardsDisplay);
-    layout.appendChild(fateCardsSection);
-
-    // Right: Enemy card
-    const monsterSection = document.createElement("div");
-    monsterSection.className = "battle-section monster-section";
-    monsterSection.innerHTML = "<h3>" + event.enemyName + "</h3>";
-    const monsterStrengthDisplay = document.createElement("div");
-    monsterStrengthDisplay.id = "monster-strength-display";
-    monsterStrengthDisplay.className = "strength-display monster-strength-display";
-    monsterSection.appendChild(monsterStrengthDisplay);
-    const monsterCard = this.renderItemCard(battle.monster, false);
-    monsterCard.id = "monster-card";
-    monsterSection.appendChild(monsterCard);
-    layout.appendChild(monsterSection);
-
-    // Battle log (spans col 2-3, row 2)
-    const logArea = document.createElement("div");
-    logArea.id = "battle-log";
-    logArea.className = "battle-log battle-section";
-    logArea.style.gridColumn = "2 / 4";
-    layout.appendChild(logArea);
-
-    container.appendChild(layout);
-    app.appendChild(container);
-
-    this.updateBattleUI(battle);
-
-    // Load dialog steps as fate cards and auto-start
-    battle.fateCards = battle.dialogSteps;
-    this.showFateCards(battle, () => {
-      const result = battle.resolveBattle();
-      this.showDialogResult(result, battle);
-    }, { textBlock: dialogTextBlock });
+        this.showDialogResult(result, battle);
+      }, { textBlock: dialogTextBlock });
+    }
   },
 
   showDialogResult(result, battle) {
