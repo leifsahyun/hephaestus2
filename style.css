@@ -47,7 +47,8 @@
   border-radius: 12px;
   padding: 40px 48px;
   text-align: center;
-  max-width: 420px;
+  max-width: 480px;
+  width: 90%;
 }
 
 .game-over-popup h2 {
@@ -60,6 +61,84 @@
   margin-bottom: 24px;
   font-size: 1.1rem;
   color: #e0e0e0;
+}
+
+/* ── Run Statistics ── */
+.run-stats {
+  background: #0f3460;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.run-stats-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.run-stats-row:last-child {
+  border-bottom: none;
+}
+
+.run-stats-label {
+  color: #a0a0c0;
+}
+
+.run-stats-value {
+  color: #e0e0e0;
+  font-weight: 600;
+  text-align: right;
+  max-width: 60%;
+  word-break: break-word;
+}
+
+.run-stats-items-heading {
+  margin-top: 10px;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  color: #e94560;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ── History Screen ── */
+.history-popup {
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.history-entry {
+  background: #0f3460;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.history-entry-heading {
+  font-size: 0.85rem;
+  color: #e94560;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.history-entry .run-stats {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 0;
 }
 
 /* ── Reset & Base ── */

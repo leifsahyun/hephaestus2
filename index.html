@@ -11,6 +11,7 @@
     <h1>⚒ Hephaestus</h1>
     <div id="title-buttons">
       <button id="btn-play" class="btn btn-fight">Play</button>
+      <button id="btn-history" class="btn" disabled>History</button>
       <button id="btn-customize-forge" class="btn" aria-disabled="true">Customize Forge</button>
     </div>
   </div>
@@ -45,7 +46,7 @@
         </p>
     </div>
 
-  <!-- Load order matters: models → config → pools → augments → timeline → battle → ui → main -->
+  <!-- Load order matters: models → config → pools → augments → timeline → battle → ui → stats → main -->
   <script src="js/models.js"></script>
   <script src="js/config.js"></script>
   <script src="js/pools.js"></script>
@@ -53,6 +54,7 @@
   <script src="js/timeline.js"></script>
   <script src="js/battle.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/stats.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

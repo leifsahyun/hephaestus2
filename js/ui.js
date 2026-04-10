@@ -100,6 +100,10 @@ const UI = {
   },
 
   showGameOverPopup(title, message) {
+    RunStats.finalize(PlayerState.bonds);
+    const summary = RunStats.saveToHistory();
+    this.updateHistoryButton();
+
     const overlay = document.createElement("div");
     overlay.className = "game-over-overlay";
 
@@ -112,6 +116,8 @@ const UI = {
     const text = document.createElement("p");
     text.textContent = message;
 
+    const statsEl = this._buildRunStatsEl(summary);
+
     const btn = document.createElement("button");
     btn.className = "btn btn-continue";
     btn.id = "game-over-continue-btn";
@@ -119,6 +125,7 @@ const UI = {
 
     popup.appendChild(heading);
     popup.appendChild(text);
+    popup.appendChild(statsEl);
     popup.appendChild(btn);
     overlay.appendChild(popup);
     document.body.appendChild(overlay);
@@ -127,6 +134,113 @@ const UI = {
       overlay.remove();
       this.showTitleScreen();
     });
+  },
+
+  _buildRunStatsEl(summary) {
+    const el = document.createElement("div");
+    el.className = "run-stats";
+
+    const rows = [
+      ["Highest Hero Score", summary.highestHeroScore],
+      ["Highest Monster Strength", summary.highestMonsterQuality],
+      ["Median Hubris", summary.medianHubris],
+      ["Monsters Defeated", summary.monstersDefeated],
+      ["Total Money Earned", "$" + summary.totalMoneyEarned],
+      ["Bonds Remaining", "🔗" + summary.bondsRemaining],
+    ];
+
+    for (const [label, value] of rows) {
+      const row = document.createElement("div");
+      row.className = "run-stats-row";
+      const labelEl = document.createElement("span");
+      labelEl.className = "run-stats-label";
+      labelEl.textContent = label;
+      const valueEl = document.createElement("span");
+      valueEl.className = "run-stats-value";
+      valueEl.textContent = value;
+      row.appendChild(labelEl);
+      row.appendChild(valueEl);
+      el.appendChild(row);
+    }
+
+    if (summary.topEquippedItems && summary.topEquippedItems.length > 0) {
+      const itemsHeading = document.createElement("div");
+      itemsHeading.className = "run-stats-items-heading";
+      itemsHeading.textContent = "Most Equipped Items";
+      el.appendChild(itemsHeading);
+
+      for (const entry of summary.topEquippedItems) {
+        const row = document.createElement("div");
+        row.className = "run-stats-row run-stats-item-row";
+        const nameEl = document.createElement("span");
+        nameEl.className = "run-stats-label";
+        nameEl.textContent = capitalize(entry.name);
+        const detailEl = document.createElement("span");
+        detailEl.className = "run-stats-value";
+        const augText = entry.augments.length > 0 ? ` [${entry.augments.join(", ")}]` : "";
+        detailEl.textContent = `◈${entry.quality}${augText} ×${entry.count}`;
+        row.appendChild(nameEl);
+        row.appendChild(detailEl);
+        el.appendChild(row);
+      }
+    }
+
+    return el;
+  },
+
+  updateHistoryButton() {
+    const btn = document.getElementById("btn-history");
+    if (!btn) return;
+    const history = RunStats.loadHistory();
+    btn.disabled = history.length === 0;
+  },
+
+  showHistoryScreen() {
+    const history = RunStats.loadHistory();
+
+    const overlay = document.createElement("div");
+    overlay.className = "game-over-overlay history-overlay";
+
+    const panel = document.createElement("div");
+    panel.className = "game-over-popup history-popup";
+
+    const heading = document.createElement("h2");
+    heading.textContent = "Run History";
+    panel.appendChild(heading);
+
+    if (history.length === 0) {
+      const empty = document.createElement("p");
+      empty.textContent = "No runs recorded yet.";
+      panel.appendChild(empty);
+    } else {
+      const list = document.createElement("div");
+      list.className = "history-list";
+
+      history.forEach((summary, idx) => {
+        const entry = document.createElement("div");
+        entry.className = "history-entry";
+
+        const entryHeading = document.createElement("div");
+        entryHeading.className = "history-entry-heading";
+        const date = new Date(summary.timestamp).toLocaleString();
+        entryHeading.textContent = `Run ${history.length - idx} — ${date}`;
+        entry.appendChild(entryHeading);
+
+        entry.appendChild(this._buildRunStatsEl(summary));
+        list.appendChild(entry);
+      });
+
+      panel.appendChild(list);
+    }
+
+    const closeBtn = document.createElement("button");
+    closeBtn.className = "btn btn-continue";
+    closeBtn.textContent = "Close";
+    closeBtn.addEventListener("click", () => overlay.remove());
+    panel.appendChild(closeBtn);
+
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
   },
 
   // ── Battle Screen ──
@@ -700,6 +814,8 @@ const UI = {
         PlayerState.removeBond();
         rewardText = `<p>Lost: <strong>🔗1</strong></p>`;
       }
+
+      RunStats.recordBattle(battle, result);
 
       logArea.innerHTML = `
         <div class="battle-result ${result.won ? "result-win" : "result-lose"}">
