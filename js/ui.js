@@ -420,17 +420,8 @@ const UI = {
   showDialogResult(result, battle) {
     const logArea = document.getElementById("battle-log");
     if (logArea) {
-      let resultText = "";
-      if (result.won) {
-        resultText = `<p>The ${battle.monster.name} is pleased with your words.</p>`;
-      } else {
-        resultText = `<p>The ${battle.monster.name} turns away, unimpressed.</p>`;
-      }
-
       logArea.innerHTML = `
-        <div class="battle-result ${result.won ? "result-win" : "result-lose"}">
-          <h3>${result.won ? "A Good Conversation" : "An Awkward Exchange"}</h3>
-          ${resultText}
+        <div class="battle-result">
           <button class="btn btn-continue" id="continue-btn">Continue</button>
         </div>
       `;
