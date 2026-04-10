@@ -17,6 +17,11 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+/** Returns a random integer in the range [-variance, variance]. */
+function randomOffset(variance) {
+  return Math.round((Math.random() * 2 - 1) * variance);
+}
+
 const ItemPool = {
   items: [],
   current: [],
@@ -45,6 +50,92 @@ const ItemPool = {
 
   shuffle() {
     this.current = shuffleArray(this.items);
+  },
+
+  // Slot sets keyed by item type, matching the forge create-item interface.
+  _slotsByType: {
+    sword:   [{ type: "edge" }, { type: "edge" },   { type: "blessing" }],
+    spear:   [{ type: "edge" }, { type: "edge" },   { type: "patina" }],
+    bow:     [{ type: "edge" }, { type: "edge" },   { type: "haft" }],
+    tool:    [{ type: "haft" }, { type: "patina" }, { type: "edge" }],
+    sandals: [{ type: "haft" }, { type: "patina" }, { type: "blessing" }],
+    helm:    [{ type: "patina" }, { type: "patina" }, { type: "edge" }],
+    armor:   [{ type: "patina" }, { type: "patina" }, { type: "blessing" }],
+    shield:  [{ type: "patina" }, { type: "patina" }, { type: "haft" }]
+  },
+
+  _zodiacSigns: [
+    "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+    "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"
+  ],
+
+  /**
+   * Creates a random Item with type and zodiac tag chosen uniformly at random.
+   *
+   * @param {number} value    - Nominal value; drives quality and hubris targets.
+   * @param {number} variance - Spread applied to quality and hubrisCost rolls.
+   *                           0 = deterministic targets; higher = wider random range.
+   * @returns {Item}
+   */
+  generateRandomItem(value, variance) {
+    // Pick a random item type from the forge's available types.
+    const types = Config.itemTypes;
+    const type = types[Math.floor(Math.random() * types.length)];
+
+    // Pick one zodiac tag uniformly at random from the 12 signs.
+    const zodiacTags = [this._zodiacSigns[Math.floor(Math.random() * this._zodiacSigns.length)]];
+
+    // HubrisCost targets floor(value / 2); variance spreads the result.
+    const hubrisTarget = Math.floor(value / 2);
+    const hubrisCost = Math.max(0, hubrisTarget + randomOffset(variance));
+
+    // Build slots from the type-specific set; higher-value items have a proportional
+    // chance per slot to receive a random augment, quality reduced by augment cost.
+    const slotTemplates = this._slotsByType[type];
+    if (!slotTemplates) {
+      console.warn(`ItemPool.generateRandomItem: no slot definition for type "${type}". Item will have zero slots.`);
+    }
+    const slots = (slotTemplates || []).map(s => ({ type: s.type, augment: null }));
+    for (const slot of slots) {
+      const augmentChance = Math.min(1, value / 50);
+      if (Math.random() < augmentChance) {
+        const aug = AugmentPool.draw();
+        if (aug) {
+          slot.augment = aug;
+          value = Math.max(0, value - aug.value);
+        }
+      }
+    }
+    
+    // Quality is random around the value, clamped to at least 1.
+    let baseQuality = Math.max(1, value + randomOffset(variance));
+
+    return new Item({
+      name: capitalize(type),
+      type,
+      variant: 0,
+      baseQuality,
+      value,
+      hubrisCost,
+      slots,
+      zodiacTags,
+      augments: [],
+      counters: {}
+    });
+  },
+
+  /**
+   * Generates a random item and appends it to the pool.
+   *
+   * @param {number} value    - See generateRandomItem.
+   * @param {number} variance - See generateRandomItem.
+   * @returns {Item} The newly added item.
+   */
+  addRandomItem(value, variance) {
+    const item = this.generateRandomItem(value, variance);
+    this.items.push(item);
+    this.current.push(item);
+    return item;
   }
 };
 
