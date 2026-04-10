@@ -155,6 +155,7 @@ class DialogBattle extends Battle {
       value: 0
     });
     super(hero, enemy, { skipItemPool: true });
+    this.initialText = event.initialText || "";
     this.dialogSteps = event.dialogSteps;
     this.isDialog = true;
   }

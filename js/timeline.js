@@ -49,6 +49,7 @@ class DialogTimelineEvent extends TimelineEvent {
     this.heroBaseQuality = data.heroBaseQuality != null ? data.heroBaseQuality : 0;
     this.enemyName = data.enemyName || "Stranger";
     this.enemyBaseQuality = data.enemyBaseQuality != null ? data.enemyBaseQuality : 0;
+    this.initialText = data.initialText || "";
     this.dialogSteps = (data.dialogSteps || []).map(s => new DialogModalFateCard(s));
   }
 
