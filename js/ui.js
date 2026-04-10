@@ -111,6 +111,12 @@ const UI = {
     const battle = isDialog ? new DialogBattle(event) : new Battle(event.hero, event.monster);
     const app = this.getApp();
 
+    // Track items that just became critical for the flash animation
+    const criticalAnimItems = new Set();
+    battle.onItemCriticalCallbacks.push((b, item) => {
+      criticalAnimItems.add(item);
+    });
+
     const container = document.createElement("div");
     container.className = "battle-screen";
 
@@ -202,7 +208,7 @@ const UI = {
           const item = battle.offerItems[i];
           if (!item) return;
           battle.selectOffer(item);
-          this.updateBattleUI(battle);
+          this.updateBattleUI(battle, criticalAnimItems);
         });
         slot.appendChild(equipBtn);
 
@@ -243,7 +249,7 @@ const UI = {
     container.appendChild(layout);
     app.appendChild(container);
 
-    this.updateBattleUI(battle);
+    this.updateBattleUI(battle, criticalAnimItems);
 
     if (isDialog) {
       // Load dialog steps as fate cards and auto-start
@@ -278,7 +284,7 @@ const UI = {
     }
   },
 
-  updateBattleUI(battle) {
+  updateBattleUI(battle, criticalAnimItems) {
     // Update hero card
     const heroCard = document.getElementById("hero-card");
     if (heroCard) {
@@ -352,9 +358,24 @@ const UI = {
     if (equippedList) {
       equippedList.innerHTML = "";
       for (const item of battle.equippedItems) {
-        equippedList.appendChild(this.renderCompactItemCard(item));
+        const card = this.renderCompactItemCard(item);
+        if (criticalAnimItems && criticalAnimItems.has(item)) {
+          criticalAnimItems.delete(item);
+          card.classList.add("critical-flash");
+          this._showCriticalPopup(card);
+        }
+        equippedList.appendChild(card);
       }
     }
+  },
+
+  _showCriticalPopup(cardEl) {
+    cardEl.style.position = "relative";
+    const popup = document.createElement("div");
+    popup.className = "critical-popup";
+    popup.textContent = "Critical!";
+    cardEl.appendChild(popup);
+    popup.addEventListener("animationend", () => popup.remove());
   },
 
   showFateCards(battle, onComplete, options = {}) {
@@ -1168,7 +1189,7 @@ const UI = {
 
   renderCompactItemCard(item) {
     const card = document.createElement("div");
-    card.className = "card compact-card";
+    card.className = "card compact-card" + (item.critical ? " compact-card--critical" : "");
 
     const nameEl = document.createElement("span");
     nameEl.className = "compact-name";

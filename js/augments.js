@@ -123,11 +123,11 @@ const defaultAugments = [
   },
   {
     name: "Glass",
-    description: "2x◈, item is destroyed on use.",
+    description: "Marks item critical: 2x◈ and all future ◈ gains are doubled. Item is destroyed on use.",
     type: "edge",
     value: 12,
     onEquip: function (battle, item) {
-      item.tempQuality = (item.tempQuality != null ? item.tempQuality : item.baseQuality) * 2;
+      battle.markCritical(item);
     },
     onBattleComplete: function (battle, item) {
       ItemPool.erase(item);

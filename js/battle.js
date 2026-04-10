@@ -13,6 +13,7 @@ class Battle {
     this.resolved = false;
     this.won = false;
     this.onItemEquippedCallbacks = [];
+    this.onItemCriticalCallbacks = [];
 
     // Reset hero for new battle
     this.hero.reset();
@@ -73,6 +74,14 @@ class Battle {
 
   addHubris(amount) {
     this.hero.hubris += amount;
+  }
+
+  markCritical(item) {
+    if (item.critical) return;
+    item.critical = true;
+    for (const cb of this.onItemCriticalCallbacks) {
+      cb(this, item);
+    }
   }
 
   resolveBattle() {
