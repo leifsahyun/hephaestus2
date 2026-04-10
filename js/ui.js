@@ -8,7 +8,7 @@ const UI = {
   init() {
     Timeline.onSceneChange = (sceneType) => {
       this.renderTimeline();
-      if (sceneType === "battle") {
+      if (sceneType === "battle" || sceneType === "dialog") {
         this.showBattle();
       } else if (sceneType === "forge") {
         this.showForge();
@@ -46,7 +46,7 @@ const UI = {
     const container = document.getElementById("event-timeline");
     if (!container) return;
 
-    const ICONS = { battle: "⚔️", forge: "⚒" };
+    const ICONS = { battle: "⚔️", forge: "⚒", dialog: "💬" };
     const MAX_UPCOMING_DISPLAYED = 9;
     const events = [];
     if (Timeline.currentEvent) {
@@ -101,25 +101,26 @@ const UI = {
     this.currentScreen = "battle";
     this.clearApp();
     const event = Timeline.currentEvent;
-    if (!event || !event.hero || !event.monster) {
+    const isDialog = event instanceof DialogTimelineEvent;
+
+    if (!isDialog && (!event || !event.hero || !event.monster)) {
       this.getApp().innerHTML = "<p>No battle event available.</p>";
       return;
     }
 
-    const battle = new Battle(event.hero, event.monster);
+    const battle = isDialog ? new DialogBattle(event) : new Battle(event.hero, event.monster);
     const app = this.getApp();
 
     const container = document.createElement("div");
     container.className = "battle-screen";
 
-    // Main layout
     const layout = document.createElement("div");
     layout.className = "battle-layout";
 
-    // Left: Hero card + Equipped Items
+    // Left: Hero card
     const heroSection = document.createElement("div");
     heroSection.className = "battle-section hero-section";
-    heroSection.innerHTML = "<h3>Hero</h3>";
+    heroSection.innerHTML = "<h3>" + (isDialog ? event.heroName : "Hero") + "</h3>";
     const heroStrengthDisplay = document.createElement("div");
     heroStrengthDisplay.id = "hero-strength-display";
     heroStrengthDisplay.className = "strength-display hero-strength-display";
@@ -128,7 +129,7 @@ const UI = {
     heroCard.id = "hero-card";
     heroSection.appendChild(heroCard);
 
-    // Equipped items (under hero card)
+    // Equipped items (always shown under hero card)
     const equippedArea = document.createElement("div");
     equippedArea.className = "equipped-area";
     equippedArea.innerHTML = "<h3>Equipped Items</h3>";
@@ -140,20 +141,19 @@ const UI = {
 
     layout.appendChild(heroSection);
 
-    // Center: Fate Cards section (populated when battle is resolved)
+    // Center: Fate Cards section
     const fateCardsSection = document.createElement("div");
     fateCardsSection.className = "battle-section fate-cards-section";
     const fateCardsDisplay = document.createElement("div");
     fateCardsDisplay.id = "fate-cards-display";
     fateCardsDisplay.className = "fate-cards-display";
     fateCardsSection.appendChild(fateCardsDisplay);
-
     layout.appendChild(fateCardsSection);
 
     // Right: Monster card
     const monsterSection = document.createElement("div");
     monsterSection.className = "battle-section monster-section";
-    monsterSection.innerHTML = "<h3>Monster</h3>";
+    monsterSection.innerHTML = "<h3>" + (isDialog ? event.enemyName : "Monster") + "</h3>";
     const monsterStrengthDisplay = document.createElement("div");
     monsterStrengthDisplay.id = "monster-strength-display";
     monsterStrengthDisplay.className = "strength-display monster-strength-display";
@@ -161,76 +161,121 @@ const UI = {
     const monsterCard = this.renderItemCard(battle.monster, false);
     monsterCard.id = "monster-card";
     monsterSection.appendChild(monsterCard);
-
     layout.appendChild(monsterSection);
 
-    // Offered items area (in layout row 2, col 2)
-    const offerArea = document.createElement("div");
-    offerArea.className = "offer-area";
-    offerArea.innerHTML = "<h3>Offered Items</h3>";
+    let dialogTextBlock = null;
+    if (isDialog) {
+      // Dialog container occupies the offer area position (row 2, col 2)
+      const dialogContainer = document.createElement("div");
+      dialogContainer.id = "dialog-container";
+      dialogContainer.className = "dialog-container dialog-container--text-only";
 
-    const offerRow = document.createElement("div");
-    offerRow.id = "offer-items-row";
-    offerRow.className = "offer-items-row";
+      dialogTextBlock = document.createElement("div");
+      dialogTextBlock.id = "dialog-text-block";
+      dialogTextBlock.className = "dialog-text-block";
+      dialogContainer.appendChild(dialogTextBlock);
 
-    for (let i = 0; i < 3; i++) {
-      const slot = document.createElement("div");
-      slot.className = "offer-slot";
+      layout.appendChild(dialogContainer);
+    } else {
+      // Offered items area (row 2, col 2)
+      const offerArea = document.createElement("div");
+      offerArea.className = "offer-area";
+      offerArea.innerHTML = "<h3>Offered Items</h3>";
 
-      const cardDiv = document.createElement("div");
-      cardDiv.id = `offer-slot-${i}`;
-      slot.appendChild(cardDiv);
+      const offerRow = document.createElement("div");
+      offerRow.id = "offer-items-row";
+      offerRow.className = "offer-items-row";
 
-      const equipBtn = document.createElement("button");
-      equipBtn.id = `offer-equip-${i}`;
-      equipBtn.className = "btn btn-equip";
-      equipBtn.textContent = "Equip";
-      equipBtn.addEventListener("click", () => {
-        const item = battle.offerItems[i];
-        if (!item) return;
-        battle.selectOffer(item);
-        this.updateBattleUI(battle);
-      });
-      slot.appendChild(equipBtn);
+      for (let i = 0; i < 3; i++) {
+        const slot = document.createElement("div");
+        slot.className = "offer-slot";
 
-      offerRow.appendChild(slot);
-    }
-    offerArea.appendChild(offerRow);
+        const cardDiv = document.createElement("div");
+        cardDiv.id = `offer-slot-${i}`;
+        slot.appendChild(cardDiv);
 
-    // Action buttons (fight only)
-    const actions = document.createElement("div");
-    actions.className = "battle-actions";
+        const equipBtn = document.createElement("button");
+        equipBtn.id = `offer-equip-${i}`;
+        equipBtn.className = "btn btn-equip";
+        equipBtn.textContent = "Equip";
+        equipBtn.addEventListener("click", () => {
+          const item = battle.offerItems[i];
+          if (!item) return;
+          battle.selectOffer(item);
+          this.updateBattleUI(battle);
+        });
+        slot.appendChild(equipBtn);
 
-    const fightBtn = document.createElement("button");
-    fightBtn.className = "btn btn-fight";
-    fightBtn.textContent = "Fight!";
-    fightBtn.addEventListener("click", () => {
-      for (const btn of document.querySelectorAll(".btn-equip")) {
-        btn.disabled = true;
+        offerRow.appendChild(slot);
       }
-      fightBtn.disabled = true;
-      battle.drawFateCards();
-      this.showFateCards(battle, () => {
-        const result = battle.resolveBattle();
-        this.showBattleResult(result, battle);
+      offerArea.appendChild(offerRow);
+
+      // Action buttons (fight only)
+      const actions = document.createElement("div");
+      actions.className = "battle-actions";
+
+      const fightBtn = document.createElement("button");
+      fightBtn.className = "btn btn-fight";
+      fightBtn.textContent = "Fight!";
+      fightBtn.addEventListener("click", () => {
+        for (const btn of document.querySelectorAll(".btn-equip")) {
+          btn.disabled = true;
+        }
+        fightBtn.disabled = true;
+        battle.drawFateCards();
+        this.showFateCards(battle, () => {
+          const result = battle.resolveBattle();
+          this.showBattleResult(result, battle);
+        });
       });
-    });
 
-    actions.appendChild(fightBtn);
-    offerArea.appendChild(actions);
-    layout.appendChild(offerArea);
+      actions.appendChild(fightBtn);
+      offerArea.appendChild(actions);
+      layout.appendChild(offerArea);
+    }
 
-    // Battle log (in layout row 2, col 3)
+    // Battle log (row 2, col 3)
     const logArea = document.createElement("div");
     logArea.id = "battle-log";
     logArea.className = "battle-log battle-section";
     layout.appendChild(logArea);
 
     container.appendChild(layout);
-
     app.appendChild(container);
 
     this.updateBattleUI(battle);
+
+    if (isDialog) {
+      // Load dialog steps as fate cards and auto-start
+      battle.fateCards = battle.dialogSteps;
+      this.showFateCards(battle, () => {
+        const result = battle.resolveBattle();
+        this.showDialogResult(result, battle);
+      }, { textBlock: dialogTextBlock });
+    }
+  },
+
+  showDialogResult(result, battle) {
+    const logArea = document.getElementById("battle-log");
+    if (logArea) {
+      let resultText = "";
+      if (result.won) {
+        resultText = `<p>The ${battle.monster.name} is pleased with your words.</p>`;
+      } else {
+        resultText = `<p>The ${battle.monster.name} turns away, unimpressed.</p>`;
+      }
+
+      logArea.innerHTML = `
+        <div class="battle-result ${result.won ? "result-win" : "result-lose"}">
+          <h3>${result.won ? "A Good Conversation" : "An Awkward Exchange"}</h3>
+          ${resultText}
+          <button class="btn btn-continue" id="continue-btn">Continue</button>
+        </div>
+      `;
+      document.getElementById("continue-btn").addEventListener("click", () => {
+        Timeline.next();
+      });
+    }
   },
 
   updateBattleUI(battle) {
@@ -312,7 +357,8 @@ const UI = {
     }
   },
 
-  showFateCards(battle, onComplete) {
+  showFateCards(battle, onComplete, options = {}) {
+    const { textBlock = null } = options;
     const display = document.getElementById("fate-cards-display");
     if (!display) {
       if (onComplete) onComplete();
@@ -385,6 +431,11 @@ const UI = {
       }
       const card = battle.fateCards[i];
       i++;
+
+      // Update dialog text block if this is a dialog step with a statement
+      if (textBlock && card instanceof DialogModalFateCard && card.statement) {
+        textBlock.textContent = card.statement;
+      }
 
       // If already at max visible, move oldest to the stack
       if (visiblePairs.length >= MAX_VISIBLE) {

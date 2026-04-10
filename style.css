@@ -256,6 +256,46 @@ header h1 {
   overflow-y: auto;
 }
 
+/* ── Dialog Text Block ── */
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+}
+
+.dialog-container--text-only .dialog-text-block {
+  flex: 1;
+}
+
+.dialog-container--text-only .dialog-equipped-area {
+  display: none;
+}
+
+.dialog-container--both .dialog-text-block {
+  flex: 1;
+}
+
+.dialog-container--both .dialog-equipped-area {
+  flex: 1;
+  display: block;
+  margin-top: 0;
+  border-top: 1px solid #333;
+  padding-top: 12px;
+}
+
+.dialog-text-block {
+  background: #f5f0e8;
+  border: 1px solid #4ecca3;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #1a1a2e;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.95rem;
+  font-style: normal;
+  line-height: 1.5;
+  min-height: 80px;
+}
+
 /* ── Expected Stats ── */
 .expected-stats {
   margin-top: 16px;

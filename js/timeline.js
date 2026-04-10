@@ -42,6 +42,21 @@ class ForgeTimelineEvent extends TimelineEvent {
   initialize() {}
 }
 
+class DialogTimelineEvent extends TimelineEvent {
+  constructor(data) {
+    super({ name: "Dialog", sceneType: "dialog" });
+    this.heroName = data.heroName || "Hephaestus";
+    this.heroBaseQuality = data.heroBaseQuality != null ? data.heroBaseQuality : 0;
+    this.enemyName = data.enemyName || "Stranger";
+    this.enemyBaseQuality = data.enemyBaseQuality != null ? data.enemyBaseQuality : 0;
+    this.dialogSteps = (data.dialogSteps || []).map(s => new DialogModalFateCard(s));
+  }
+
+  initialize() {
+    this.description = "Talk to the " + this.enemyName;
+  }
+}
+
 const Timeline = {
   eventCycles: [],
   minLength: 10,
@@ -52,6 +67,13 @@ const Timeline = {
   init() {
     this.eventCycles = Config.eventCycles;
     this.minLength = Config.minTimelineLength;
+    // Prepend dialog events from config (placed before regular battle/forge cycle)
+    const dialogEvents = (Config.defaultDialogEvents || []).map(d => {
+      const evt = new DialogTimelineEvent(d);
+      evt.initialize();
+      return evt;
+    });
+    this.upcomingEvents = dialogEvents;
     this.populate();
     this.next();
   },

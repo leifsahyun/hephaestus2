@@ -279,6 +279,47 @@ const Config = {
     },
   ],
 
+  defaultDialogEvents: [
+    {
+      heroName: "Hephaestus",
+      heroBaseQuality: 0,
+      enemyName: "Farmer",
+      enemyBaseQuality: 3,
+      dialogSteps: [
+        {
+          statement: "Good morrow, stranger! What brings the god of the forge to my humble farm?",
+          name: "Greeting",
+          separatorText: "Greeting",
+          options: [
+            {
+              text: "I seek news of the monsters plaguing this land.",
+              effects: [{ key: "heroQuality", amount: 2 }]
+            },
+            {
+              text: "I am merely passing through, farmer.",
+              effects: []
+            }
+          ]
+        },
+        {
+          statement: "The Minotaur's minions have been raiding our fields. Surely a god can help us?",
+          name: "Plea",
+          separatorText: "Plea",
+          options: [
+            {
+              text: "I shall forge weapons for your defenders.",
+              effects: [{ key: "heroQuality", amount: 3 }]
+            },
+            {
+              text: "I cannot promise anything.",
+              effects: [{ key: "hubris", amount: 2 }]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+
   fixedFateCards: [
     [0, new HubrisThresholdFateCard({
       name: "Death",
