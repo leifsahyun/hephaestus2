@@ -83,7 +83,7 @@ const RunStats = {
 
   saveToHistory() {
     const summary = this.getSummary();
-    const history = RunStats.loadHistory();
+    const history = this.loadHistory();
     history.unshift(summary);
     localStorage.setItem("hephaestus_history", JSON.stringify(history.slice(0, 20)));
     return summary;

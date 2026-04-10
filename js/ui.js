@@ -177,8 +177,8 @@ const UI = {
         nameEl.textContent = capitalize(entry.name);
         const detailEl = document.createElement("span");
         detailEl.className = "run-stats-value";
-        const augText = entry.augments.length > 0 ? " [" + entry.augments.join(", ") + "]" : "";
-        detailEl.textContent = "◈" + entry.quality + augText + " ×" + entry.count;
+        const augText = entry.augments.length > 0 ? ` [${entry.augments.join(", ")}]` : "";
+        detailEl.textContent = `◈${entry.quality}${augText} ×${entry.count}`;
         row.appendChild(nameEl);
         row.appendChild(detailEl);
         el.appendChild(row);
