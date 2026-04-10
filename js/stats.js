@@ -25,7 +25,7 @@ const RunStats = {
     if (result.heroStrength > this.highestHeroScore) {
       this.highestHeroScore = result.heroStrength;
     }
-    if (result.monsterStrength > this.highestMonsterQuality) {
+    if (result.won && result.monsterStrength > this.highestMonsterQuality) {
       this.highestMonsterQuality = result.monsterStrength;
     }
     this.hubrisValues.push(battle.hero.hubris);
