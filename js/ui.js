@@ -129,40 +129,15 @@ const UI = {
     heroCard.id = "hero-card";
     heroSection.appendChild(heroCard);
 
-    let dialogTextBlock = null;
-    if (isDialog) {
-      // Dialog container holds text block and optionally equipped items
-      const dialogContainer = document.createElement("div");
-      dialogContainer.id = "dialog-container";
-      dialogContainer.className = "dialog-container dialog-container--text-only";
-
-      dialogTextBlock = document.createElement("div");
-      dialogTextBlock.id = "dialog-text-block";
-      dialogTextBlock.className = "dialog-text-block";
-      dialogContainer.appendChild(dialogTextBlock);
-
-      const equippedArea = document.createElement("div");
-      equippedArea.id = "dialog-equipped-area";
-      equippedArea.className = "equipped-area dialog-equipped-area";
-      equippedArea.innerHTML = "<h3>Equipped Items</h3>";
-      const equippedList = document.createElement("div");
-      equippedList.id = "equipped-list";
-      equippedList.className = "equipped-list";
-      equippedArea.appendChild(equippedList);
-      dialogContainer.appendChild(equippedArea);
-
-      heroSection.appendChild(dialogContainer);
-    } else {
-      // Equipped items (under hero card)
-      const equippedArea = document.createElement("div");
-      equippedArea.className = "equipped-area";
-      equippedArea.innerHTML = "<h3>Equipped Items</h3>";
-      const equippedList = document.createElement("div");
-      equippedList.id = "equipped-list";
-      equippedList.className = "equipped-list";
-      equippedArea.appendChild(equippedList);
-      heroSection.appendChild(equippedArea);
-    }
+    // Equipped items (always shown under hero card)
+    const equippedArea = document.createElement("div");
+    equippedArea.className = "equipped-area";
+    equippedArea.innerHTML = "<h3>Equipped Items</h3>";
+    const equippedList = document.createElement("div");
+    equippedList.id = "equipped-list";
+    equippedList.className = "equipped-list";
+    equippedArea.appendChild(equippedList);
+    heroSection.appendChild(equippedArea);
 
     layout.appendChild(heroSection);
 
@@ -188,7 +163,20 @@ const UI = {
     monsterSection.appendChild(monsterCard);
     layout.appendChild(monsterSection);
 
-    if (!isDialog) {
+    let dialogTextBlock = null;
+    if (isDialog) {
+      // Dialog container occupies the offer area position (row 2, col 2)
+      const dialogContainer = document.createElement("div");
+      dialogContainer.id = "dialog-container";
+      dialogContainer.className = "dialog-container dialog-container--text-only";
+
+      dialogTextBlock = document.createElement("div");
+      dialogTextBlock.id = "dialog-text-block";
+      dialogTextBlock.className = "dialog-text-block";
+      dialogContainer.appendChild(dialogTextBlock);
+
+      layout.appendChild(dialogContainer);
+    } else {
       // Offered items area (row 2, col 2)
       const offerArea = document.createElement("div");
       offerArea.className = "offer-area";
@@ -246,13 +234,10 @@ const UI = {
       layout.appendChild(offerArea);
     }
 
-    // Battle log (spans cols 2-3 in dialog layout, standalone in battle layout)
+    // Battle log (row 2, col 3)
     const logArea = document.createElement("div");
     logArea.id = "battle-log";
     logArea.className = "battle-log battle-section";
-    if (isDialog) {
-      logArea.style.gridColumn = "2 / 4";
-    }
     layout.appendChild(logArea);
 
     container.appendChild(layout);
