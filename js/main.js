@@ -66,4 +66,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   UI.updateHistoryButton();
+  UI.updateCustomizeForgeButton();
 });
