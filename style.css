@@ -1,3 +1,35 @@
+/* ── Title Screen ── */
+#title-screen {
+  position: fixed;
+  inset: 0;
+  background: #1a1a2e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  z-index: 1000;
+}
+
+#title-screen h1 {
+  color: #e94560;
+  font-size: 3rem;
+  letter-spacing: 4px;
+}
+
+#title-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+#title-buttons .btn {
+  width: 200px;
+  padding: 14px 0;
+  font-size: 1.1rem;
+}
+
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
