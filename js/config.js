@@ -96,7 +96,34 @@ const Config = {
     1: [
       { name: "Minotaur", type: "monster", baseQuality: 45, fateCards: 3, augments: [], variant: -1, value: 0 },
       { name: "Hydra", type: "monster", baseQuality: 60, fateCards: 2, augments: [], variant: -1, value: 0 },
-      { name: "Medusa", type: "monster", baseQuality: 20, fateCards: 5, augments: [], variant: -1, value: 0 }
+      { name: "Medusa", type: "monster", baseQuality: 20, fateCards: 5, augments: [], variant: -1, value: 0 },
+      {
+        name: "Centaur", type: "monster", baseQuality: 25, fateCards: 3, variant: -1, value: 0,
+        augments: [{
+          name: "Poison Blood",
+          description: "Poisons items used against the Centaur.",
+          type: "monster",
+          value: 0,
+          onEquip: function (battle, monster) {
+            battle.onItemEquippedCallbacks.push(function (b, item) {
+              let poisonedAug = new Augment({
+                name: "Poisoned",
+                description: "-7◈ next time this item is equipped",
+                type: "item",
+                value: 0,
+                onEquip: function (bat, itm) {
+                  itm.tempQuality -= 7;
+                  const idx = itm.augments.indexOf(poisonedAug);
+                  if (idx !== -1) itm.augments.splice(idx, 1);
+                }
+              });
+              item.augments.push(poisonedAug);
+              poisonedAug.onEquip(b, item);
+            });
+          },
+          onBattleComplete: function (battle, monster) {}
+        }]
+      }
     ]
   },
 
