@@ -1395,7 +1395,7 @@ const UI = {
     }
 
     if (item.counters && item.counters.size > 0) {
-      const namedCounters = Array.from(item.counters.entries()).filter(([, val]) => val > 0);
+      const namedCounters = Array.from(item.counters.entries()).filter(([name, val]) => val > 0 && !name.startsWith("_"));
       if (namedCounters.length > 0) {
         const total = namedCounters.reduce((sum, [, val]) => sum + val, 0);
         const badge = document.createElement("div");
