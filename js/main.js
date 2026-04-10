@@ -8,8 +8,8 @@ const PlayerState = {
   bonds: 0,
 
   init() {
-    this.money = 10;
-    this.bonds = 5;
+    this.money = 20;
+    this.bonds = 3;
   },
 
   addMoney(amount) {
