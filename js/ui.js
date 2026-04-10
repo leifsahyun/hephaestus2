@@ -359,22 +359,41 @@ const UI = {
       equippedList.innerHTML = "";
       for (const item of battle.equippedItems) {
         const card = this.renderCompactItemCard(item);
-        if (criticalAnimItems && criticalAnimItems.has(item)) {
-          criticalAnimItems.delete(item);
-          card.classList.add("critical-flash");
-          this._showCriticalPopup(card);
-        }
+        const isCritical = criticalAnimItems && criticalAnimItems.has(item);
+        if (isCritical) criticalAnimItems.delete(item);
         equippedList.appendChild(card);
+        if (isCritical) {
+          requestAnimationFrame(() => {
+            this._showCriticalFlash(card);
+            this._showCriticalPopup(card);
+          });
+        }
       }
     }
   },
 
+  _showCriticalFlash(cardEl) {
+    const rect = cardEl.getBoundingClientRect();
+    const overlay = document.createElement("div");
+    overlay.className = "critical-flash-overlay";
+    overlay.style.left   = rect.left + "px";
+    overlay.style.top    = rect.top + "px";
+    overlay.style.width  = rect.width + "px";
+    overlay.style.height = rect.height + "px";
+    document.body.appendChild(overlay);
+    overlay.addEventListener("animationend", () => overlay.remove());
+  },
+
   _showCriticalPopup(cardEl) {
-    cardEl.style.position = "relative";
+    const rect = cardEl.getBoundingClientRect();
     const popup = document.createElement("div");
     popup.className = "critical-popup";
     popup.textContent = "Critical!";
-    cardEl.appendChild(popup);
+    const angle = (Math.random() * 24 - 12).toFixed(1) + "deg";
+    popup.style.setProperty("--popup-angle", angle);
+    popup.style.left = (rect.left + rect.width / 2) + "px";
+    popup.style.top = (rect.top - 4) + "px";
+    document.body.appendChild(popup);
     popup.addEventListener("animationend", () => popup.remove());
   },
 
