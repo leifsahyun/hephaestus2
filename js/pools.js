@@ -85,9 +85,6 @@ const ItemPool = {
     // Pick one zodiac tag uniformly at random from the 12 signs.
     const zodiacTags = [this._zodiacSigns[Math.floor(Math.random() * this._zodiacSigns.length)]];
 
-    // Quality is random around the value, clamped to at least 1.
-    let baseQuality = Math.max(1, value + randomOffset(variance));
-
     // HubrisCost targets floor(value / 2); variance spreads the result.
     const hubrisTarget = Math.floor(value / 2);
     const hubrisCost = Math.max(0, hubrisTarget + randomOffset(variance));
@@ -99,16 +96,19 @@ const ItemPool = {
       console.warn(`ItemPool.generateRandomItem: no slot definition for type "${type}". Item will have zero slots.`);
     }
     const slots = (slotTemplates || []).map(s => ({ type: s.type, augment: null }));
-    const augmentChance = Math.min(1, value / 20);
     for (const slot of slots) {
+      const augmentChance = Math.min(1, value / 50);
       if (Math.random() < augmentChance) {
         const aug = AugmentPool.draw();
         if (aug) {
           slot.augment = aug;
-          baseQuality = Math.max(1, baseQuality - aug.value);
+          value = Math.max(0, value - aug.value);
         }
       }
     }
+    
+    // Quality is random around the value, clamped to at least 1.
+    let baseQuality = Math.max(1, value + randomOffset(variance));
 
     return new Item({
       name: capitalize(type),
