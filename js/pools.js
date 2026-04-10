@@ -96,13 +96,15 @@ const ItemPool = {
       console.warn(`ItemPool.generateRandomItem: no slot definition for type "${type}". Item will have zero slots.`);
     }
     const slots = (slotTemplates || []).map(s => ({ type: s.type, augment: null }));
-    for (const slot of slots) {
-      const augmentChance = Math.min(1, value / 50);
-      if (Math.random() < augmentChance) {
-        const aug = AugmentPool.draw();
-        if (aug) {
-          slot.augment = aug;
-          value = Math.max(0, value - aug.value);
+    if (value >= 10) {
+      for (const slot of slots) {
+        const augmentChance = Math.min(1, value / 50);
+        if (Math.random() < augmentChance) {
+          const aug = AugmentPool.draw();
+          if (aug) {
+            slot.augment = aug;
+            value = Math.max(0, value - aug.value);
+          }
         }
       }
     }
@@ -110,7 +112,7 @@ const ItemPool = {
     // Quality is random around the value, clamped to at least 1.
     let baseQuality = Math.max(1, value + randomOffset(variance));
 
-    return new Item({
+    const item = new Item({
       name: capitalize(type),
       type,
       variant: 0,
@@ -122,6 +124,16 @@ const ItemPool = {
       augments: [],
       counters: {}
     });
+
+    // Register slot augments fully on the item: link back to item and add to augments list.
+    for (const slot of item.slots) {
+      if (slot.augment) {
+        slot.augment.onAugment(item);
+        item.augments.push(slot.augment);
+      }
+    }
+
+    return item;
   },
 
   /**
