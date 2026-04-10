@@ -358,7 +358,7 @@ const Config = {
               onSelect: function(battle) {
                 ItemPool.items = [];
                 ItemPool.current = [];
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < 15; i++) {
                   ItemPool.addRandomItem(8, 2);
                 }
               }
@@ -371,7 +371,7 @@ const Config = {
               onSelect: function(battle) {
                 ItemPool.items = [];
                 ItemPool.current = [];
-                for (let i = 0; i < 12; i++) {
+                for (let i = 0; i < 45; i++) {
                   const isHighValue = Math.random() < 0.15;
                   ItemPool.addRandomItem(isHighValue ? 25 : 10, 10);
                 }
