@@ -311,39 +311,56 @@ const Config = {
   defaultDialogEvents: [
     {
       heroName: "Hephaestus",
-      heroBaseQuality: 0,
+      heroBaseQuality: 1,
       enemyName: "Farmer",
-      enemyBaseQuality: 3,
-      initialText: "Good morrow, stranger! What brings the god of the forge to my humble farm?",
+      enemyBaseQuality: 0,
+      initialText: "Ah… Hephaestus, I am glad of your aid on this farm, but soon you may need to venture into the world. Monsters roam the lands and the gods have forsaken us, preferring to squabble amongst themselves. More than that, wars have strained the bonds of the Greeks - should they break, all hope is lost. Perhaps a champion bestowed with your craft could defend those bonds?",
       dialogSteps: [
         {
-          name: "Greeting",
-          separatorText: "Greeting",
+          name: "Address the Chaos",
+          separatorText: "Address the Chaos",
           options: [
             {
-              text: "I seek news of the monsters plaguing this land.",
-              response: "Aye, the Minotaur's minions have been raiding our fields. Surely a god can help us?",
-              effects: [{ key: "heroQuality", amount: 2 }]
+              text: "I have a champion",
+              response: "Excellent. Arm your chosen champions well… but temper your ambition. Each gift you grant them feeds a quiet pride… a Hubris that calls stronger horrors forth. Keep it below 21 if you value the life of your champion. Here, you will need some items to supply them with: you can take a few spare tools from around the farm, or I'm told a shipment just arrived for you from the King of Sicily!",
+              effects: [] //Add an effect here that lets you select a hero to be used instead of a random one until they die.
             },
             {
-              text: "I am merely passing through, farmer.",
-              response: "Very well... though if you change your mind, the Minotaur's minions have been raiding our fields.",
-              effects: []
+              text: "The bonds of the Greeks are still strong",
+              response: "That may be a wise choice... the heroes of this land harbor dark ambition - Hubris that could rival even Zeus himself. Though that ambition may be useful, keep it below 21 until you are ready to challenge the gods themselves. Here, you will need some items to make your way out there: you can take a few spare tools from around the farm, or I'm told a shipment just arrived for you from the King of Sicily!",
+              effects: [] //Add 2 bonds
             }
           ]
         },
         {
-          statement: "The Minotaur's minions have been raiding our fields. Surely a god can help us?",
-          name: "Plea",
-          separatorText: "Plea",
+          name: "Select Item Pool",
+          separatorText: "Select Item Pool",
           options: [
             {
-              text: "I shall forge weapons for your defenders.",
-              effects: [{ key: "heroQuality", amount: 3 }]
+              text: "Farm Implements",
+              response: "I hope they are of use to you - they may not look like much but there is a time for even the lowliest tool. Just as the signs of the zodiac follow each other in my almanac, when the stars align with your items their true potential will shine. Fate comes from more than the stars though, in battle lines will be drawn - cards, if you will - and each offers a choice. Some appear kind… most are not. And should your Hubris grow too great, fate will cease offering choices at all, and simply choose your suffering for you.",
+              effects: [] //Add a small number of low quality random items to the item pool
             },
             {
-              text: "I cannot promise anything.",
-              effects: [{ key: "hubris", amount: 2 }]
+              text: "Shipment From Sicily",
+              response: "There are some fine quality items in there, and many aligned with the zodiac. Just as the signs of the zodiac follow each other in my almanac, in due time the true potential of your items will shine. Fate comes from more than the stars though, in battle lines will be drawn - cards, if you will - and each offers a choice. Some appear kind… most are not. And should your Hubris grow too great, fate will cease offering choices at all, and simply choose your suffering for you.",
+              effects: [] //Add a large number of random items to the item pool with high variance and the best items based on previous run performance
+            }
+          ]
+        },
+        {
+          name: "Response to Fate",
+          separatorText: "Response to Fate",
+          options: [
+            {
+              text: "The Fates can suck it",
+              response: "Sigh... sometimes I wonder if your head was injured when Zeus threw you off Olympus. Zeus abandoned you just as he has forsaken the rest of Greece. When you leave here, please don't return to Olympus - be the only god to defend the people of this land from the monsters",
+              effects: [] //Add Hubris, and copy a few random hubris threshold cards in the default fate card pool
+            },
+            {
+              text: "I'll be careful",
+              response: "Good, the Greeks need you. They have been forsaken by Zeus just as he abandoned you as a child. When you leave here, please don't return to Olympus - be the only god to defend the people of this land from the monsters",
+              effects: [] //shuffle a few additional crossroads cards into the default fate card pool
             }
           ]
         }
