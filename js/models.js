@@ -167,6 +167,7 @@ class ModalFateCard {
     this.options = data.options.map(opt => ({
       text: opt.text || "",
       description: opt.description || "",
+      response: opt.response || "",
       zodiac: opt.zodiac || "",
       effects: (opt.effects || []).map(e => ({ key: e.key, amount: e.amount != null ? e.amount : 1 })),
       onSelectFn: opt.onSelect || null

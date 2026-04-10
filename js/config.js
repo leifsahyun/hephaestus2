@@ -314,18 +314,20 @@ const Config = {
       heroBaseQuality: 0,
       enemyName: "Farmer",
       enemyBaseQuality: 3,
+      initialText: "Good morrow, stranger! What brings the god of the forge to my humble farm?",
       dialogSteps: [
         {
-          statement: "Good morrow, stranger! What brings the god of the forge to my humble farm?",
           name: "Greeting",
           separatorText: "Greeting",
           options: [
             {
               text: "I seek news of the monsters plaguing this land.",
+              response: "Aye, the Minotaur's minions have been raiding our fields. Surely a god can help us?",
               effects: [{ key: "heroQuality", amount: 2 }]
             },
             {
               text: "I am merely passing through, farmer.",
+              response: "Very well... though if you change your mind, the Minotaur's minions have been raiding our fields.",
               effects: []
             }
           ]

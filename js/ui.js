@@ -405,7 +405,7 @@ const UI = {
       this.showFateCards(battle, () => {
         const result = battle.resolveBattle();
         this.showDialogResult(result, battle);
-      }, { textBlock: dialogTextBlock });
+      }, { textBlock: dialogTextBlock, initialText: battle.initialText || null });
     }
   },
 
@@ -545,8 +545,42 @@ const UI = {
     popup.addEventListener("animationend", () => popup.remove());
   },
 
+  _typewriterAnimate(textBlock, text, onComplete) {
+    const CHAR_DELAY_MS = 25;
+    textBlock.textContent = "";
+    let charIndex = 0;
+    let done = false;
+
+    const finish = () => {
+      if (done) return;
+      done = true;
+      textBlock.removeEventListener("click", skipHandler);
+      document.removeEventListener("keydown", skipHandler);
+      textBlock.textContent = text;
+      if (onComplete) onComplete();
+    };
+
+    const skipHandler = () => finish();
+
+    textBlock.addEventListener("click", skipHandler);
+    document.addEventListener("keydown", skipHandler);
+
+    const addChar = () => {
+      if (done) return;
+      if (charIndex < text.length) {
+        textBlock.textContent += text[charIndex];
+        charIndex++;
+        setTimeout(addChar, CHAR_DELAY_MS);
+      } else {
+        finish();
+      }
+    };
+
+    setTimeout(addChar, 0);
+  },
+
   showFateCards(battle, onComplete, options = {}) {
-    const { textBlock = null } = options;
+    const { textBlock = null, initialText = null } = options;
     const display = document.getElementById("fate-cards-display");
     if (!display) {
       if (onComplete) onComplete();
@@ -612,19 +646,9 @@ const UI = {
     };
 
     let i = 0;
-    const drawNext = () => {
-      if (i >= battle.fateCards.length) {
-        if (onComplete) onComplete();
-        return;
-      }
-      const card = battle.fateCards[i];
-      i++;
+    let pendingResponseText = null;
 
-      // Update dialog text block if this is a dialog step with a statement
-      if (textBlock && card instanceof DialogModalFateCard && card.statement) {
-        textBlock.textContent = card.statement;
-      }
-
+    const renderCard = (card) => {
       // If already at max visible, move oldest to the stack
       if (visiblePairs.length >= MAX_VISIBLE) {
         const oldest = visiblePairs.shift();
@@ -640,7 +664,8 @@ const UI = {
         display.appendChild(cardEl);
         visiblePairs.push({ card, el: cardEl });
       } else if (card instanceof ModalFateCard) {
-        const cardEl = this.renderModalFateCard(card, battle, () => {
+        const cardEl = this.renderModalFateCard(card, battle, (responseText) => {
+          if (responseText) pendingResponseText = responseText;
           setTimeout(drawNext, 300);
         });
         display.appendChild(cardEl);
@@ -654,7 +679,39 @@ const UI = {
         setTimeout(drawNext, 600);
       }
     };
-    drawNext();
+
+    const drawNext = () => {
+      if (i >= battle.fateCards.length) {
+        if (onComplete) onComplete();
+        return;
+      }
+      const card = battle.fateCards[i];
+      i++;
+
+      // Determine the text to display in the dialog text block before showing the card
+      let textToShow = null;
+      if (textBlock) {
+        if (pendingResponseText !== null) {
+          textToShow = pendingResponseText;
+          pendingResponseText = null;
+        } else if (card instanceof DialogModalFateCard && card.statement) {
+          textToShow = card.statement;
+        }
+      }
+
+      if (textToShow) {
+        this._typewriterAnimate(textBlock, textToShow, () => renderCard(card));
+      } else {
+        renderCard(card);
+      }
+    };
+
+    // Show initial text before drawing the first card, if provided
+    if (initialText && textBlock) {
+      this._typewriterAnimate(textBlock, initialText, drawNext);
+    } else {
+      drawNext();
+    }
   },
 
   renderModalFateCard(card, battle, onComplete) {
@@ -724,7 +781,7 @@ const UI = {
       optBEl.disabled = true;
       el.classList.add("modal-selected");
       this.updateBattleUI(battle);
-      onComplete();
+      onComplete(card.options[index].response || null);
     };
 
     optAEl.addEventListener("click", () => handleSelect(0));
