@@ -78,10 +78,7 @@ class Battle {
 
   markCritical(item) {
     if (item.critical) return;
-    const rawQ = item.tempQuality != null ? item.tempQuality : item.baseQuality;
-    item._criticalBase = rawQ;
     item.critical = true;
-    item.tempQuality = rawQ * 2;
     for (const cb of this.onItemCriticalCallbacks) {
       cb(this, item);
     }

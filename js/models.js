@@ -16,7 +16,6 @@ class Item {
     this.hubris = 0;
     this.hubrisCost = data.hubrisCost != null ? data.hubrisCost : 0;
     this.critical = false;
-    this._criticalBase = 0;
     this.fateCards = data.fateCards != null ? data.fateCards : null;
     this.counters = data.counters instanceof Map
       ? new Map(data.counters)
@@ -37,10 +36,7 @@ class Item {
 
   get quality() {
     const raw = this.tempQuality != null ? this.tempQuality : this.baseQuality;
-    if (this.critical) {
-      return 2 * (raw - this._criticalBase);
-    }
-    return raw;
+    return this.critical ? 2 * raw : raw;
   }
 
   set quality(val) {
