@@ -52,16 +52,39 @@ const ItemPool = {
     this.current = shuffleArray(this.items);
   },
 
+  // Slot sets keyed by item type, matching the forge create-item interface.
+  _slotsByType: {
+    sword:   [{ type: "edge" }, { type: "edge" },   { type: "blessing" }],
+    spear:   [{ type: "edge" }, { type: "edge" },   { type: "patina" }],
+    bow:     [{ type: "edge" }, { type: "edge" },   { type: "haft" }],
+    tool:    [{ type: "haft" }, { type: "patina" }, { type: "edge" }],
+    sandals: [{ type: "haft" }, { type: "patina" }, { type: "blessing" }],
+    helm:    [{ type: "patina" }, { type: "patina" }, { type: "edge" }],
+    armor:   [{ type: "patina" }, { type: "patina" }, { type: "blessing" }],
+    shield:  [{ type: "patina" }, { type: "patina" }, { type: "haft" }]
+  },
+
+  _zodiacSigns: [
+    "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+    "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"
+  ],
+
   /**
-   * Creates a random Item from a template.
+   * Creates a random Item with type and zodiac tag chosen uniformly at random.
    *
-   * @param {object} template  - Partial item data: type, name, variant, slots, zodiacTags.
-   * @param {number} value     - Nominal value; drives quality and hubris targets.
-   * @param {number} variance  - Spread applied to quality and hubrisCost rolls.
-   *                             0 = deterministic targets; higher = wider random range.
+   * @param {number} value    - Nominal value; drives quality and hubris targets.
+   * @param {number} variance - Spread applied to quality and hubrisCost rolls.
+   *                           0 = deterministic targets; higher = wider random range.
    * @returns {Item}
    */
-  generateRandomItem(template, value, variance) {
+  generateRandomItem(value, variance) {
+    // Pick a random item type from the forge's available types.
+    const types = Config.itemTypes;
+    const type = types[Math.floor(Math.random() * types.length)];
+
+    // Pick one zodiac tag uniformly at random from the 12 signs.
+    const zodiacTags = [this._zodiacSigns[Math.floor(Math.random() * this._zodiacSigns.length)]];
+
     // Quality is random around the value, clamped to at least 1.
     let baseQuality = Math.max(1, value + randomOffset(variance));
 
@@ -69,29 +92,30 @@ const ItemPool = {
     const hubrisTarget = Math.floor(value / 2);
     const hubrisCost = Math.max(0, hubrisTarget + randomOffset(variance));
 
-    // Copy slots; higher-value items have a proportional chance per slot to receive an augment.
-    const slots = (template.slots || []).map(s => ({ type: s.type, augment: null }));
+    // Build slots from the type-specific set; higher-value items have a proportional
+    // chance per slot to receive a random augment, quality reduced by augment cost.
+    const slotTemplates = this._slotsByType[type] || [];
+    const slots = slotTemplates.map(s => ({ type: s.type, augment: null }));
     const augmentChance = Math.min(1, value / 20);
     for (const slot of slots) {
       if (Math.random() < augmentChance) {
         const aug = AugmentPool.draw();
         if (aug) {
           slot.augment = aug;
-          // Quality is reduced by the augment's cost.
           baseQuality = Math.max(1, baseQuality - aug.value);
         }
       }
     }
 
     return new Item({
-      name: template.name || capitalize(template.type || "item"),
-      type: template.type || "item",
-      variant: template.variant != null ? template.variant : 0,
+      name: capitalize(type),
+      type,
+      variant: 0,
       baseQuality,
       value,
       hubrisCost,
       slots,
-      zodiacTags: template.zodiacTags ? template.zodiacTags.slice() : [],
+      zodiacTags,
       augments: [],
       counters: {}
     });
@@ -100,13 +124,12 @@ const ItemPool = {
   /**
    * Generates a random item and appends it to the pool.
    *
-   * @param {object} template - See generateRandomItem.
    * @param {number} value    - See generateRandomItem.
    * @param {number} variance - See generateRandomItem.
    * @returns {Item} The newly added item.
    */
-  addRandomItem(template, value, variance) {
-    const item = this.generateRandomItem(template, value, variance);
+  addRandomItem(value, variance) {
+    const item = this.generateRandomItem(value, variance);
     this.items.push(item);
     this.current.push(item);
     return item;
