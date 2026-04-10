@@ -373,7 +373,7 @@ const Config = {
                 ItemPool.current = [];
                 for (let i = 0; i < 45; i++) {
                   const isHighValue = Math.random() < 0.15;
-                  ItemPool.addRandomItem(isHighValue ? 25 : 10, 10);
+                  ItemPool.addRandomItem(isHighValue ? 25 : 10, 8);
                 }
               }
             }
