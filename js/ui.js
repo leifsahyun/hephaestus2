@@ -911,6 +911,46 @@ const UI = {
     typeGroup.appendChild(typeSelect);
     panel.appendChild(typeGroup);
 
+    // Zodiac tag selector
+    const zodiacSigns = ["none", "aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"];
+    let zodiacIdx = 0;
+    const zodiacGroup = document.createElement("div");
+    zodiacGroup.className = "form-group qual-group";
+    zodiacGroup.innerHTML = '<label class="qual-label">Zodiac:</label>';
+    const zodiacDiv = document.createElement("div");
+    zodiacDiv.className = "number-selector";
+    const zodiacLabel = document.createElement("span");
+    zodiacLabel.className = "number-value";
+    zodiacLabel.textContent = "—";
+
+    const zodiacLeft = document.createElement("button");
+    zodiacLeft.className = "btn btn-sm";
+    zodiacLeft.textContent = "◀";
+    const zodiacRight = document.createElement("button");
+    zodiacRight.className = "btn btn-sm";
+    zodiacRight.textContent = "▶";
+
+    function updateZodiacLabel() {
+      const sign = zodiacSigns[zodiacIdx];
+      zodiacLabel.textContent = sign === "none" ? "—" : UI.zodiacIcon(sign);
+      zodiacLabel.title = sign === "none" ? "None" : capitalize(sign);
+    }
+
+    zodiacLeft.addEventListener("click", () => {
+      zodiacIdx = (zodiacIdx - 1 + zodiacSigns.length) % zodiacSigns.length;
+      updateZodiacLabel();
+    });
+    zodiacRight.addEventListener("click", () => {
+      zodiacIdx = (zodiacIdx + 1) % zodiacSigns.length;
+      updateZodiacLabel();
+    });
+
+    zodiacDiv.appendChild(zodiacLeft);
+    zodiacDiv.appendChild(zodiacLabel);
+    zodiacDiv.appendChild(zodiacRight);
+    zodiacGroup.appendChild(zodiacDiv);
+    panel.appendChild(zodiacGroup);
+
     // Quality selector (0 allowed as minimum)
     const qualGroup = document.createElement("div");
     qualGroup.className = "form-group qual-group";
@@ -1069,6 +1109,7 @@ const UI = {
       const value = getItemValue(qualityVal);
       const hubrisCost = getHubrisCost(qualityVal);
       const slots = slotStates.map(s => ({ type: slotTypes[s.typeIdx], augment: null }));
+      const selectedZodiac = zodiacSigns[zodiacIdx];
       const item = new Item({
         name: capitalize(typeSelect.value),
         type: typeSelect.value,
@@ -1077,7 +1118,8 @@ const UI = {
         hubrisCost,
         augments: [],
         variant: 0,
-        slots
+        slots,
+        zodiacTags: selectedZodiac !== "none" ? [selectedZodiac] : []
       });
       for (let i = 0; i < slotStates.length; i++) {
         const state = slotStates[i];
