@@ -94,8 +94,11 @@ const ItemPool = {
 
     // Build slots from the type-specific set; higher-value items have a proportional
     // chance per slot to receive a random augment, quality reduced by augment cost.
-    const slotTemplates = this._slotsByType[type] || [];
-    const slots = slotTemplates.map(s => ({ type: s.type, augment: null }));
+    const slotTemplates = this._slotsByType[type];
+    if (!slotTemplates) {
+      console.warn(`ItemPool.generateRandomItem: no slot definition for type "${type}". Item will have zero slots.`);
+    }
+    const slots = (slotTemplates || []).map(s => ({ type: s.type, augment: null }));
     const augmentChance = Math.min(1, value / 20);
     for (const slot of slots) {
       if (Math.random() < augmentChance) {
