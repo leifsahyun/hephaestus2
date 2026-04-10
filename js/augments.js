@@ -203,5 +203,26 @@ const defaultAugments = [
     onBattleComplete: function (battle, item) {
       delete item.allTypes;
     }
+  },
+  {
+    name: "Pythia",
+    description: "Critical chance on equip based on item omens. Omens added for each unique zodiac seen.",
+    type: "blessing",
+    value: 15,
+    onEquip: function (battle, item) {
+      const omens = item.counters.get("omen") || 0;
+      const critChance = omens >= 12 ? 1.0 : omens * 0.07;
+      if (Math.random() < critChance) {
+        battle.markCritical(item);
+      }
+      battle.onZodiacResolvedCallbacks.push(function (b, zodiac) {
+        const key = "pythia_" + zodiac;
+        if (!item.counters.has(key)) {
+          item.counters.set(key, 1);
+          item.counters.set("omen", (item.counters.get("omen") || 0) + 1);
+        }
+      });
+    },
+    onBattleComplete: null
   }
 ];
