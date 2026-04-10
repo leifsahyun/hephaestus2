@@ -10,6 +10,8 @@ const UI = {
       this.renderTimeline();
       if (sceneType === "battle") {
         this.showBattle();
+      } else if (sceneType === "dialog") {
+        this.showBattle();
       } else if (sceneType === "forge") {
         this.showForge();
       }
@@ -46,7 +48,7 @@ const UI = {
     const container = document.getElementById("event-timeline");
     if (!container) return;
 
-    const ICONS = { battle: "⚔️", forge: "⚒" };
+    const ICONS = { battle: "⚔️", forge: "⚒", dialog: "💬" };
     const MAX_UPCOMING_DISPLAYED = 9;
     const events = [];
     if (Timeline.currentEvent) {
@@ -101,6 +103,12 @@ const UI = {
     this.currentScreen = "battle";
     this.clearApp();
     const event = Timeline.currentEvent;
+
+    if (event instanceof DialogTimelineEvent) {
+      this.showDialogBattle(event);
+      return;
+    }
+
     if (!event || !event.hero || !event.monster) {
       this.getApp().innerHTML = "<p>No battle event available.</p>";
       return;
@@ -233,6 +241,117 @@ const UI = {
     this.updateBattleUI(battle);
   },
 
+  showDialogBattle(event) {
+    const battle = new DialogBattle(event);
+    const app = this.getApp();
+
+    const container = document.createElement("div");
+    container.className = "battle-screen";
+
+    const layout = document.createElement("div");
+    layout.className = "battle-layout";
+
+    // Left: Hero card + dialog container (text block / equip items)
+    const heroSection = document.createElement("div");
+    heroSection.className = "battle-section hero-section";
+    heroSection.innerHTML = "<h3>" + event.heroName + "</h3>";
+    const heroStrengthDisplay = document.createElement("div");
+    heroStrengthDisplay.id = "hero-strength-display";
+    heroStrengthDisplay.className = "strength-display hero-strength-display";
+    heroSection.appendChild(heroStrengthDisplay);
+    const heroCard = this.renderItemCard(battle.hero, true);
+    heroCard.id = "hero-card";
+    heroSection.appendChild(heroCard);
+
+    // Dialog container holds text block and optionally equipped items
+    const dialogContainer = document.createElement("div");
+    dialogContainer.id = "dialog-container";
+    dialogContainer.className = "dialog-container dialog-container--text-only";
+
+    const dialogTextBlock = document.createElement("div");
+    dialogTextBlock.id = "dialog-text-block";
+    dialogTextBlock.className = "dialog-text-block";
+    dialogContainer.appendChild(dialogTextBlock);
+
+    // Equipped items area (hidden by default in dialog mode, shown when needed)
+    const equippedArea = document.createElement("div");
+    equippedArea.id = "dialog-equipped-area";
+    equippedArea.className = "equipped-area dialog-equipped-area";
+    equippedArea.innerHTML = "<h3>Equipped Items</h3>";
+    const equippedList = document.createElement("div");
+    equippedList.id = "equipped-list";
+    equippedList.className = "equipped-list";
+    equippedArea.appendChild(equippedList);
+    dialogContainer.appendChild(equippedArea);
+
+    heroSection.appendChild(dialogContainer);
+    layout.appendChild(heroSection);
+
+    // Center: Fate cards section
+    const fateCardsSection = document.createElement("div");
+    fateCardsSection.className = "battle-section fate-cards-section";
+    const fateCardsDisplay = document.createElement("div");
+    fateCardsDisplay.id = "fate-cards-display";
+    fateCardsDisplay.className = "fate-cards-display";
+    fateCardsSection.appendChild(fateCardsDisplay);
+    layout.appendChild(fateCardsSection);
+
+    // Right: Enemy card
+    const monsterSection = document.createElement("div");
+    monsterSection.className = "battle-section monster-section";
+    monsterSection.innerHTML = "<h3>" + event.enemyName + "</h3>";
+    const monsterStrengthDisplay = document.createElement("div");
+    monsterStrengthDisplay.id = "monster-strength-display";
+    monsterStrengthDisplay.className = "strength-display monster-strength-display";
+    monsterSection.appendChild(monsterStrengthDisplay);
+    const monsterCard = this.renderItemCard(battle.monster, false);
+    monsterCard.id = "monster-card";
+    monsterSection.appendChild(monsterCard);
+    layout.appendChild(monsterSection);
+
+    // Battle log (spans col 2-3, row 2)
+    const logArea = document.createElement("div");
+    logArea.id = "battle-log";
+    logArea.className = "battle-log battle-section";
+    logArea.style.gridColumn = "2 / 4";
+    layout.appendChild(logArea);
+
+    container.appendChild(layout);
+    app.appendChild(container);
+
+    this.updateBattleUI(battle);
+
+    // Load dialog steps as fate cards and auto-start
+    battle.fateCards = battle.dialogSteps;
+    this.showFateCards(battle, () => {
+      const result = battle.resolveBattle();
+      this.showDialogResult(result, battle);
+    }, { textBlock: dialogTextBlock });
+  },
+
+  showDialogResult(result, battle) {
+    const logArea = document.getElementById("battle-log");
+    if (logArea) {
+      let resultText = "";
+      if (result.won) {
+        resultText = `<p>The ${battle.monster.name} is pleased with your words.</p>`;
+      } else {
+        resultText = `<p>The ${battle.monster.name} turns away, unimpressed.</p>`;
+      }
+
+      logArea.innerHTML = `
+        <div class="battle-result ${result.won ? "result-win" : "result-lose"}">
+          <h3>${result.won ? "A Good Conversation" : "An Awkward Exchange"}</h3>
+          ${resultText}
+          <button class="btn btn-continue" id="continue-btn">Continue</button>
+        </div>
+      `;
+      document.getElementById("continue-btn").addEventListener("click", () => {
+        Timeline.next();
+      });
+    }
+  },
+
   updateBattleUI(battle) {
     // Update hero card
     const heroCard = document.getElementById("hero-card");
@@ -312,7 +431,8 @@ const UI = {
     }
   },
 
-  showFateCards(battle, onComplete) {
+  showFateCards(battle, onComplete, options = {}) {
+    const { textBlock = null } = options;
     const display = document.getElementById("fate-cards-display");
     if (!display) {
       if (onComplete) onComplete();
@@ -385,6 +505,11 @@ const UI = {
       }
       const card = battle.fateCards[i];
       i++;
+
+      // Update dialog text block if this is a dialog step with a statement
+      if (textBlock && card instanceof DialogModalFateCard && card.statement) {
+        textBlock.textContent = card.statement;
+      }
 
       // If already at max visible, move oldest to the stack
       if (visiblePairs.length >= MAX_VISIBLE) {

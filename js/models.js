@@ -198,3 +198,10 @@ class HubrisThresholdFateCard extends ModalFateCard {
     return battle.hero.hubris >= this.hubrisThreshold ? 0 : 1;
   }
 }
+
+class DialogModalFateCard extends ModalFateCard {
+  constructor(data) {
+    super(data);
+    this.statement = data.statement || "";
+  }
+}

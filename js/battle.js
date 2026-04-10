@@ -4,7 +4,7 @@
  */
 
 class Battle {
-  constructor(hero, monster) {
+  constructor(hero, monster, { skipItemPool = false } = {}) {
     this.hero = hero;
     this.monster = monster;
     this.equippedItems = [];
@@ -30,8 +30,10 @@ class Battle {
     }
 
     // Shuffle item pool and draw first three offers
-    ItemPool.shuffle();
-    this.drawOffers();
+    if (!skipItemPool) {
+      ItemPool.shuffle();
+      this.drawOffers();
+    }
   }
 
   drawOffers() {
@@ -120,5 +122,31 @@ class Battle {
       const card = FatePool.draw();
       if (card) this.fateCards.push(card);
     }
+  }
+}
+
+class DialogBattle extends Battle {
+  constructor(event) {
+    const hero = new Hero({
+      name: event.heroName,
+      type: "hero",
+      baseQuality: event.heroBaseQuality,
+      baseHubris: 0,
+      variant: -1,
+      value: 0,
+      augments: []
+    });
+    const enemy = new Item({
+      name: event.enemyName,
+      type: "monster",
+      baseQuality: event.enemyBaseQuality,
+      fateCards: 0,
+      augments: [],
+      variant: -1,
+      value: 0
+    });
+    super(hero, enemy, { skipItemPool: true });
+    this.dialogSteps = event.dialogSteps;
+    this.isDialog = true;
   }
 }
