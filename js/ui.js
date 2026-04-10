@@ -261,8 +261,16 @@ const UI = {
 
     // Track items that just became critical for the flash animation
     const criticalAnimItems = new Set();
+    let criticalUIUpdateScheduled = false;
     battle.onItemCriticalCallbacks.push((b, item) => {
       criticalAnimItems.add(item);
+      if (!criticalUIUpdateScheduled) {
+        criticalUIUpdateScheduled = true;
+        setTimeout(() => {
+          criticalUIUpdateScheduled = false;
+          this.updateBattleUI(battle, criticalAnimItems);
+        }, 0);
+      }
     });
 
     const container = document.createElement("div");

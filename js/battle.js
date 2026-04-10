@@ -112,6 +112,11 @@ class Battle {
       aug.onBattleComplete(this, this.hero);
     }
 
+    // Reset critical status on all equipped items so it doesn't persist to future battles
+    for (const item of this.equippedItems) {
+      item.critical = false;
+    }
+
     return { won, heroStrength, monsterStrength };
   }
 
