@@ -263,6 +263,7 @@ const UI = {
     const criticalAnimItems = new Set();
     battle.onItemCriticalCallbacks.push((b, item) => {
       criticalAnimItems.add(item);
+      this.updateBattleUI(battle, criticalAnimItems);
     });
 
     const container = document.createElement("div");
