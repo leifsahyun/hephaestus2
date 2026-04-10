@@ -106,8 +106,7 @@ const Config = {
           value: 0,
           onEquip: function (battle, monster) {
             battle.onItemEquippedCallbacks.push(function (b, item) {
-              let poisonedAug;
-              poisonedAug = new Augment({
+              let poisonedAug = new Augment({
                 name: "Poisoned",
                 description: "-7◈ on equip.",
                 type: "item",
