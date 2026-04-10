@@ -195,6 +195,13 @@ const UI = {
     btn.disabled = history.length === 0;
   },
 
+  updateCustomizeForgeButton() {
+    const btn = document.getElementById("btn-customize-forge");
+    if (!btn) return;
+    const history = RunStats.loadHistory();
+    btn.disabled = history.length === 0;
+  },
+
   showHistoryScreen() {
     const history = RunStats.loadHistory();
 
