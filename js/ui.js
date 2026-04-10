@@ -8,9 +8,7 @@ const UI = {
   init() {
     Timeline.onSceneChange = (sceneType) => {
       this.renderTimeline();
-      if (sceneType === "battle") {
-        this.showBattle();
-      } else if (sceneType === "dialog") {
+      if (sceneType === "battle" || sceneType === "dialog") {
         this.showBattle();
       } else if (sceneType === "forge") {
         this.showForge();
