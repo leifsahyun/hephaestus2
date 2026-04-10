@@ -1364,6 +1364,11 @@ const UI = {
       }
     }
 
+    if (item.zodiacTags && item.zodiacTags.length > 0) {
+      const hasCounter = item.counters && Array.from(item.counters.values()).some(v => v > 0);
+      card.appendChild(this.renderItemZodiacBadges(item.zodiacTags, hasCounter));
+    }
+
     return card;
   },
 
@@ -1399,7 +1404,24 @@ const UI = {
       }
     }
 
+    if (item.zodiacTags && item.zodiacTags.length > 0) {
+      card.appendChild(this.renderItemZodiacBadges(item.zodiacTags, false));
+    }
+
     return card;
+  },
+
+  renderItemZodiacBadges(zodiacTags, withCounter) {
+    const container = document.createElement("div");
+    container.className = "item-zodiac-badges" + (withCounter ? " item-zodiac-badges--with-counter" : "");
+    for (const tag of zodiacTags) {
+      const badge = document.createElement("span");
+      badge.className = "zodiac-badge";
+      badge.textContent = UI.zodiacIcon(tag);
+      badge.title = tag;
+      container.appendChild(badge);
+    }
+    return container;
   },
 
   zodiacIcon(zodiac) {

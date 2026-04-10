@@ -17,6 +17,7 @@ class Item {
     this.hubrisCost = data.hubrisCost != null ? data.hubrisCost : 0;
     this.critical = false;
     this.fateCards = data.fateCards != null ? data.fateCards : null;
+    this.zodiacTags = data.zodiacTags ? data.zodiacTags.slice() : [];
     this.counters = data.counters instanceof Map
       ? new Map(data.counters)
       : new Map(Object.entries(data.counters || {}));
@@ -58,6 +59,7 @@ class Item {
       baseQuality: this.baseQuality,
       value: this.value,
       hubrisCost: this.hubrisCost,
+      zodiacTags: this.zodiacTags.slice(),
       counters: new Map(this.counters),
       augments: this.augments.map(a => a.clone()),
       slots: this.slots.map(s => ({ type: s.type, augment: s.augment ? s.augment.clone() : null }))
@@ -180,6 +182,13 @@ class ModalFateCard {
       }
       if (opt.onSelectFn) {
         opt.onSelectFn(battle);
+      }
+      if (opt.zodiac && battle && battle.equippedItems) {
+        for (const item of battle.equippedItems) {
+          if (item.zodiacTags && item.zodiacTags.includes(opt.zodiac)) {
+            battle.markCritical(item);
+          }
+        }
       }
     }
   }
