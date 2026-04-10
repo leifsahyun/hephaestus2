@@ -1250,16 +1250,7 @@ const UI = {
 
     if (item.zodiacTags && item.zodiacTags.length > 0) {
       const hasCounter = item.counters && Array.from(item.counters.values()).some(v => v > 0);
-      const zodiacContainer = document.createElement("div");
-      zodiacContainer.className = "item-zodiac-badges" + (hasCounter ? " item-zodiac-badges--with-counter" : "");
-      for (const tag of item.zodiacTags) {
-        const badge = document.createElement("span");
-        badge.className = "zodiac-badge";
-        badge.textContent = UI.zodiacIcon(tag);
-        badge.title = tag;
-        zodiacContainer.appendChild(badge);
-      }
-      card.appendChild(zodiacContainer);
+      card.appendChild(this.renderItemZodiacBadges(item.zodiacTags, hasCounter));
     }
 
     return card;
@@ -1298,19 +1289,23 @@ const UI = {
     }
 
     if (item.zodiacTags && item.zodiacTags.length > 0) {
-      const zodiacContainer = document.createElement("div");
-      zodiacContainer.className = "item-zodiac-badges";
-      for (const tag of item.zodiacTags) {
-        const badge = document.createElement("span");
-        badge.className = "zodiac-badge";
-        badge.textContent = UI.zodiacIcon(tag);
-        badge.title = tag;
-        zodiacContainer.appendChild(badge);
-      }
-      card.appendChild(zodiacContainer);
+      card.appendChild(this.renderItemZodiacBadges(item.zodiacTags, false));
     }
 
     return card;
+  },
+
+  renderItemZodiacBadges(zodiacTags, withCounter) {
+    const container = document.createElement("div");
+    container.className = "item-zodiac-badges" + (withCounter ? " item-zodiac-badges--with-counter" : "");
+    for (const tag of zodiacTags) {
+      const badge = document.createElement("span");
+      badge.className = "zodiac-badge";
+      badge.textContent = UI.zodiacIcon(tag);
+      badge.title = tag;
+      container.appendChild(badge);
+    }
+    return container;
   },
 
   zodiacIcon(zodiac) {
