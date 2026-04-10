@@ -145,15 +145,24 @@ const HeroPool = {
   cities: ["Athens", "Sparta", "Troy"],
   current: {},
   remaining: [],
+  champion: null,
 
   init(heroDataArray) {
     this.heroes = heroDataArray.map(d => new Hero(d));
     this.remaining = [];
+    this.champion = null;
     this.populate();
   },
 
   draw() {
     const values = Object.values(this.current);
+    if (this.champion) {
+      if (values.includes(this.champion)) {
+        return this.champion;
+      }
+      // Champion was removed from pool, clear the designation
+      this.champion = null;
+    }
     if (values.length === 0) return null;
     return values[Math.floor(Math.random() * values.length)];
   },
@@ -323,6 +332,18 @@ const EffectPool = {
       apply(battle) {
         const boulder = new Item({ name: "Boulder", type: "boulder", baseQuality: 5, augments: [] });
         battle.equippedItems.push(boulder);
+      }
+    },
+    bonds: {
+      label(amount) {
+        return (amount >= 0 ? "+" : "") + amount + "\uD83D\uDD17";
+      },
+      color(amount) {
+        return amount > 0 ? "#4ecca3" : "#e63946";
+      },
+      apply(battle, amount) {
+        PlayerState.bonds += amount;
+        UI.updatePlayerStats();
       }
     }
   },

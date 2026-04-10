@@ -754,6 +754,11 @@ const UI = {
       return optEl;
     };
 
+    // Call onDraw for each option before building elements, allowing dynamic text updates
+    for (const opt of card.options) {
+      if (opt.onDrawFn) opt.onDrawFn.call(opt);
+    }
+
     const optAEl = buildOptionEl(card.options[0]);
     const optBEl = buildOptionEl(card.options[1]);
 
@@ -868,6 +873,9 @@ const UI = {
         rewardText = `<p>Earned: <strong>$${earned}</strong></p>`;
       } else {
         PlayerState.removeBond();
+        if (HeroPool.champion === battle.hero) {
+          HeroPool.champion = null;
+        }
         rewardText = `<p>Lost: <strong>🔗1</strong></p>`;
       }
 

@@ -323,12 +323,26 @@ const Config = {
             {
               text: "I have a champion",
               response: "Excellent. Arm your chosen champions well… but temper your ambition. Each gift you grant them feeds a quiet pride… a Hubris that calls stronger horrors forth. Keep it below 21 if you value the life of your champion. Here, you will need some items to supply them with: you can take a few spare tools from around the farm, or I'm told a shipment just arrived for you from the King of Sicily!",
-              effects: [] //Add an effect here that lets you select a hero to be used instead of a random one until they die.
+              effects: [],
+              description: "A hero will always be selected for battle until they fall.",
+              onDraw: function() {
+                if (!this._champion || !Object.values(HeroPool.current).includes(this._champion)) {
+                  this._champion = HeroPool.draw();
+                }
+                if (this._champion) {
+                  this.text = "I have a champion: " + this._champion.name;
+                }
+              },
+              onSelect: function(battle) {
+                if (this._champion) {
+                  HeroPool.champion = this._champion;
+                }
+              }
             },
             {
               text: "The bonds of the Greeks are still strong",
               response: "That may be a wise choice... the heroes of this land harbor dark ambition - Hubris that could rival even Zeus himself. Though that ambition may be useful, keep it below 21 until you are ready to challenge the gods themselves. Here, you will need some items to make your way out there: you can take a few spare tools from around the farm, or I'm told a shipment just arrived for you from the King of Sicily!",
-              effects: [] //Add 2 bonds
+              effects: [{ key: "bonds", amount: 2 }]
             }
           ]
         },
@@ -339,12 +353,29 @@ const Config = {
             {
               text: "Farm Implements",
               response: "I hope they are of use to you - they may not look like much but there is a time for even the lowliest tool. Just as the signs of the zodiac follow each other in my almanac, when the stars align with your items their true potential will shine. Fate comes from more than the stars though, in battle lines will be drawn - cards, if you will - and each offers a choice. Some appear kind… most are not. And should your Hubris grow too great, fate will cease offering choices at all, and simply choose your suffering for you.",
-              effects: [] //Add a small number of low quality random items to the item pool
+              effects: [],
+              description: "Receive a small set of modest, reliable tools.",
+              onSelect: function(battle) {
+                ItemPool.items = [];
+                ItemPool.current = [];
+                for (let i = 0; i < 15; i++) {
+                  ItemPool.addRandomItem(8, 2);
+                }
+              }
             },
             {
               text: "Shipment From Sicily",
               response: "There are some fine quality items in there, and many aligned with the zodiac. Just as the signs of the zodiac follow each other in my almanac, in due time the true potential of your items will shine. Fate comes from more than the stars though, in battle lines will be drawn - cards, if you will - and each offers a choice. Some appear kind… most are not. And should your Hubris grow too great, fate will cease offering choices at all, and simply choose your suffering for you.",
-              effects: [] //Add a large number of random items to the item pool with high variance and the best items based on previous run performance
+              effects: [],
+              description: "Receive a large shipment of varied, unpredictable items.",
+              onSelect: function(battle) {
+                ItemPool.items = [];
+                ItemPool.current = [];
+                for (let i = 0; i < 45; i++) {
+                  const isHighValue = Math.random() < 0.15;
+                  ItemPool.addRandomItem(isHighValue ? 25 : 10, 10);
+                }
+              }
             }
           ]
         },
@@ -355,12 +386,88 @@ const Config = {
             {
               text: "The Fates can suck it",
               response: "Sigh... sometimes I wonder if your head was injured when Zeus threw you off Olympus. Zeus abandoned you just as he has forsaken the rest of Greece. When you leave here, please don't return to Olympus - be the only god to defend the people of this land from the monsters",
-              effects: [] //Add Hubris, and copy a few random hubris threshold cards in the default fate card pool
+              effects: [{ key: "hubris", amount: 5 }],
+              onSelect: function(battle) {
+                const thresholdCards = FatePool.cards.filter(c => c instanceof HubrisThresholdFateCard);
+                const shuffled = shuffleArray(thresholdCards);
+                const toCopy = shuffled.slice(0, 3);
+                for (const card of toCopy) {
+                  const copy = new HubrisThresholdFateCard({
+                    name: card.name,
+                    hubrisThreshold: card.hubrisThreshold,
+                    options: card.options.map(o => ({
+                      zodiac: o.zodiac,
+                      text: o.text || "",
+                      description: o.description || "",
+                      effects: o.effects.map(e => ({ key: e.key, amount: e.amount })),
+                      onSelect: o.onSelectFn,
+                      onDraw: o.onDrawFn
+                    }))
+                  });
+                  FatePool.cards.push(copy);
+                }
+              }
             },
             {
               text: "I'll be careful",
               response: "Good, the Greeks need you. They have been forsaken by Zeus just as he abandoned you as a child. When you leave here, please don't return to Olympus - be the only god to defend the people of this land from the monsters",
-              effects: [] //shuffle a few additional crossroads cards into the default fate card pool
+              effects: [],
+              description: "Add crossroads cards to the fate pool.",
+              onSelect: function(battle) {
+                const crossroadsCards = [
+                  new ModalFateCard({
+                    name: "Trials of the Land",
+                    separatorText: "Trials of the Land",
+                    options: [
+                      {
+                        text: "Reckless Charge",
+                        zodiac: "aries",
+                        effects: [{ key: "monsterQualityMultiply", amount: 2 }]
+                      },
+                      {
+                        text: "Careful Footing",
+                        zodiac: "virgo",
+                        effects: [{ key: "heroQuality", amount: 3 }]
+                      }
+                    ]
+                  }),
+                  new ModalFateCard({
+                    name: "Gifts and Burdens",
+                    separatorText: "Gifts and Burdens",
+                    options: [
+                      {
+                        text: "Divine Favour",
+                        zodiac: "cancer",
+                        effects: [{ key: "hubris", amount: -3 }]
+                      },
+                      {
+                        text: "Heavy Load",
+                        zodiac: "leo",
+                        effects: [{ key: "equipBoulder", amount: 1 }, { key: "hubris", amount: 5 }]
+                      }
+                    ]
+                  }),
+                  new ModalFateCard({
+                    name: "Fateful Crossing",
+                    separatorText: "Fateful Crossing",
+                    options: [
+                      {
+                        text: "Press Forward",
+                        zodiac: "gemini",
+                        effects: [{ key: "drawFateCards", amount: 2 }]
+                      },
+                      {
+                        text: "Fall Back",
+                        zodiac: "scorpio",
+                        effects: [{ key: "monsterQuality", amount: 3 }]
+                      }
+                    ]
+                  })
+                ];
+                for (const card of crossroadsCards) {
+                  FatePool.cards.push(card);
+                }
+              }
             }
           ]
         }
