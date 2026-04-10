@@ -118,10 +118,12 @@ const Config = {
       options: [
         {
           text: "Recklessness",
+          zodiac: "aries",
           effects: [{ key: "monsterQualityMultiply", amount: 2 }]
         },
         {
           text: "Cowardice",
+          zodiac: "taurus",
           effects: [{ key: "drawFateCards", amount: 3 }]
         }
       ]
@@ -132,10 +134,12 @@ const Config = {
       options: [
         {
           text: "Strength",
+          zodiac: "gemini",
           effects: [{ key: "heroQuality", amount: 3 }]
         },
         {
           text: "Favour of the Gods",
+          zodiac: "cancer",
           effects: [{ key: "hubris", amount: -3 }]
         }
       ]
@@ -146,10 +150,12 @@ const Config = {
       options: [
         {
           text: "Boulder",
+          zodiac: "leo",
           effects: [{ key: "equipBoulder", amount: 1 }, { key: "hubris", amount: 5 }]
         },
         {
           text: "Weakness",
+          zodiac: "virgo",
           effects: [{ key: "heroQuality", amount: -5 }]
         }
       ]
@@ -158,9 +164,11 @@ const Config = {
       hubrisThreshold: 5,
       options: [
         {
+          zodiac: "libra",
           effects: [{ key: "monsterQuality", amount: 3 }]
         },
         {
+          zodiac: "scorpio",
           effects: [{ key: "equipBoulder", amount: 1 }]
         }
       ]
@@ -169,9 +177,11 @@ const Config = {
       hubrisThreshold: 7,
       options: [
         {
+          zodiac: "sagittarius",
           effects: [{ key: "hubris", amount: 3 }]
         },
         {
+          zodiac: "capricorn",
           effects: [{ key: "drawFateCards", amount: 1 }]
         }
       ]
@@ -180,9 +190,11 @@ const Config = {
       hubrisThreshold: 9,
       options: [
         {
+          zodiac: "aquarius",
           effects: [{ key: "monsterQuality", amount: 10 }]
         },
         {
+          zodiac: "pisces",
           effects: [{ key: "heroQuality", amount: 3 }]
         }
       ]
@@ -191,9 +203,11 @@ const Config = {
       hubrisThreshold: 13,
       options: [
         {
+          zodiac: "aries",
           effects: [{ key: "monsterQuality", amount: 10 }, {key: "drawFateCards", amount:1}]
         },
         {
+          zodiac: "taurus",
           effects: [{ key: "hubris", amount: -1 }]
         }
       ]
@@ -202,9 +216,11 @@ const Config = {
       hubrisThreshold: 14,
       options: [
         {
+          zodiac: "gemini",
           effects: [{ key: "monsterQuality", amount: 15 }, {key: "drawFateCards", amount:1}]
         },
         {
+          zodiac: "cancer",
           effects: [{ key: "monsterQuality", amount: 3 }]
         }
       ]
@@ -213,9 +229,11 @@ const Config = {
       hubrisThreshold: 15,
       options: [
         {
+          zodiac: "leo",
           effects: [{ key: "monsterQualityMultiply", amount: 2 }]
         },
         {
+          zodiac: "virgo",
           effects: [{ key: "monsterQuality", amount: 5 }]
         }
       ]
@@ -224,9 +242,11 @@ const Config = {
       hubrisThreshold: 16,
       options: [
         {
+          zodiac: "libra",
           effects: [{ key: "drawFateCards", amount: 2 }]
         },
         {
+          zodiac: "scorpio",
           effects: [{ key: "hubris", amount: -1 }]
         }
       ]
@@ -235,9 +255,11 @@ const Config = {
       hubrisThreshold: 20,
       options: [
         {
+          zodiac: "sagittarius",
           effects: [{ key: "monsterQualityMultiply", amount: 2 }, {key: "drawFateCards", amount:1}]
         },
         {
+          zodiac: "capricorn",
           effects: [{ key: "monsterQuality", amount: 5 }]
         }
       ]
@@ -246,9 +268,11 @@ const Config = {
       hubrisThreshold: 21,
       options: [
         {
+          zodiac: "aquarius",
           effects: [{ key: "drawFateCards", amount: 3 }]
         },
         {
+          zodiac: "pisces",
           effects: [{ key: "hubris", amount: -1 }]
         }
       ]
@@ -261,9 +285,11 @@ const Config = {
       hubrisThreshold: 1,
       options: [
         {
+          zodiac: "aries",
           effects: [{ key: "monsterQuality", amount: 999999 }]
         },
         {
+          zodiac: "taurus",
           effects: [{ key: "monsterQuality", amount: 666 }]
         }
       ]

@@ -425,6 +425,13 @@ const UI = {
     const buildOptionEl = (opt) => {
       const optEl = document.createElement("button");
       optEl.className = "modal-option";
+      if (opt.zodiac) {
+        const zodiacBadge = document.createElement("span");
+        zodiacBadge.className = "zodiac-badge";
+        zodiacBadge.textContent = UI.zodiacIcon(opt.zodiac);
+        zodiacBadge.title = opt.zodiac;
+        optEl.appendChild(zodiacBadge);
+      }
       const optText = document.createElement("div");
       optText.className = "modal-option-text";
       optText.textContent = opt.text;
@@ -500,6 +507,13 @@ const UI = {
     const buildOptionEl = (opt, isSelected) => {
       const optEl = document.createElement("div");
       optEl.className = "modal-option " + (isSelected ? "modal-option-auto-selected" : "modal-option-not-selected");
+      if (opt.zodiac) {
+        const zodiacBadge = document.createElement("span");
+        zodiacBadge.className = "zodiac-badge";
+        zodiacBadge.textContent = UI.zodiacIcon(opt.zodiac);
+        zodiacBadge.title = opt.zodiac;
+        optEl.appendChild(zodiacBadge);
+      }
       const optText = document.createElement("div");
       optText.className = "modal-option-text";
       optText.textContent = opt.text;
@@ -1134,5 +1148,14 @@ const UI = {
     }
 
     return card;
+  },
+
+  zodiacIcon(zodiac) {
+    const icons = {
+      aries: "♈", taurus: "♉", gemini: "♊", cancer: "♋",
+      leo: "♌", virgo: "♍", libra: "♎", scorpio: "♏",
+      sagittarius: "♐", capricorn: "♑", aquarius: "♒", pisces: "♓"
+    };
+    return icons[zodiac] || "";
   }
 };
