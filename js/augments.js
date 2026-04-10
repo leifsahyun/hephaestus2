@@ -216,7 +216,7 @@ const defaultAugments = [
         battle.markCritical(item);
       }
       battle.onZodiacResolvedCallbacks.push(function (b, zodiac) {
-        const key = "pythia_" + zodiac;
+        const key = "_omen_" + zodiac;
         if (!item.counters.has(key)) {
           item.counters.set(key, 1);
           item.counters.set("omen", (item.counters.get("omen") || 0) + 1);
