@@ -1126,13 +1126,4 @@ header h1 {
 ::-webkit-scrollbar-thumb:hover { background: #666; }
 
 /* ── Responsive ── */
-@media (max-width: 768px) {
-  .battle-layout { grid-template-columns: 1fr; grid-template-rows: auto; }
-  .hero-section { grid-row: auto; }
-  .forge-layout { grid-template-columns: 1fr; }
-  .create-item-panel,
-  .upgrade-anvil-panel,
-  .augment-shelf-panel { grid-column: span 1; }
-  .upgrade-items { flex-direction: column; }
-  .augment-shelf-list { flex-direction: column; }
-}
+
